@@ -1,0 +1,214 @@
+.parallax {
+    background-attachment: fixed;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    height: 720px;
+    position: relative;
+}
+
+.parallax-caption {
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
+    color: #fff;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.parallax-caption h3 {
+    font-size: 2rem;
+    font-weight: bold;
+}
+
+.parallax-caption p {
+    font-size: 1.2rem;
+}
+
+.parallax-1 {
+    background-image: url(images/BG1.jpg);
+}
+
+.parallax-2 {
+    background-image: url(images/BG2.jpg);
+}
+
+.parallax-3 {
+    background-image: url(images/BG3.jpg);
+}
+
+.cards {
+    display: flex;
+    justify-content: space-evenly;
+    padding: 24px;
+} 
+
+/* Navbar background */
+.travia-navbar {
+  background: rgba(0, 42, 61, 0.85);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease;
+}
+
+/* Brand */
+.navbar-brand {
+  font-size: 1.6rem;
+  letter-spacing: 1px;
+}
+
+.brand-highlight {
+  color: #1dd3b0;
+}
+
+.travia {
+  height: 50px;
+  width: auto;
+  object-fit: contain;
+}
+
+/* Nav links */
+.nav-link {
+  position: relative;
+  margin: 0 10px;
+  font-weight: 500;
+  color: #ffffff !important;
+}
+
+.nav-link::after {
+  content: "";
+  position: absolute;
+  width: 0;
+  height: 2px;
+  left: 0;
+  bottom: -5px;
+  background-color: #1dd3b0;
+  transition: width 0.3s ease-in-out;
+}
+
+.nav-link:hover::after,
+.nav-link.active::after {
+  width: 100%;
+}
+
+/* CTA Button */
+.btn-travia {
+  background-color: #1dd3b0;
+  color: #002a3d;
+  padding: 8px 20px;
+  border-radius: 30px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.btn-travia:hover {
+  background-color: #14b8a6;
+  transform: translateY(-2px);
+}
+
+/* Footer wrapper */
+.travia-footer {
+  background: linear-gradient(180deg, #001f2d, #002a3d);
+}
+
+/* Brand */
+.footer-brand {
+  font-size: 1.8rem;
+  font-weight: 700;
+}
+
+.brand-highlight {
+  color: #1dd3b0;
+}
+
+/* Text */
+.footer-text {
+  color: #b5c7d3;
+  margin-top: 10px;
+  line-height: 1.7;
+}
+
+/* Titles */
+.footer-title {
+  font-weight: 600;
+  margin-bottom: 15px;
+  position: relative;
+}
+
+.footer-title::after {
+  content: "";
+  width: 40px;
+  height: 2px;
+  background: #1dd3b0;
+  display: block;
+  margin-top: 6px;
+}
+
+/* Links */
+.footer-links {
+  list-style: none;
+  padding: 0;
+}
+
+.footer-links li {
+  margin-bottom: 10px;
+}
+
+.footer-links a {
+  color: #b5c7d3;
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+
+.footer-links a:hover {
+  color: #1dd3b0;
+  padding-left: 5px;
+}
+
+/* Social icons */
+.footer-socials {
+  margin-top: 20px;
+}
+
+.footer-socials a {
+  color: #ffffff;
+  font-size: 1.2rem;
+  margin-right: 15px;
+  transition: transform 0.3s ease, color 0.3s ease;
+}
+
+.footer-socials a:hover {
+  color: #1dd3b0;
+  transform: translateY(-3px);
+}
+
+/* Newsletter */
+.footer-newsletter input {
+  border-radius: 30px;
+  border: none;
+  padding: 10px 15px;
+}
+
+.footer-newsletter input:focus {
+  box-shadow: none;
+}
+
+/* CTA Button (same as navbar) */
+.btn-travia {
+  background-color: #1dd3b0;
+  color: #002a3d;
+  border-radius: 30px;
+  font-weight: 600;
+  padding: 10px 20px;
+}
+
+.btn-travia:hover {
+  background-color: #14b8a6;
+}
+
+/* Bottom bar */
+.footer-bottom {
+  background-color: #001824;
+  color: #8faec0;
+  font-size: 0.9rem;
+}
+
