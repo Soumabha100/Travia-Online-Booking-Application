@@ -1,3 +1,14 @@
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
+h1, h2, h3, h4, h5, .navbar-brand {
+    font-family: 'Poppins', sans-serif;
+    letter-spacing: 0.5px;
+}
+
+body, p, a, .btn {
+    font-family: 'Open Sans', sans-serif;
+}
+
 .parallax {
     background-attachment: fixed;
     background-position: center;
@@ -212,3 +223,133 @@
   font-size: 0.9rem;
 }
 
+/* Search Bar Styling */
+.search-form input {
+  background-color: rgba(255, 255, 255, 0.1); 
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #fff;
+  border-radius: 20px; /* Pill shape */
+  padding-left: 20px;
+  transition: all 0.3s ease;
+}
+
+.search-form input::placeholder {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.search-form input:focus {
+  background-color: rgba(255, 255, 255, 0.2);
+  box-shadow: none;
+  border-color: #1dd3b0; /* Your brand highlight color */
+  color: #fff;
+}
+
+/* --- Unified Search Pill --- */
+.search-box {
+  display: flex;
+  align-items: center;
+  background-color: rgba(255, 255, 255, 0.1); /* Glass background for the whole box */
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 30px; /* One big rounded pill */
+  padding: 2px 5px;    /* Padding to keep elements away from edges */
+  width: 250px;        /* Fixed width for consistency */
+  transition: all 0.3s ease;
+}
+
+/* Style the Input to be invisible/transparent inside the box */
+.search-box input {
+  background: transparent !important;
+  border: none !important;
+  color: #fff !important;
+  box-shadow: none !important;
+  padding-left: 15px;
+  font-size: 0.95rem;
+}
+
+.search-box input::placeholder {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+/* Style the Button to sit nicely at the end */
+.search-box button {
+  background: transparent;
+  border: none;
+  border-radius: 50%; /* Circle shape on hover */
+  width: 35px;
+  height: 35px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  margin-right: 2px;
+}
+
+/* Icon Sizing */
+.search-box button img {
+  width: 16px;
+  height: 16px;
+  opacity: 0.8;
+  transition: opacity 0.3s;
+}
+
+/* --- Hover & Focus Effects --- */
+
+/* When hovering the BUTTON, make it glow Ocean Green */
+.search-box button:hover {
+  background-color: rgba(29, 211, 176, 0.2); /* Your brand color tint */
+}
+
+/* When clicking the INPUT, light up the whole box border */
+.search-box:focus-within {
+  background-color: rgba(255, 255, 255, 0.15);
+  border-color: #1dd3b0; /* Brand Ocean Green */
+  box-shadow: 0 0 10px rgba(29, 211, 176, 0.3);
+}
+
+@media (min-width: 992px) {
+    
+    /* Show dropdown on hover */
+    .nav-item.dropdown:hover .dropdown-menu {
+        display: block;
+        opacity: 1;
+        visibility: visible;
+        transform: translateY(0);
+        margin-top: 0;
+    }
+
+    /* Initial hidden state for animation */
+    .dropdown-menu {
+        display: block; /* We keep it 'block' but hide it visually to animate */
+        opacity: 0;
+        visibility: hidden;
+        transform: translateY(20px); 
+        transition: all 0.3s ease; 
+        margin-top: 10px; 
+    }
+}
+
+/* --- Dropdown Styling (Dark Theme) --- */
+.dropdown-menu {
+    background-color: #002a3d; 
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+    padding: 10px 0;
+}
+
+.dropdown-item {
+    color: #ccdfec; /* Light Grey Text */
+    padding: 10px 20px;
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+
+.dropdown-item:hover {
+    background-color: rgba(29, 211, 176, 0.1); /* Slight Green Tint */
+    color: #1dd3b0; /* Ocean Green Text */
+    padding-left: 25px; /* Slight shift to the right */
+}
+
+.dropdown-divider {
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
