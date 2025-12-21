@@ -1,26 +1,102 @@
-[ 
-    {
-    "name": "Test Day",
-    "date": "2025-12-21"
+[
+  {
+    "name": "Christmas Day",
+    "date": "2025-12-25"
   },
   {
-    "name": "New Year",
+    "name": "New Year's Day",
     "date": "2026-01-01"
+  },
+  {
+    "name": "Lohri / Pongal",
+    "date": "2026-01-14"
+  },
+  {
+    "name": "Makar Sankranti",
+    "date": "2026-01-15"
   },
   {
     "name": "Republic Day",
     "date": "2026-01-26"
   },
   {
+    "name": "Valentine's Day",
+    "date": "2026-02-14"
+  },
+  {
+    "name": "Maha Shivaratri",
+    "date": "2026-02-15"
+  },
+  {
     "name": "Holi",
-    "date": "2026-03-14"
+    "date": "2026-03-04"
+  },
+  {
+    "name": "Good Friday",
+    "date": "2026-04-03"
+  },
+  {
+    "name": "Easter Sunday",
+    "date": "2026-04-05"
+  },
+  {
+    "name": "Eid al-Fitr",
+    "date": "2026-03-20"
+  },
+  {
+    "name": "Ram Navami",
+    "date": "2026-03-27"
+  },
+  {
+    "name": "Labor Day",
+    "date": "2026-05-01"
+  },
+  {
+    "name": "Buddha Purnima",
+    "date": "2026-05-31"
+  },
+  {
+    "name": "Eid al-Adha",
+    "date": "2026-05-27"
   },
   {
     "name": "Independence Day",
     "date": "2026-08-15"
   },
   {
+    "name": "Raksha Bandhan",
+    "date": "2026-08-28"
+  },
+  {
+    "name": "Janmashtami",
+    "date": "2026-09-04"
+  },
+  {
+    "name": "Ganesh Chaturthi",
+    "date": "2026-09-14"
+  },
+  {
+    "name": "Gandhi Jayanti",
+    "date": "2026-10-02"
+  },
+  {
+    "name": "Dussehra",
+    "date": "2026-10-20"
+  },
+  {
+    "name": "Halloween",
+    "date": "2026-10-31"
+  },
+  {
+    "name": "Diwali",
+    "date": "2026-11-08"
+  },
+  {
+    "name": "Guru Nanak Jayanti",
+    "date": "2026-11-24"
+  },
+  {
     "name": "Christmas",
-    "date": "2025-12-25"
+    "date": "2026-12-25"
   }
 ]

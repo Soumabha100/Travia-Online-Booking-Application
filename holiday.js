@@ -1,81 +1,74 @@
 document.addEventListener("DOMContentLoaded", () => {
   fetch("holidays.json")
     .then((response) => response.json())
-    .then((holidays) => checkHolidays(holidays))
-    .catch((error) => console.error("Error loading holidays:", error));
+    .then((holidays) => loadHolidays(holidays))
+    .catch((error) => console.error("Error:", error));
 });
 
-function checkHolidays(holidays) {
+function loadHolidays(holidays) {
+  const container = document.getElementById("holidayMessage");
+  
   const today = new Date();
   const todayStr = today.toISOString().split("T")[0];
 
-  const messageBox = document.getElementById("holidayMessage");
+  const todayHoliday = holidays.find((h) => h.date === todayStr);
 
-  // Check if today is a holiday
-  const todayHoliday = holidays.find((holiday) => holiday.date === todayStr);
+  const upcoming = holidays
+    .filter((h) => new Date(h.date) > today)
+    .sort((a, b) => new Date(a.date) - new Date(b.date))
+    .slice(0, 8);
+
+  let html = `<div class="holiday-container">`;
+  html += `<h3>📅 Upcoming Breaks & Offers</h3>`;
+  html += `<div class="holiday-list">`;
 
   if (todayHoliday) {
-    messageBox.innerHTML = `
-      🎉 <strong>Today is ${todayHoliday.name}!</strong>
-      <span class="ms-2">Enjoy your holiday ✨</span>
-    `;
-    messageBox.classList.add("today-holiday");
-    return;
+    html += createCardHtml(todayHoliday, true);
   }
-
-  // Find upcoming holidays
-  const upcoming = holidays
-    .filter((holiday) =>new Date(holiday.date) > today)
-    .sort((a, b) => new Date(a.date) - new Date(b.date))
-    .slice(0, 5);
 
   if (upcoming.length > 0) {
-    messageBox.innerHTML = `
-      📅 <strong>Upcoming Holidays:</strong>
-      <ul class="mt-2">
-        ${upcoming
-          .map((h) => {
-            const daysLeft = getDaysLeft(h.date);
-
-            return `
-    <li>
-      ${h.name} —
-      <span>${formatDate(h.date)}</span>
-      <small class="ms-2 text-muted">
-        (${daysLeft} day${daysLeft > 1 ? "s" : ""} left)
-      </small>
-    </li>
-  `;
-          })
-          .join("")}
-      </ul>
-    `;
+    upcoming.forEach((h) => {
+      html += createCardHtml(h, false);
+    });
   } else {
-    messageBox.innerHTML = `No upcoming holidays 🎒`;
+    html += `<p style="color:#b5c7d3;">No upcoming holidays found.</p>`;
   }
+
+  html += `</div></div>`; 
+  
+  container.innerHTML = html;
+  container.classList.remove("holiday-box");
 }
 
-function formatDate(dateStr) {
-  const date = new Date(dateStr);
-  return date.toLocaleDateString("en-GB", {
-    day: "numeric",
-    month: "long",
-    year: "numeric",
-  });
+function createCardHtml(holiday, isToday) {
+  const dateObj = new Date(holiday.date);
+  const dateText = dateObj.toLocaleDateString("en-GB", { day: "numeric", month: "long" });
+  
+
+  let offerText = "Book early to save 10%!";
+  const day = dateObj.getDay();
+  
+  if (day === 1 || day === 5) {
+    offerText = "Long Weekend Deal: Stay 3 Nights, Pay for 2!";
+  } else if (holiday.name.includes("New Year")) {
+    offerText = "New Year Bash: Party Packs Available 🎆";
+  }
+  else if (holiday.name.includes("Christmas")) {
+    offerText = "Ho Ho Ho ! Save 25% Off For Christmas! 🎆";
+  }
+
+  // Return the HTML string
+  return `
+    <div class="holiday-card ${isToday ? "today" : ""}">
+      <div class="holiday-date">
+        ${isToday ? "Happening Now" : dateText}
+      </div>
+      <div class="holiday-name">
+        ${holiday.name} ${isToday ? "🎉" : ""}
+      </div>
+      <div class="holiday-offer">
+        <span>Offer:</span> ${offerText}
+      </div>
+    </div>
+  `;
 }
-
-function getDaysLeft(dateStr) {
-  const today = new Date();
-  const holidayDate = new Date(dateStr);
-
-  // Remove time part for accurate day calculation
-  today.setHours(0, 0, 0, 0);
-  holidayDate.setHours(0, 0, 0, 0);
-
-  const diffTime = holidayDate - today;
-  const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-
-  return diffDays;
-}
-
-console.log("Filtered holidays:", upcoming);

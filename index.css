@@ -377,85 +377,140 @@ a,
   border-top: 1px solid rgba(255, 255, 255, 0.1);
 }
 
+/* The Container Bar */
+.travel-banner {
+  width: 100%;
+  background: rgba(0, 42, 61, 0.95); 
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  overflow: hidden; 
+  padding: 12px 0;
+  position: relative;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+  margin-bottom: 20px;
+}
+
+/* The Scrolling Text */
 .travel-text {
   display: inline-block;
-  white-space: nowrap;
-  padding-left: 100%;
+  white-space: nowrap; /* Forces text to stay on one line */
+  
+  /* Font Styling */
   font-family: "Poppins", sans-serif;
-  font-size: 1.25rem;
-  font-weight: 500;
-  letter-spacing: 0.6px;
-
-  /* Brand color harmony */
-  margin-bottom: 12px;
+  font-size: 1rem;
   color: #eaf7f5;
-
-  animation: scrollText 24s linear infinite;
+  letter-spacing: 0.5px;
+  
+  /* Animation Configuration */
+  animation: scrollText 30s linear infinite;
+  padding-left: 100%; /* Starts the text from the far right */
 }
 
-/* Highlight destinations subtly */
-.travel-text span {
-  color: #16879b;
-  font-weight: 600;
-  font-size: 48px;
+/* Highlight Important Words (Strong) */
+.travel-text strong {
+  color: #1dd3b0; /* Travia Ocean Green */
+  font-weight: 700;
+  text-transform: uppercase;
 }
 
+/* Hover Effect: Pause so users can read the offer */
+.travel-banner:hover .travel-text {
+  animation-play-state: paused;
+  cursor: pointer;
+}
+
+/* The Animation Keyframes */
 @keyframes scrollText {
-  from {
+  0% {
     transform: translateX(0);
   }
-  to {
+  100% {
     transform: translateX(-100%);
   }
 }
 
-.travel-banner:hover .travel-text {
-  animation-play-state: paused;
-}
-
+/* Mobile Responsiveness */
 @media (max-width: 768px) {
   .travel-text {
-    font-size: 1.05rem;
-  }
-
-  .travel-banner {
-    border-radius: 12px;
+    font-size: 0.9rem; /* Slightly smaller on phone */
+    animation-duration: 20s; /* Faster scroll on smaller screens */
   }
 }
 
-/* === Holiday Alert Box === */
-.holiday-box {
-  background: rgba(0, 42, 61, 0.95);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 16px;
-  padding: 18px 22px;
+/* === Simple Holiday Section === */
+.holiday-container {
+  margin-top: 30px;
+  padding: 25px;
+  background-color: rgba(0, 42, 61, 0.85); /* Travia Dark Blue */
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: white;
+}
+
+/* Title Styling */
+.holiday-container h3 {
+  color: #1dd3b0; /* Travia Ocean Green */
+  font-family: "Poppins", sans-serif;
+  margin-bottom: 20px;
+  font-size: 1.5rem;
+}
+
+/* Layout for the cards */
+.holiday-list {
+  display: flex;
+  flex-wrap: wrap; /* Wraps to next line on small screens */
+  gap: 15px;       /* Space between cards */
+}
+
+/* Individual Holiday Card */
+.holiday-card {
+  background: rgba(255, 255, 255, 0.05); /* Very light transparent white */
+  padding: 15px 20px;
+  border-radius: 12px;
+  flex: 1 1 250px; /* Each card takes at least 250px space */
+  border: 1px solid transparent; /* Invisible border for hover effect */
+  transition: all 0.2s ease-in-out;
+}
+
+/* Hover Effect */
+.holiday-card:hover {
+  border-color: #1dd3b0; /* Green border on hover */
+  transform: translateY(-3px); /* Slight lift */
+}
+
+/* Highlight 'Today' differently */
+.holiday-card.today {
+  background: rgba(29, 211, 176, 0.15); /* Green tint */
+  border: 1px solid #1dd3b0;
+  flex: 1 1 100%; /* Makes 'Today' card take full width */
+}
+
+/* Text Details */
+.holiday-date {
+  font-size: 0.85rem;
+  color: #b5c7d3; /* Light Blue-Grey */
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.holiday-name {
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin: 5px 0;
+}
+
+/* Offer Section inside the card */
+.holiday-offer {
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1); /* Divider line */
+  font-size: 0.9rem;
   color: #eaf7f5;
-  font-size: 1.05rem;
-  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
 }
 
-.holiday-box ul {
-  padding-left: 20px;
-  margin-bottom: 0;
-}
-
-.holiday-box li {
-  margin-bottom: 6px;
-}
-
-.holiday-box span {
-  color: #1dd3b0;
-  font-weight: 600;
-}
-
-/* Highlight when today is a holiday */
-.today-holiday {
-  background: linear-gradient(
-    90deg,
-    rgba(29, 211, 176, 0.25),
-    rgba(0, 42, 61, 0.74)
-  );
-  border-color: #1dd3b0;
+.holiday-offer span {
+  color: #1dd3b0; /* Highlight the word 'Offer' */
+  font-weight: bold;
 }
 
 .hero {
@@ -468,4 +523,128 @@ a,
   border-radius: 18px;
   padding: 12px;
   backdrop-filter: blur(10px);
+}
+
+/* === Special Offer Section === */
+.special-offer-container {
+  display: flex;
+  justify-content: center;
+  margin: 30px 0; /* Space above and below */
+  padding: 0 15px;
+}
+
+.offer-banner {
+  background: linear-gradient(135deg, rgba(0, 42, 61, 0.95), rgba(0, 20, 30, 0.98));
+  width: 100%;
+  max-width: 900px; /* Restrict width so it doesn't stretch too far */
+  border-radius: 20px;
+  border: 1px solid rgba(29, 211, 176, 0.3); /* Subtle Teal Border */
+  padding: 25px 40px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between; /* Spreads items out */
+  box-shadow: 0 0 20px rgba(29, 211, 176, 0.15); /* Glowing effect */
+  position: relative;
+  overflow: hidden;
+  flex-wrap: wrap; /* Makes it responsive on phones */
+  gap: 20px;
+}
+
+/* The Glowing Background Decoration */
+.offer-banner::before {
+  content: "";
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(29, 211, 176, 0.1) 0%, transparent 60%);
+  animation: rotateGlow 10s linear infinite;
+  z-index: 0;
+}
+
+/* Ensure text sits on top of the glow */
+.offer-badge, .offer-content, .btn-claim {
+  position: relative;
+  z-index: 1;
+}
+
+/* Fire Badge */
+.offer-badge {
+  background: #ff7e42; /* Hot Red/Orange for urgency */
+  color: white;
+  padding: 6px 12px;
+  border-radius: 30px;
+  font-size: 0.8rem;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  animation: pulseBadge 2s infinite;
+  align-self: flex-start; /* Aligns to top on mobile */
+}
+
+/* Text Styling */
+.offer-content h2 {
+  font-family: "Poppins", sans-serif;
+  color: #fff;
+  font-size: 1.8rem;
+  margin: 0;
+  font-weight: 700;
+}
+
+.offer-content p {
+  color: #b5c7d3;
+  margin: 5px 0 0 0;
+  font-size: 1rem;
+}
+
+.offer-content strong {
+  color: #1dd3b0; /* Brand Teal */
+  font-size: 1.2rem;
+}
+
+/* Claim Button */
+.btn-claim {
+  background: #1dd3b0;
+  color: #002a3d;
+  border: none;
+  padding: 12px 25px;
+  border-radius: 50px;
+  font-weight: bold;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  white-space: nowrap; /* Prevents button text wrapping */
+}
+
+.btn-claim:hover {
+  background: #fff; /* Turns white on hover */
+  transform: translateY(-3px);
+  box-shadow: 0 5px 15px rgba(255, 255, 255, 0.3);
+}
+
+/* Animations */
+@keyframes pulseBadge {
+  0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 107, 107, 0.7); }
+  70% { transform: scale(1.05); box-shadow: 0 0 0 10px rgba(255, 107, 107, 0); }
+  100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 107, 107, 0); }
+}
+
+@keyframes rotateGlow {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 768px) {
+  .offer-banner {
+    flex-direction: column;
+    text-align: center;
+    padding: 20px;
+  }
+  
+  .offer-badge {
+    align-self: center;
+    margin-bottom: 10px;
+  }
 }
