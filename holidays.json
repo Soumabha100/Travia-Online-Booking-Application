@@ -1,0 +1,26 @@
+[ 
+    {
+    "name": "Test Day",
+    "date": "2025-12-21"
+  },
+  {
+    "name": "New Year",
+    "date": "2026-01-01"
+  },
+  {
+    "name": "Republic Day",
+    "date": "2026-01-26"
+  },
+  {
+    "name": "Holi",
+    "date": "2026-03-14"
+  },
+  {
+    "name": "Independence Day",
+    "date": "2026-08-15"
+  },
+  {
+    "name": "Christmas",
+    "date": "2025-12-25"
+  }
+]
