@@ -517,12 +517,23 @@ a,
   margin-top: 12px;
 }
 .btn2 {
-  font: bold;
+  font-weight: 700;
   font-size: 24px;
   border: none;
   border-radius: 18px;
-  padding: 12px;
+  padding: 16px;
   backdrop-filter: blur(10px);
+  background-color: #1dd3b0;
+  color: #002a3d;
+  cursor: pointer;
+  margin-top: 20px;
+  transition: ease-in-out 0.2s;
+}
+
+.btn2:hover {
+background-color: #ffffff;
+color: #001f2d;
+transform: translateY(-3px);
 }
 
 /* === Special Offer Section === */
@@ -646,5 +657,97 @@ a,
   .offer-badge {
     align-self: center;
     margin-bottom: 10px;
+  }
+}
+
+.hero-section {
+  position: relative; 
+  height: 720px;      
+  overflow: hidden;
+  margin-top: -80px;  
+}
+
+.hero-img {
+  height: 720px;
+  object-fit: cover; 
+  width: 100%;
+}
+
+/* Dark Overlay (Crucial for text readability) */
+.hero-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(to bottom, rgba(0, 42, 61, 0.106), rgba(0, 42, 61, 0.371));
+  z-index: 1;
+}
+
+.hero-content {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 10;
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-start;
+  
+  pointer-events: none;
+  padding-bottom: 20px; 
+  padding-left: 20px;
+}
+.hero-caption {
+  text-align: left; 
+  color: #fff;
+  pointer-events: auto; 
+  max-width: 650px;
+  
+  background: linear-gradient(90deg, rgba(0, 42, 61, 0.6) 0%, transparent 100%);
+  padding: 30px;
+  border-left: 5px solid #1dd3b0;
+  border-radius: 0 20px 20px 0;
+}
+
+/* Adjust Headline Size */
+.hero-caption h3 {
+  font-size: 3rem;
+  font-weight: 700;
+  text-shadow: 2px 2px 8px rgba(0,0,0,0.6);
+  margin-bottom: 10px;
+  font-family: "Poppins", sans-serif;
+  line-height: 1.2;
+}
+
+/* Adjust Paragraph Size */
+.hero-caption p {
+  font-size: 1.3rem;
+  text-shadow: 1px 1px 4px rgba(0,0,0,0.6);
+  margin-bottom: 25px;
+  color: #eaf7f5;
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 768px) {
+  .hero-content {
+    padding-bottom: 40px;
+    padding-left: 20px;
+    align-items: center; /* On phone, center it again or keep bottom */
+    justify-content: center;
+  }
+  
+  .hero-caption {
+    text-align: center;
+    border-left: none; /* Remove accent border on mobile */
+    border-bottom: 4px solid #1dd3b0; /* Put accent on bottom instead */
+    background: rgba(0, 42, 61, 0.5); /* darker background for phone readability */
+    border-radius: 20px;
+    margin: 0 20px;
+  }
+  
+  .hero-caption h3 {
+    font-size: 2rem;
   }
 }

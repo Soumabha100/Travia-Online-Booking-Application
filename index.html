@@ -90,11 +90,51 @@
     </nav>
 
     <div>
-      <div class="parallax parallax-1">
-        <div class="parallax-caption">
-          <h3>Top Places to Visit!</h3>
-          <p>There is a lot to explore the World ! Click Here to Book Now!</p>
-          <button class="btn2" id="myButton">Book Now</button>
+      <div class="hero-section">
+        <div
+          id="heroCarousel"
+          class="carousel slide carousel-fade"
+          data-bs-ride="carousel"
+          data-bs-interval="3000"
+        >
+          <div class="carousel-inner">
+            <div class="carousel-item active">
+              <img
+                src="images/Hero1.jpg"
+                class="d-block w-100 hero-img"
+                alt="Desert"
+              />
+              <div class="hero-overlay"></div>
+            </div>
+
+            <div class="carousel-item">
+              <img
+                src="images/Hero2.jpg"
+                class="d-block w-100 hero-img"
+                alt="Forest"
+              />
+              <div class="hero-overlay"></div>
+            </div>
+
+            <div class="carousel-item">
+              <img
+                src="images/Hero3.jpg"
+                class="d-block w-100 hero-img"
+                alt="Aurora"
+              />
+              <div class="hero-overlay"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="hero-content">
+          <div class="hero-caption">
+            <h3>Top Places to Visit!</h3>
+            <p>
+              There is a lot to explore in the World! Click Here to Book Now!
+            </p>
+            <button class="btn2" id="myButton">Book Now</button>
+          </div>
         </div>
       </div>
 
