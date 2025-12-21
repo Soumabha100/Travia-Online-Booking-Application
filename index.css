@@ -353,3 +353,12 @@ body, p, a, .btn {
 .dropdown-divider {
     border-top: 1px solid rgba(255, 255, 255, 0.1);
 }
+
+.btn2 {
+  font: bold;
+  font-size: 24px;
+  border: none;
+  border-radius: 18px;
+  padding: 12px;
+  backdrop-filter: blur(10px);
+}
