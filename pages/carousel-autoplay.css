@@ -44,3 +44,216 @@
     margin-top: 20px;
     line-height: 1.6;
 }
+
+/* Navbar background */
+.travia-navbar {
+  background: rgba(0, 42, 61, 0.85);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease;
+}
+
+/* Brand */
+.navbar-brand {
+  font-size: 1.6rem;
+  letter-spacing: 1px;
+}
+
+.brand-highlight {
+  color: #1dd3b0;
+}
+
+.travia {
+  height: 50px;
+  width: auto;
+  object-fit: contain;
+}
+
+/* Nav links */
+.nav-link {
+  position: relative;
+  margin: 0 10px;
+  font-weight: 500;
+  color: #ffffff !important;
+}
+
+.nav-link::after {
+  content: "";
+  position: absolute;
+  width: 0;
+  height: 2px;
+  left: 0;
+  bottom: -5px;
+  background-color: #1dd3b0;
+  transition: width 0.3s ease-in-out;
+}
+
+.nav-link:hover::after,
+.nav-link.active::after {
+  width: 100%;
+}
+
+/* CTA Button */
+.btn-travia {
+  background-color: #1dd3b0;
+  color: #002a3d;
+  padding: 8px 20px;
+  border-radius: 30px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.btn-travia:hover {
+  background-color: #14b8a6;
+  transform: translateY(-2px);
+}
+
+.btn-travia {
+  background-color: #1dd3b0;
+  color: #002a3d;
+  border-radius: 30px;
+  font-weight: 600;
+  padding: 10px 20px;
+}
+
+.btn-travia:hover {
+  background-color: #14b8a6;
+}
+
+/* Bottom bar */
+.footer-bottom {
+  background-color: #001824;
+  color: #8faec0;
+  font-size: 0.9rem;
+}
+
+/* Search Bar Styling */
+.search-form input {
+  background-color: rgba(255, 255, 255, 0.1); 
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #fff;
+  border-radius: 20px; /* Pill shape */
+  padding-left: 20px;
+  transition: all 0.3s ease;
+}
+
+.search-form input::placeholder {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.search-form input:focus {
+  background-color: rgba(255, 255, 255, 0.2);
+  box-shadow: none;
+  border-color: #1dd3b0; /* Your brand highlight color */
+  color: #fff;
+}
+
+/* --- Unified Search Pill --- */
+.search-box {
+  display: flex;
+  align-items: center;
+  background-color: rgba(255, 255, 255, 0.1); /* Glass background for the whole box */
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 30px; /* One big rounded pill */
+  padding: 2px 5px;    /* Padding to keep elements away from edges */
+  width: 250px;        /* Fixed width for consistency */
+  transition: all 0.3s ease;
+}
+
+/* Style the Input to be invisible/transparent inside the box */
+.search-box input {
+  background: transparent !important;
+  border: none !important;
+  color: #fff !important;
+  box-shadow: none !important;
+  padding-left: 15px;
+  font-size: 0.95rem;
+}
+
+.search-box input::placeholder {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+/* Style the Button to sit nicely at the end */
+.search-box button {
+  background: transparent;
+  border: none;
+  border-radius: 50%; /* Circle shape on hover */
+  width: 35px;
+  height: 35px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  margin-right: 2px;
+}
+
+/* Icon Sizing */
+.search-box button img {
+  width: 16px;
+  height: 16px;
+  opacity: 0.8;
+  transition: opacity 0.3s;
+}
+
+/* --- Hover & Focus Effects --- */
+
+/* When hovering the BUTTON, make it glow Ocean Green */
+.search-box button:hover {
+  background-color: rgba(29, 211, 176, 0.2); /* Your brand color tint */
+}
+
+/* When clicking the INPUT, light up the whole box border */
+.search-box:focus-within {
+  background-color: rgba(255, 255, 255, 0.15);
+  border-color: #1dd3b0; /* Brand Ocean Green */
+  box-shadow: 0 0 10px rgba(29, 211, 176, 0.3);
+}
+
+@media (min-width: 992px) {
+    
+    /* Show dropdown on hover */
+    .nav-item.dropdown:hover .dropdown-menu {
+        display: block;
+        opacity: 1;
+        visibility: visible;
+        transform: translateY(0);
+        margin-top: 0;
+    }
+
+    /* Initial hidden state for animation */
+    .dropdown-menu {
+        display: block; /* We keep it 'block' but hide it visually to animate */
+        opacity: 0;
+        visibility: hidden;
+        transform: translateY(20px); 
+        transition: all 0.3s ease; 
+        margin-top: 10px; 
+    }
+}
+
+/* --- Dropdown Styling (Dark Theme) --- */
+.dropdown-menu {
+    background-color: #002a3d; 
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+    padding: 10px 0;
+}
+
+.dropdown-item {
+    color: #ccdfec; /* Light Grey Text */
+    padding: 10px 20px;
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+
+.dropdown-item:hover {
+    background-color: rgba(29, 211, 176, 0.1); /* Slight Green Tint */
+    color: #1dd3b0; /* Ocean Green Text */
+    padding-left: 25px; /* Slight shift to the right */
+}
+
+.dropdown-divider {
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
