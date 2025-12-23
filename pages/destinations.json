@@ -1,0 +1,52 @@
+[
+  {
+    "id": "asia",
+    "name": "Asia",
+    "countries": [
+      {
+        "name": "India",
+        "places": ["Taj Mahal - Agra", "Jaipur - Rajasthan", "Kerala Backwaters", "Goa"]
+      },
+      {
+        "name": "Thailand",
+        "places": ["Bangkok", "Phuket", "Chiang Mai"]
+      },
+      {
+        "name": "Japan",
+        "places": ["Mount Fuji", "Kyoto Temples", "Tokyo Tower"]
+      },
+      {
+        "name": "Singapore",
+        "places": ["Gardens by the Bay", "Marina Bay Sands", "Universal Studios Singapore"]
+      }
+    ]
+  },
+  {
+    "id": "europe",
+    "name": "Europe",
+    "countries": [
+      {
+        "name": "France",
+        "places": ["Eiffel Tower", "Louvre Museum", "French Riviera"]
+      },
+      {
+        "name": "Italy",
+        "places": ["Colosseum", "Venice Canals", "Amalfi Coast"]
+      }
+    ]
+  },
+  {
+    "id": "america",
+    "name": "North America",
+    "countries": [
+      {
+        "name": "USA",
+        "places": ["Grand Canyon", "New York City", "Yellowstone"]
+      },
+      {
+        "name": "Canada",
+        "places": ["Niagara Falls", "Banff National Park"]
+      }
+    ]
+  }
+]

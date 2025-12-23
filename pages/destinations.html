@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Destinations - Travia</title>
+    
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    
+    <link rel="stylesheet" href="destinations.css" />
+
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+    ></script>
+  </head>
+  
+  <body>
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top travia-navbar">
+      <div class="container">
+        <a class="navbar-brand fw-bold" href="#">
+          <img class="travia" src="/assets/Travia.png" alt="Travia Logo" />
+        </a>
+
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#traviaNavbar"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="traviaNavbar">
+          <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
+            <li class="nav-item">
+              <a class="nav-link" href="../index.html">Home</a>
+            </li>
+            <li class="nav-item dropdown">
+              <a
+                class="nav-link dropdown-toggle active"
+                href="#"
+                id="navbarDropdown"
+                role="button"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+              >
+                Destinations
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <li><a class="dropdown-item" href="#">Popular Tours</a></li>
+                <li><a class="dropdown-item" href="#">Europe</a></li>
+                <li><a class="dropdown-item" href="#">America</a></li>
+                <li><a class="dropdown-item" href="#">Asia</a></li>
+                <li><hr class="dropdown-divider" /></li>
+                <li><a class="dropdown-item" href="#">All Destinations</a></li>
+              </ul>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">Experiences</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">About</a>
+            </li>
+          </ul>
+
+          <div class="d-flex align-items-center">
+            <form class="search-box me-3" role="search">
+              <input
+                class="form-control"
+                type="search"
+                placeholder="Search..."
+                aria-label="Search"
+              />
+              <button type="submit">
+                <img src="/assets/Search.svg" alt="Search" height="16px" />
+              </button>
+            </form>
+            <a href="#" class="btn-travia">Explore Trips</a>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <div class="hero-section">
+      <div
+        id="heroCarousel"
+        class="carousel slide carousel-fade"
+        data-bs-ride="carousel"
+        data-bs-interval="3000"
+      >
+        <div class="carousel-inner">
+          <div class="carousel-item active">
+            <img src="../images/SWZ.jpg" class="d-block w-100 hero-img" alt="Switzerland" />
+            <div class="hero-overlay"></div>
+          </div>
+          <div class="carousel-item">
+            <img src="../images/IND.jpg" class="d-block w-100 hero-img" alt="India" />
+            <div class="hero-overlay"></div>
+          </div>
+          <div class="carousel-item">
+            <img src="../images/FR.jpg" class="d-block w-100 hero-img" alt="France" />
+            <div class="hero-overlay"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="hero-content">
+        <div class="hero-caption">
+          <h3>DESTINATIONS</h3>
+          <p>There is a lot to explore in the World! Click Here to Book Now!</p>
+          <button class="btn2" id="myButton">Book Now</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="container destination-explorer-section">
+      <div class="row">
+        
+        <div class="col-lg-4 mb-4">
+          <h2 class="explorer-heading">
+            Explore <br />
+            <span class="highlight">Destinations</span>
+          </h2>
+          <p class="explorer-sub">
+            Click on the regions to uncover top countries and their hidden gems.
+          </p>
+        </div>
+
+        <div class="col-lg-8">
+          <div id="destinationContainer" class="destination-list-wrapper">
+            <div class="text-center text-white py-3">Loading destinations...</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <script src="destinations.js"></script>
+  </body>
+</html>
