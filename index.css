@@ -904,6 +904,25 @@ transform: translateY(-3px);
     box-shadow: 0 10px 25px rgba(0,0,0,0.1);
 }
 
+.btn-close-modal {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: transparent;
+    border: none;
+    font-size: 1.2rem;
+    color: #94a3b8; /* Soft Grey */
+    cursor: pointer;
+    transition: all 0.2s ease;
+    z-index: 10;
+    transition: ease-in-out 0.2s;
+}
+
+.btn-close-modal:hover {
+    color: #d32f2f; 
+    font-size: 1.3rem; 
+}
+
 .auth-title {
     text-align: center;
     font-weight: 700;

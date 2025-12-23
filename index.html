@@ -54,7 +54,11 @@
                 Destinations
               </a>
               <ul class="dropdown-menu">
-                <li><a class="dropdown-item" href="pages/destinations.html">Popular Tours</a></li>
+                <li>
+                  <a class="dropdown-item" href="pages/destinations.html"
+                    >Popular Tours</a
+                  >
+                </li>
                 <li><a class="dropdown-item" href="#">Europe</a></li>
                 <li><a class="dropdown-item" href="#">America</a></li>
                 <li><a class="dropdown-item" href="#">Asia</a></li>
@@ -180,17 +184,6 @@
             Checking holidays...
           </div>
         </div>
-
-        <p>
-          Embrace the profound serenity of the natural world, where every
-          landscape tells a story of timeless grace. From the ethereal glow of a
-          mountain sunrise to the rhythmic dance of coastal tides, nature’s
-          artistry provides a sanctuary for the soul. This theme celebrates the
-          delicate balance between raw power and quiet stillness, inviting you
-          to rediscover the intricate details—the vein of a leaf, the shimmer of
-          dew, and the vastness of an open sky—that define our planet's
-          incomparable majesty.
-        </p>
       </div>
 
       <div class="container my-5">
@@ -410,6 +403,14 @@
     <div class="modal fade" id="authModal" tabindex="-1" aria-hidden="true">
       <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content auth-container">
+          <button
+            type="button"
+            class="btn-close-modal"
+            data-bs-dismiss="modal"
+            aria-label="Close"
+          >
+            <i class="bi bi-x-lg"></i>
+          </button>
           <form class="auth-form" id="login">
             <h1 class="auth-title">Welcome Back</h1>
 
@@ -417,10 +418,10 @@
 
             <div class="auth-input-group">
               <input
-                type="text"
+                type="email"
                 class="auth-input"
                 autofocus
-                placeholder="Username or Email"
+                placeholder="Email"
               />
               <div class="auth-input-error-message"></div>
             </div>
