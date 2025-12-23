@@ -10,6 +10,10 @@
       integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
       crossorigin="anonymous"
     />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css"
+    />
     <script
       src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
       integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
@@ -21,12 +25,10 @@
   <body>
     <nav class="navbar navbar-expand-lg navbar-dark fixed-top travia-navbar">
       <div class="container">
-        <!-- Brand -->
         <a class="navbar-brand fw-bold" href="#">
-          <img class="travia" src="/assets/Travia.png" alt="" />
+          <img class="travia" src="/assets/Travia.png" alt="Travia Logo" />
         </a>
 
-        <!-- Toggler -->
         <button
           class="navbar-toggler"
           type="button"
@@ -36,7 +38,6 @@
           <span class="navbar-toggler-icon"></span>
         </button>
 
-        <!-- Links -->
         <div class="collapse navbar-collapse" id="traviaNavbar">
           <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
             <li class="nav-item">
@@ -49,12 +50,11 @@
                 id="navbarDropdown"
                 role="button"
                 data-bs-toggle="dropdown"
-                aria-expanded="false"
               >
                 Destinations
               </a>
-              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                <li><a class="dropdown-item" href="#">Popular Tours</a></li>
+              <ul class="dropdown-menu">
+                <li><a class="dropdown-item" href="pages/destinations.html">Popular Tours</a></li>
                 <li><a class="dropdown-item" href="#">Europe</a></li>
                 <li><a class="dropdown-item" href="#">America</a></li>
                 <li><a class="dropdown-item" href="#">Asia</a></li>
@@ -65,13 +65,10 @@
             <li class="nav-item">
               <a class="nav-link" href="#">Experiences</a>
             </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#">About</a>
-            </li>
+            <li class="nav-item"><a class="nav-link" href="#">About</a></li>
           </ul>
 
-          <!-- CTA -->
-          <div class="d-flex">
+          <div class="d-flex align-items-center">
             <form class="search-box me-3" role="search">
               <input
                 class="form-control"
@@ -83,7 +80,14 @@
                 <img src="/assets/Search.svg" alt="Search" />
               </button>
             </form>
-            <a href="#" class="btn btn-travia">Explore Trips</a>
+            <button
+              type="button"
+              class="btn btn-travia"
+              data-bs-toggle="modal"
+              data-bs-target="#authModal"
+            >
+              Login
+            </button>
           </div>
         </div>
       </div>
@@ -189,69 +193,85 @@
         </p>
       </div>
 
-      <div class="cards">
-        <div class="card box" style="width: 18rem; border-radius: 24px">
-          <img
-            src="images/Desert.jpg"
-            class="card-img-top"
-            alt="..."
-            style="height: 320px; border-radius: 24px"
-          />
-          <div class="card-body">
-            <h5 class="card-title">Sandy Desert</h5>
-            <p class="card-text">
-              Some quick example text to build on the card title and make up the
-              bulk of the card's content.
-            </p>
-            <a href="pages/desert.html" class="btn btn-primary">Explore</a>
+      <div class="container my-5">
+        <div class="row g-4 justify-content-center">
+          <div class="col-12 col-md-6 col-lg-3">
+            <div class="card travia-card h-100">
+              <div class="card-img-wrapper">
+                <img
+                  src="images/Desert.jpg"
+                  class="card-img-top"
+                  alt="Sandy Desert"
+                />
+              </div>
+              <div class="card-body">
+                <h5 class="card-title">Sandy Desert</h5>
+                <p class="card-text">
+                  Experience the golden dunes and endless horizons of the vast
+                  desert.
+                </p>
+                <a href="pages/desert.html" class="btn btn-primary">Explore</a>
+              </div>
+            </div>
           </div>
-        </div>
-        <div class="card" style="width: 18rem; border-radius: 24px">
-          <img
-            src="images/Forest.jpg"
-            class="card-img-top"
-            alt="..."
-            style="height: 320px; border-radius: 24px"
-          />
-          <div class="card-body">
-            <h5 class="card-title">Tropical Rainforest</h5>
-            <p class="card-text">
-              Some quick example text to build on the card title and make up the
-              bulk of the card's content.
-            </p>
-            <a href="#" class="btn btn-primary">Explore</a>
+
+          <div class="col-12 col-md-6 col-lg-3">
+            <div class="card travia-card h-100">
+              <div class="card-img-wrapper">
+                <img
+                  src="images/Forest.jpg"
+                  class="card-img-top"
+                  alt="Tropical Rainforest"
+                />
+              </div>
+              <div class="card-body">
+                <h5 class="card-title">Tropical Rainforest</h5>
+                <p class="card-text">
+                  Discover the lush greenery and vibrant wildlife of the deep
+                  jungle.
+                </p>
+                <a href="#" class="btn btn-primary">Explore</a>
+              </div>
+            </div>
           </div>
-        </div>
-        <div class="card" style="width: 18rem; border-radius: 24px">
-          <img
-            src="images/Aurora.jpg"
-            class="card-img-top"
-            alt="..."
-            style="height: 320px; border-radius: 24px"
-          />
-          <div class="card-body">
-            <h5 class="card-title">Aurora Boriallis</h5>
-            <p class="card-text">
-              Some quick example text to build on the card title and make up the
-              bulk of the card's content.
-            </p>
-            <a href="#" class="btn btn-primary">Explore</a>
+
+          <div class="col-12 col-md-6 col-lg-3">
+            <div class="card travia-card h-100">
+              <div class="card-img-wrapper">
+                <img
+                  src="images/Aurora.jpg"
+                  class="card-img-top"
+                  alt="Aurora Borealis"
+                />
+              </div>
+              <div class="card-body">
+                <h5 class="card-title">Aurora Borealis</h5>
+                <p class="card-text">
+                  Witness the magical dance of lights in the frozen northern
+                  skies.
+                </p>
+                <a href="#" class="btn btn-primary">Explore</a>
+              </div>
+            </div>
           </div>
-        </div>
-        <div class="card" style="width: 18rem; border-radius: 24px">
-          <img
-            src="images/Coral.jpg"
-            class="card-img-top"
-            alt="..."
-            style="height: 320px; border-radius: 24px"
-          />
-          <div class="card-body">
-            <h5 class="card-title">Oceans Deepness</h5>
-            <p class="card-text">
-              Some quick example text to build on the card title and make up the
-              bulk of the card's content.
-            </p>
-            <a href="#" class="btn btn-primary">Explore</a>
+
+          <div class="col-12 col-md-6 col-lg-3">
+            <div class="card travia-card h-100">
+              <div class="card-img-wrapper">
+                <img
+                  src="images/Coral.jpg"
+                  class="card-img-top"
+                  alt="Oceans Deepness"
+                />
+              </div>
+              <div class="card-body">
+                <h5 class="card-title">Oceans Deepness</h5>
+                <p class="card-text">
+                  Dive into the blue abyss and explore the colorful coral reefs.
+                </p>
+                <a href="#" class="btn btn-primary">Explore</a>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -299,14 +319,19 @@
       <div class="container py-5">
         <div class="row g-4">
           <div class="col-lg-4 col-md-6">
-            <h3 class="footer-brand">
-              <img class="travia" src="/assets/Travia.png" alt="" />
-            </h3>
+            <a class="navbar-brand fw-bold mb-3 d-block" href="#">
+              <img
+                class="travia"
+                src="assets/Travia.png"
+                alt="Travia Logo"
+                style="height: 50px"
+              />
+            </a>
             <p class="footer-text">
-              Discover breathtaking destinations and unforgettable travel
-              experiences around the world.
+              Discover breathtaking destinations and create unforgettable
+              memories. We bring the world to your fingertips with curated tours
+              and exclusive deals.
             </p>
-
             <div class="footer-socials">
               <a href="#"><i class="bi bi-facebook"></i></a>
               <a href="#"><i class="bi bi-instagram"></i></a>
@@ -315,52 +340,165 @@
             </div>
           </div>
 
-          <!-- Links -->
           <div class="col-lg-2 col-md-6">
-            <h6 class="footer-title">Explore</h6>
+            <h6 class="footer-title">Quick Links</h6>
             <ul class="footer-links">
-              <li><a href="#">Destinations</a></li>
-              <li><a href="#">Experiences</a></li>
-              <li><a href="#">Travel Guides</a></li>
-              <li><a href="#">Blog</a></li>
-            </ul>
-          </div>
-
-          <!-- Company -->
-          <div class="col-lg-2 col-md-6">
-            <h6 class="footer-title">Company</h6>
-            <ul class="footer-links">
+              <li><a href="index.html">Home</a></li>
+              <li><a href="pages/destinations.html">Destinations</a></li>
+              <li><a href="#">Packages</a></li>
               <li><a href="#">About Us</a></li>
-              <li><a href="#">Careers</a></li>
-              <li><a href="#">Press</a></li>
-              <li><a href="#">Contact</a></li>
             </ul>
           </div>
 
-          <!-- Newsletter -->
-          <div class="col-lg-4 col-md-6">
+          <div class="col-lg-3 col-md-6">
+            <h6 class="footer-title">Contact Us</h6>
+            <ul class="footer-contact-list">
+              <li>
+                <i class="bi bi-geo-alt-fill"></i>
+                <span>123 Travel Road, Wanderlust City, 560001</span>
+              </li>
+              <li>
+                <i class="bi bi-envelope-fill"></i>
+                <span>support@travia.com</span>
+              </li>
+              <li>
+                <i class="bi bi-telephone-fill"></i>
+                <span>+91 98765 43210</span>
+              </li>
+            </ul>
+          </div>
+
+          <div class="col-lg-3 col-md-6">
             <h6 class="footer-title">Newsletter</h6>
             <p class="footer-text">
-              Get travel inspiration and special offers straight to your inbox.
+              Subscribe to get the latest travel updates and special offers.
             </p>
-
-            <form class="footer-newsletter d-flex">
-              <input
-                type="email"
-                class="form-control"
-                placeholder="Your email"
-              />
-              <button class="btn btn-travia ms-2">Subscribe</button>
+            <form class="footer-newsletter">
+              <div class="input-group">
+                <input
+                  type="email"
+                  class="form-control"
+                  placeholder="Your Email"
+                  aria-label="Email"
+                />
+                <button class="btn btn-travia" type="submit">
+                  <i class="bi bi-send-fill"></i>
+                </button>
+              </div>
             </form>
           </div>
         </div>
       </div>
 
-      <!-- Bottom Bar -->
-      <div class="footer-bottom text-center py-3">
-        © 2025 <strong>Travia</strong>. All rights reserved.
+      <div class="footer-bottom py-3">
+        <div
+          class="container d-flex justify-content-between align-items-center flex-wrap"
+        >
+          <div class="text-center text-md-start mb-2 mb-md-0">
+            © 2025 <strong>Travia</strong>. All rights reserved.
+          </div>
+          <div class="footer-legal">
+            <a href="#">Privacy Policy</a>
+            <span class="mx-2 text-muted">|</span>
+            <a href="#">Terms & Conditions</a>
+            <span class="mx-2 text-muted">|</span>
+            <a href="#">FAQ</a>
+          </div>
+        </div>
       </div>
     </footer>
+    <div class="modal fade" id="authModal" tabindex="-1" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content auth-container">
+          <form class="auth-form" id="login">
+            <h1 class="auth-title">Welcome Back</h1>
+
+            <div class="auth-message"></div>
+
+            <div class="auth-input-group">
+              <input
+                type="text"
+                class="auth-input"
+                autofocus
+                placeholder="Username or Email"
+              />
+              <div class="auth-input-error-message"></div>
+            </div>
+            <div class="auth-input-group">
+              <input
+                type="password"
+                class="auth-input"
+                autofocus
+                placeholder="Password"
+              />
+              <div class="auth-input-error-message"></div>
+            </div>
+
+            <button class="auth-button" type="submit">Continue</button>
+            <p class="auth-text">
+              <a href="#" class="auth-link">Forgot your password?</a>
+            </p>
+            <p class="auth-text">
+              <a class="auth-link" href="#" id="linkCreateAccount"
+                >Don't have an account? Create account</a
+              >
+            </p>
+          </form>
+
+          <form class="auth-form auth-form--hidden" id="createAccount">
+            <h1 class="auth-title">Create Account</h1>
+
+            <div class="auth-message"></div>
+
+            <div class="auth-input-group">
+              <input
+                type="text"
+                id="signupUsername"
+                class="auth-input"
+                autofocus
+                placeholder="Username"
+              />
+              <div class="auth-input-error-message"></div>
+            </div>
+            <div class="auth-input-group">
+              <input
+                type="email"
+                class="auth-input"
+                autofocus
+                placeholder="Email Address"
+              />
+              <div class="auth-input-error-message"></div>
+            </div>
+            <div class="auth-input-group">
+              <input
+                type="password"
+                class="auth-input"
+                autofocus
+                placeholder="Password"
+              />
+              <div class="auth-input-error-message"></div>
+            </div>
+            <div class="auth-input-group">
+              <input
+                type="password"
+                class="auth-input"
+                autofocus
+                placeholder="Confirm Password"
+              />
+              <div class="auth-input-error-message"></div>
+            </div>
+
+            <button class="auth-button" type="submit">Sign Up</button>
+            <p class="auth-text">
+              <a class="auth-link" href="#" id="linkLogin"
+                >Already have an account? Sign in</a
+              >
+            </p>
+          </form>
+        </div>
+      </div>
+    </div>
     <script src="holiday.js"></script>
+    <script src="index.js"></script>
   </body>
 </html>

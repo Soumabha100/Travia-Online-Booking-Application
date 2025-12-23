@@ -242,6 +242,148 @@ a,
   font-size: 0.9rem;
 }
 
+.footer-links li {
+  margin-bottom: 12px;
+}
+
+/* Contact List Styles */
+.footer-contact-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.footer-contact-list li {
+  display: flex;
+  align-items: flex-start;
+  margin-bottom: 15px;
+  color: #b5c7d3;
+  font-size: 0.95rem;
+}
+
+.footer-contact-list i {
+  color: #1dd3b0; /* Ocean Green Icon */
+  margin-right: 12px;
+  font-size: 1.1rem;
+  margin-top: -2px; /* Align icon with text */
+}
+
+/* Better Input Group for Newsletter */
+.footer-newsletter .input-group {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 30px;
+  padding: 4px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.footer-newsletter input {
+  background: transparent !important;
+  border: none !important;
+  color: #fff !important;
+  box-shadow: none !important;
+  padding-left: 15px;
+}
+
+.footer-newsletter input::placeholder {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.footer-newsletter .btn-travia {
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Bottom Bar Legal Links */
+.footer-legal a {
+  color: #8faec0;
+  text-decoration: none;
+  font-size: 0.9rem;
+  transition: color 0.3s;
+}
+
+.footer-legal a:hover {
+  color: #1dd3b0;
+}
+
+/* Responsive tweak for bottom bar */
+@media (max-width: 768px) {
+  .footer-bottom .container {
+    flex-direction: column;
+    text-align: center;
+  }
+  .footer-legal {
+    margin-top: 10px;
+  }
+}
+
+.travia-card {
+  border: none; 
+  border-radius: 24px; 
+  background: #ffffff;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05); 
+  transition: all 0.4s ease; 
+  overflow: hidden; 
+}
+
+/* Lift Effect on Hover */
+.travia-card:hover {
+  transform: translateY(-10px); /* Lifts the card up */
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15); /* Premium shadow depth */
+}
+
+/* Image Wrapper for Zoom Effect */
+.card-img-wrapper {
+  overflow: hidden; /* Clips the image when it zooms */
+  height: 280px; /* Fixed height for consistency */
+}
+
+.travia-card .card-img-top {
+  height: 100%;
+  width: 100%;
+  object-fit: cover; /* Ensures image covers area without stretching */
+  transition: transform 0.6s ease;
+}
+
+/* Subtle Zoom on Image Hover */
+.travia-card:hover .card-img-top {
+  transform: scale(1.08);
+}
+
+/* Content Styling */
+.travia-card .card-body {
+  padding: 24px;
+}
+
+.travia-card .card-title {
+  font-family: "Poppins", sans-serif;
+  font-weight: 700;
+  font-size: 1.25rem;
+  color: #002a3d; /* Travia Dark Blue */
+  margin-bottom: 12px;
+}
+
+.travia-card .card-text {
+  font-family: "Open Sans", sans-serif;
+  color: #6c757d; /* Muted grey for clean look */
+  font-size: 0.95rem;
+  line-height: 1.6;
+  margin-bottom: 24px;
+}
+
+/* Button Styling */
+.travia-card .btn {
+  padding: 10px 28px;
+  border-radius: 50px; /* Pill shape */
+  font-weight: 600;
+  font-size: 0.9rem;
+ background-color: #0d6efd; 
+}
+
 /* Search Bar Styling */
 .search-form input {
   background-color: rgba(255, 255, 255, 0.1);
@@ -750,4 +892,118 @@ transform: translateY(-3px);
   .hero-caption h3 {
     font-size: 2rem;
   }
+}
+
+/* Form CSS  */
+
+.auth-container {
+    padding: 2rem;
+    border-radius: 20px; 
+    background: #ffffff;
+    border: none;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+}
+
+.auth-title {
+    text-align: center;
+    font-weight: 700;
+    margin-bottom: 2rem;
+    color: #002a3d; 
+}
+
+/* Hidden state for toggling forms */
+.auth-form--hidden {
+    display: none;
+}
+
+/* Message Box (General Errors) */
+.auth-message {
+    text-align: center;
+    margin-bottom: 1rem;
+    font-size: 0.9rem;
+    padding: 10px;
+    border-radius: 5px;
+    display: none; /* Hidden by default */
+}
+
+.auth-message--error {
+    color: #d32f2f;
+    background: #ffebee;
+    border: 1px solid #ffcdd2;
+    display: block; 
+}
+
+/* Input Fields */
+.auth-input-group {
+    margin-bottom: 1.25rem;
+}
+
+.auth-input {
+    display: block;
+    width: 100%;
+    padding: 0.75rem;
+    box-sizing: border-box;
+    border-radius: 10px;
+    border: 1px solid #dddddd;
+    outline: none;
+    background: #f8f9fa;
+    transition: background 0.2s, border-color 0.2s;
+    font-size: 1rem;
+}
+
+.auth-input:focus {
+    border-color: #1dd3b0; /* Travia Teal */
+    background: #ffffff;
+}
+
+/* Input Error State */
+.auth-input--error {
+    border-color: #d32f2f;
+    background: #fff8f8;
+}
+
+.auth-input-error-message {
+    margin-top: 5px;
+    font-size: 0.85rem;
+    color: #d32f2f;
+}
+
+/* Buttons */
+.auth-button {
+    width: 100%;
+    padding: 12px;
+    font-weight: bold;
+    font-size: 1rem;
+    color: #ffffff;
+    border: none;
+    border-radius: 50px; /* Pill shape */
+    background: #1dd3b0; /* Travia Teal */
+    cursor: pointer;
+    transition: background 0.3s, transform 0.1s;
+}
+
+.auth-button:hover {
+    background: #15a98d; /* Darker Teal */
+}
+
+.auth-button:active {
+    transform: scale(0.98);
+}
+
+/* Links (Forgot Password / Switch) */
+.auth-text {
+    text-align: center;
+    margin-top: 1.5rem;
+    font-size: 0.95rem;
+}
+
+.auth-link {
+    color: #6c757d;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.auth-link:hover {
+    text-decoration: underline;
+    color: #1dd3b0;
 }

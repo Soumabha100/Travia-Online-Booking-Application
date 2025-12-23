@@ -10,6 +10,8 @@
       rel="stylesheet"
     />
     
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+
     <link rel="stylesheet" href="destinations.css" />
 
     <script
@@ -45,11 +47,10 @@
                 id="navbarDropdown"
                 role="button"
                 data-bs-toggle="dropdown"
-                aria-expanded="false"
               >
                 Destinations
               </a>
-              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+              <ul class="dropdown-menu">
                 <li><a class="dropdown-item" href="#">Popular Tours</a></li>
                 <li><a class="dropdown-item" href="#">Europe</a></li>
                 <li><a class="dropdown-item" href="#">America</a></li>
@@ -75,10 +76,10 @@
                 aria-label="Search"
               />
               <button type="submit">
-                <img src="/assets/Search.svg" alt="Search" height="16px" />
+                <img src="/assets/Search.svg" alt="Search" />
               </button>
             </form>
-            <a href="#" class="btn-travia">Explore Trips</a>
+            <a href="#" class="btn btn-travia">Login</a>
           </div>
         </div>
       </div>
@@ -117,16 +118,17 @@
     </div>
 
     <div class="container destination-explorer-section">
-      <div class="row">
-        
-        <div class="col-lg-4 mb-4">
-          <h2 class="explorer-heading">
-            Explore <br />
-            <span class="highlight">Destinations</span>
-          </h2>
-          <p class="explorer-sub">
-            Click on the regions to uncover top countries and their hidden gems.
-          </p>
+      <div class="row g-5"> <div class="col-lg-4 mb-4">
+          <div class="explorer-sticky">
+             <h2 class="explorer-heading">
+              Explore <br />
+              <span class="highlight">Destinations</span>
+            </h2>
+            <p class="explorer-sub">
+              Click on the regions to uncover top countries and their hidden gems.
+            </p>
+            <div class="explorer-deco"></div>
+          </div>
         </div>
 
         <div class="col-lg-8">
