@@ -1,87 +1,87 @@
 document.addEventListener("DOMContentLoaded", () => {
   fetch("destinations.json")
     .then((response) => {
-      if (!response.ok) {
-        throw new Error("Network response was not ok");
-      }
+      if (!response.ok) throw new Error("Failed to load data");
       return response.json();
     })
     .then((data) => renderDestinations(data))
     .catch((error) => {
-      console.error("Error loading destinations:", error);
+      console.error(error);
       document.getElementById("destinationContainer").innerHTML = 
-        `<div class="text-danger text-center">Failed to load data. Please try again later.</div>`;
+        `<div class="text-center text-danger">Failed to load destinations.</div>`;
     });
 });
 
 function renderDestinations(data) {
   const container = document.getElementById("destinationContainer");
-  
   container.innerHTML = "";
 
-  // 2. Loop through Continents (Level 1)
   data.forEach((continent) => {
-    // Create Wrapper
-    const continentDiv = document.createElement("div");
-    continentDiv.className = "continent-item";
+    
+    const continentItem = document.createElement("div");
+    continentItem.className = "continent-item";
 
-    // Create Header (Name + Plus Button)
     const header = document.createElement("div");
     header.className = "continent-header";
     header.innerHTML = `
       <span>${continent.name}</span>
-      <span class="plus-btn">+</span>
+      <span class="plus-btn"><i class="bi bi-plus-lg"></i></span>
     `;
 
-    // Create Container for Countries
-    const countryContainer = document.createElement("div");
-    countryContainer.className = "nested-list";
+    const contentBody = document.createElement("div");
+    contentBody.className = "nested-list"; 
 
-    // 3. Loop through Countries 
+    const cardGrid = document.createElement("div");
+    cardGrid.className = "card-grid";
+
     if (continent.countries && continent.countries.length > 0) {
-      continent.countries.forEach((country) => {
-        const countryDiv = document.createElement("div");
-        countryDiv.className = "country-item";
+      continent.countries.forEach((place) => {
+        
+        const card = document.createElement("div");
+        card.className = "dest-card";
+        
+        const imgSrc = place.image ? place.image : 'https://via.placeholder.com/600';
 
-        const countryName = document.createElement("div");
-        countryName.className = "country-name";
-        countryName.innerText = country.name;
+        card.innerHTML = `
+          <div class="dest-card-img-wrapper">
+            <img src="${imgSrc}" class="dest-card-img" alt="${place.name}" loading="lazy">
+          </div>
+          <div class="dest-card-body">
+            <div class="dest-card-title">${place.name}</div>
+            <div class="dest-card-desc">${place.desc}</div>
+            
+            <div class="dest-card-footer">
+              <div class="dest-price">
+                <span>Starting from</span>
+                ${place.price}
+              </div>
+              <button class="btn-book-sm">Book Now</button>
+            </div>
+          </div>
+        `;
 
-        // Create Container for Places
-        const placesList = document.createElement("ul");
-        placesList.className = "places-list";
-
-        if (country.places && country.places.length > 0) {
-          country.places.forEach((place) => {
-            const placeItem = document.createElement("li");
-            placeItem.className = "place-item";
-            placeItem.innerText = place;
-            placesList.appendChild(placeItem);
-          });
-        }
-
-        // Event: Click Country to toggle Places
-        countryName.addEventListener("click", (e) => {
-          e.stopPropagation();
-          const isVisible = placesList.style.display === "block";
-          placesList.style.display = isVisible ? "none" : "block";
-        });
-
-        countryDiv.appendChild(countryName);
-        countryDiv.appendChild(placesList);
-        countryContainer.appendChild(countryDiv);
+        cardGrid.appendChild(card);
       });
     }
 
+    contentBody.appendChild(cardGrid); 
+    continentItem.appendChild(header);      
+    continentItem.appendChild(contentBody); 
+    container.appendChild(continentItem);    
+
     header.addEventListener("click", () => {
+      // Toggle 'active' class
       header.classList.toggle("active");
       
-      const isVisible = countryContainer.style.display === "block";
-      countryContainer.style.display = isVisible ? "none" : "block";
+      // Handle Icon Rotation (Plus <-> Dash)
+      const icon = header.querySelector(".plus-btn i");
+      if (header.classList.contains("active")) {
+        icon.classList.replace("bi-plus-lg", "bi-dash-lg");
+        contentBody.style.display = "block"; // Show
+      } else {
+        icon.classList.replace("bi-dash-lg", "bi-plus-lg");
+        contentBody.style.display = "none"; // Hide
+      }
     });
-
-    continentDiv.appendChild(header);
-    continentDiv.appendChild(countryContainer);
-    container.appendChild(continentDiv);
   });
 }
