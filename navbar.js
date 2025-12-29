@@ -56,13 +56,28 @@ document.addEventListener("DOMContentLoaded", () => {
     </nav>
     `;
 
-    // 3. Inject the Navbar into the container
     const navbarContainer = document.getElementById("navbar-container");
     if (navbarContainer) {
         navbarContainer.innerHTML = navbarHTML;
     }
 
     highlightActiveLink();
+
+    const searchForm = document.querySelector(".search-box");
+    
+    if (searchForm) {
+        const searchInput = searchForm.querySelector("input");
+
+        searchForm.addEventListener("submit", (e) => {
+            e.preventDefault(); 
+            
+            const query = searchInput.value.trim(); 
+            
+            if (query.length > 0) {
+                window.location.href = `${rootPath}pages/destinations.html?search=${encodeURIComponent(query)}`;
+            }
+        });
+    }
 });
 
 function highlightActiveLink() {
@@ -70,7 +85,6 @@ function highlightActiveLink() {
     const navLinks = document.querySelectorAll('.nav-link');
 
     navLinks.forEach(link => {
-        
         if (link.getAttribute('href') !== "#" && path.includes(link.getAttribute('href').replace("../", "").replace("./", ""))) {
             link.classList.add('active');
         }

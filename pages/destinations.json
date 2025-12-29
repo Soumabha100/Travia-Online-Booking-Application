@@ -4,12 +4,14 @@
     "countries": [
       {
         "name": "Switzerland",
+        "city": "Zurich",
         "price": "$999",
         "image": "https://images.unsplash.com/photo-1530122037265-a5f1f91d3b99?q=80&w=600&auto=format&fit=crop",
         "desc": "Breathtaking Alps, pristine lakes, and world-class Swiss chocolate."
       },
       {
         "name": "France",
+         "city": "Paris",
         "price": "$899",
         "image": "https://images.unsplash.com/photo-1502602898657-3e91760cbb34?q=80&w=600&auto=format&fit=crop",
         "desc": "Romance in Paris, the iconic Eiffel Tower, and exquisite cuisine."
