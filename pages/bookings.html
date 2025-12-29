@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Book Your Trip - Travia</title>
+
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css"
+    />
+    <link rel="stylesheet" href="booking.css" />
+  </head>
+
+  <body>
+    <div id="navbar-container"></div>
+
+    <section class="booking-section">
+      <div class="container">
+        <div class="booking-breadcrumb">
+          <a href="../index.html">Home</a> <i class="bi bi-chevron-right"></i>
+          <a href="destinations.html">Destinations</a>
+          <i class="bi bi-chevron-right"></i>
+          <span id="breadcrumb-current">Switzerland</span>
+        </div>
+
+        <div class="row g-5">
+          <div class="col-lg-8">
+            <div class="tour-header mb-4">
+              <h1 class="tour-title" id="tour-title">Switzerland Alps Explorer</h1>
+              <div class="tour-meta">
+                <span><i class="bi bi-geo-alt-fill"></i> Zurich, Switzerland</span>
+                <span><i class="bi bi-star-fill text-warning"></i> 4.9 (120 Reviews)</span>
+              </div>
+            </div>
+
+            <div class="tour-gallery mb-5">
+              <img
+                src="https://images.unsplash.com/photo-1530122037265-a5f1f91d3b99?q=80&w=1000&auto=format&fit=crop"
+                alt="Tour Image"
+                class="main-img"
+                id="tour-image"
+              />
+            </div>
+
+            <div class="tour-highlights mb-5">
+              <div class="row g-3">
+                <div class="col-6 col-md-3">
+                  <div class="highlight-box">
+                    <i class="bi bi-clock"></i>
+                    <h5>Duration</h5>
+                    <p>4 Days</p>
+                  </div>
+                </div>
+                <div class="col-6 col-md-3">
+                  <div class="highlight-box">
+                    <i class="bi bi-people"></i>
+                    <h5>Group Size</h5>
+                    <p>Max 10</p>
+                  </div>
+                </div>
+                <div class="col-6 col-md-3">
+                  <div class="highlight-box">
+                    <i class="bi bi-camera"></i>
+                    <h5>Photography</h5>
+                    <p>Allowed</p>
+                  </div>
+                </div>
+                <div class="col-6 col-md-3">
+                  <div class="highlight-box">
+                    <i class="bi bi-translate"></i>
+                    <h5>Guide</h5>
+                    <p>English</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="tour-description mb-5">
+              <h3>About this Tour</h3>
+              <p class="tour-text mb-5" id="tour-desc">
+                Experience the breathtaking beauty of the Swiss Alps. This tour
+                takes you through lush green meadows, snow-capped peaks, and
+                crystal clear lakes. Perfect for nature lovers and adventure
+                seekers alike.
+              </p>
+
+              <div class="addninfo mb-5">
+                <h4>What's Included</h4>
+                <ul class="included-list">
+                  <li>
+                    <i class="bi bi-check-circle-fill text-success"></i>
+                    Professional Tour Guide
+                  </li>
+                  <li>
+                    <i class="bi bi-check-circle-fill text-success"></i> 
+                    3 Nights Accommodation
+                  </li>
+                  <li>
+                    <i class="bi bi-check-circle-fill text-success"></i> 
+                    Breakfast & Dinner
+                  </li>
+                  <li>
+                    <i class="bi bi-check-circle-fill text-success"></i> 
+                    Wifi Services
+                  </li>
+                  <li>
+                    <i class="bi bi-check-circle-fill text-success"></i> 
+                    AC Transportation
+                  </li>
+                  <li>
+                    <i class="bi bi-check-circle-fill text-success"></i> 
+                    All Entry Tickets
+                  </li>
+                </ul>
+              </div>
+
+              <h3 class="mt-4">Additional Information</h3>
+              <ul class="additional-list">
+                <li>Hotels and Transportation are not included in the package. Additional charges apply for booking.</li>
+                <li>Everyone must abide by the tourism laws of the respective countries to promote a friendly culture.</li>
+                <li>Personalized Experience, VIP Lounges, and other facilities can be arranged on request.</li>
+                <li>Flexible payment options: We accept Cash, Card, and Crypto.</li>
+                <li>Complimentary refreshments (cold drinks, water, juices) served during the tour.</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="col-lg-4">
+            <div class="booking-sidebar">
+              <div class="sidebar-header">
+                <span class="price-tag" id="tour-price">$1,200</span>
+                <span class="price-unit">/ person</span>
+              </div>
+
+              <form class="booking-form" id="bookingForm">
+                <div class="form-group mb-3">
+                  <label class="form-label">Travel Date</label>
+                  <div class="input-group">
+                    <span class="input-group-text"><i class="bi bi-calendar-event"></i></span>
+                    <input type="date" class="form-control" id="travelDate" required />
+                  </div>
+                </div>
+
+                <div class="form-group mb-4">
+                  <label class="form-label">Guests</label>
+                  <div class="guest-selector">
+                    <button type="button" class="btn-guest" onclick="updateGuests(-1)">-</button>
+                    <input type="number" id="guestCount" value="1" min="1" max="10" readonly />
+                    <button type="button" class="btn-guest" onclick="updateGuests(1)">+</button>
+                  </div>
+                </div>
+
+                <div class="price-breakdown">
+                  <div class="d-flex justify-content-between mb-2">
+                    <span id="base-calc">$1,200 x 1 guest</span>
+                    <span id="base-total">$1,200</span>
+                  </div>
+                  <div class="d-flex justify-content-between mb-2">
+                    <span>Service Fee</span>
+                    <span>$50</span>
+                  </div>
+                  <hr />
+                  <div class="d-flex justify-content-between total-row">
+                    <span>Total</span>
+                    <span id="final-total">$1,250</span>
+                  </div>
+                </div>
+
+                <button type="submit" class="btn btn-book-now w-100">
+                  Confirm Booking
+                </button>
+                <p class="text-center mt-2 text-muted small">
+                  You won't be charged yet
+                </p>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../navbar.js"></script>
+
+    <script>
+      function updateGuests(change) {
+        const input = document.getElementById("guestCount");
+        let val = parseInt(input.value);
+        val += change;
+        if (val < 1) val = 1;
+        if (val > 10) val = 10;
+        input.value = val;
+        
+        // Simple Dynamic Price Update (Visual Only)
+        const basePrice = 1200;
+        const serviceFee = 50;
+        const total = (basePrice * val) + serviceFee;
+        
+        document.getElementById("base-calc").innerText = `$1,200 x ${val} guest${val > 1 ? 's' : ''}`;
+        document.getElementById("base-total").innerText = `$${(basePrice * val).toLocaleString()}`;
+        document.getElementById("final-total").innerText = `$${total.toLocaleString()}`;
+      }
+    </script>
+  </body>
+</html>

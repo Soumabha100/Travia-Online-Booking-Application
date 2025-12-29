@@ -1,0 +1,564 @@
+@import url("https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&family=Poppins:wght@600;700&display=swap");
+
+body {
+  background-color: #f9fafb;
+  font-family: "Open Sans", sans-serif;
+  color: #334155;
+  padding-top: 80px; 
+}
+
+h1, h2, h3, h4, h5 {
+  font-family: "Poppins", sans-serif;
+  color: #0f172a;
+}
+
+.booking-breadcrumb {
+  margin: 20px 0 30px;
+  font-size: 0.9rem;
+  color: #64748b;
+}
+
+.booking-breadcrumb a {
+  text-decoration: none;
+  color: #64748b;
+  transition: color 0.2s;
+}
+
+.booking-breadcrumb a:hover {
+  color: #1dd3b0;
+}
+
+.booking-breadcrumb i {
+  font-size: 0.75rem;
+  margin: 0 8px;
+}
+
+/* --- Left Column (Details) --- */
+.tour-title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+
+.tour-meta {
+  font-size: 1rem;
+  color: #64748b;
+}
+
+.tour-meta span {
+  margin-right: 20px;
+}
+
+/* Image */
+.tour-gallery {
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+}
+
+.main-img {
+  width: 100%;
+  height: 500px;
+  object-fit: cover;
+  transition: transform 0.3s;
+}
+
+/* Highlights Grid */
+.highlight-box {
+  background: white;
+  padding: 20px 15px;
+  border-radius: 16px;
+  text-align: center;
+  border: 1px solid #e2e8f0;
+  height: 100%;
+  transition: transform 0.2s;
+}
+
+.highlight-box:hover {
+  transform: translateY(-3px);
+  border-color: #1dd3b0;
+}
+
+.highlight-box i {
+  font-size: 1.8rem;
+  color: #1dd3b0;
+  margin-bottom: 10px;
+  display: block;
+}
+
+.highlight-box h5 {
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 5px;
+  color: #64748b;
+}
+
+.highlight-box p {
+  font-weight: 700;
+  color: #0f172a;
+  margin: 0;
+}
+
+/* --- Description & Included Section --- */
+.tour-description h3 {
+  border-left: 5px solid #1dd3b0;
+  padding-left: 15px;
+  margin-bottom: 20px;
+  font-size: 1.8rem;
+}
+
+.tour-text {
+  font-size: 1.05rem;
+  line-height: 1.7;
+  color: #475569;
+}
+
+/* "What's Included" Box (Fixed) */
+.addninfo {
+  background-color: #ffffff;
+  border: 1px solid #e2e8f0;
+  padding: 30px;
+  border-radius: 20px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05); /* Softer shadow */
+}
+
+.addninfo h4 {
+  font-size: 1.3rem;
+  margin-bottom: 20px;
+  color: #1dd3b0;
+  font-weight: 700;
+}
+
+.included-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  grid-template-columns: 1fr 1fr; /* True 2-column layout */
+  gap: 15px 30px; /* Row Gap 15px, Column Gap 30px */
+}
+
+@media (max-width: 768px) {
+  .included-list {
+    grid-template-columns: 1fr; /* Stack on mobile */
+  }
+}
+
+.included-list li {
+  display: flex;
+  align-items: center;
+  font-size: 1rem;
+  color: #334155;
+  font-weight: 500;
+}
+
+.included-list i {
+  margin-right: 12px;
+  font-size: 1.2rem;
+  color: #1dd3b0 !important; /* Force Brand Color */
+}
+
+/* Additional Info List (Fixed) */
+.additional-list {
+  list-style: none;
+  padding: 0;
+  margin-top: 15px;
+}
+
+.additional-list li {
+  position: relative;
+  padding-left: 25px;
+  margin-bottom: 12px;
+  line-height: 1.6;
+  color: #475569;
+}
+
+.additional-list li::before {
+  content: "•";
+  color: #1dd3b0;
+  font-weight: bold;
+  font-size: 1.5rem;
+  position: absolute;
+  left: 0;
+  top: -5px;
+}
+
+/* --- Right Column (Sticky Form) --- */
+.booking-sidebar {
+  background: white;
+  padding: 30px;
+  border-radius: 20px;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.08);
+  border: 1px solid #e2e8f0;
+  position: sticky;
+  top: 100px;
+}
+
+.sidebar-header {
+  margin-bottom: 25px;
+  border-bottom: 1px solid #f1f5f9;
+  padding-bottom: 15px;
+}
+
+.price-tag {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #1dd3b0;
+}
+
+.price-unit {
+  color: #64748b;
+}
+
+/* Form Elements */
+.form-label {
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: #0f172a;
+}
+
+.form-control, .input-group-text {
+  padding: 12px 15px;
+  border-radius: 10px;
+  border: 1px solid #cbd5e1;
+}
+
+.input-group-text {
+  background: #f8fafc;
+  color: #64748b;
+}
+
+/* Guest Selector */
+.guest-selector {
+  display: flex;
+  align-items: center;
+  border: 1px solid #cbd5e1;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.btn-guest {
+  background: #f1f5f9;
+  border: none;
+  width: 45px;
+  height: 45px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.2s;
+  color: #0f172a;
+}
+
+.btn-guest:hover {
+  background: #e2e8f0;
+}
+
+#guestCount {
+  border: none;
+  text-align: center;
+  width: 100%;
+  font-weight: 600;
+  color: #0f172a;
+  outline: none;
+}
+
+/* Breakdown */
+.price-breakdown {
+  background: #f8fafc;
+  padding: 20px;
+  border-radius: 12px;
+  margin: 25px 0;
+  font-size: 0.95rem;
+  color: #475569;
+}
+
+.total-row {
+  font-weight: 700;
+  color: #0f172a;
+  font-size: 1.2rem;
+}
+
+/* Submit Button */
+.btn-book-now {
+  background: #1dd3b0;
+  color: #002a3d;
+  font-weight: 700;
+  padding: 15px;
+  border-radius: 50px;
+  font-size: 1.1rem;
+  transition: all 0.3s;
+}
+
+.btn-book-now:hover {
+  background: #14b8a6;
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(29, 211, 176, 0.3);
+}
+
+/* --- NavBar (Preserved) --- */
+
+.travia-navbar {
+  background: rgba(0, 42, 61, 0.85); 
+  backdrop-filter: blur(10px);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease;
+  padding: 10px 0;
+}
+
+.navbar-brand {
+  font-size: 1.6rem;
+  letter-spacing: 1px;
+  color: #ffffff;
+}
+
+.travia {
+  height: 50px;
+  width: auto;
+  object-fit: contain;
+}
+
+/* Navigation Links */
+.nav-link {
+  position: relative;
+  margin: 0 10px;
+  font-weight: 500;
+  color: #ffffff !important; /* Force White */
+}
+
+.nav-link::after {
+  content: "";
+  position: absolute;
+  width: 0;
+  height: 2px;
+  left: 0;
+  bottom: -5px;
+  background-color: #1dd3b0; /* Teal Accent */
+  transition: width 0.3s ease-in-out;
+}
+
+.nav-link:hover::after,
+.nav-link.active::after {
+  width: 100%;
+}
+
+/* Login/CTA Button */
+.btn-travia {
+  background-color: #1dd3b0;
+  color: #002a3d;
+  padding: 8px 24px;
+  border-radius: 30px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.btn-travia:hover {
+  background-color: #14b8a6;
+  color: #ffffff;
+  transform: translateY(-2px);
+}
+
+/* Search Box (Dark Glass Style) */
+.search-box {
+  display: flex;
+  align-items: center;
+  background-color: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 30px;
+  padding: 2px 5px;
+  width: 250px;
+  transition: all 0.3s ease;
+}
+
+.search-box input {
+  background: transparent !important;
+  border: none !important;
+  color: #ffffff !important;
+  box-shadow: none !important;
+  padding-left: 15px;
+  width: 100%;
+}
+
+.search-box input::placeholder {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.search-box button {
+  background: transparent;
+  border: none;
+  border-radius: 50%;
+  width: 35px;
+  height: 35px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.search-box button:hover {
+  background-color: rgba(29, 211, 176, 0.2);
+}
+
+.search-box:focus-within {
+  border-color: #1dd3b0;
+  box-shadow: 0 0 10px rgba(29, 211, 176, 0.3);
+}
+
+/* Dropdown Menu (Dark Theme) */
+.dropdown-menu {
+  background-color: #002a3d;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+}
+
+.dropdown-item {
+  color: #ccdfec;
+  padding: 10px 20px;
+  transition: all 0.2s ease;
+}
+
+.dropdown-item:hover {
+  background-color: rgba(29, 211, 176, 0.1);
+  color: #1dd3b0;
+}
+
+.dropdown-divider {
+  border-top-color: rgba(255, 255, 255, 0.1);
+}
+
+/* Search Bar Styling */
+.search-form input {
+  background-color: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #fff;
+  border-radius: 20px; /* Pill shape */
+  padding-left: 20px;
+  transition: all 0.3s ease;
+}
+
+.search-form input::placeholder {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.search-form input:focus {
+  background-color: rgba(255, 255, 255, 0.2);
+  box-shadow: none;
+  border-color: #1dd3b0; /* Your brand highlight color */
+  color: #fff;
+}
+
+/* --- Unified Search Pill --- */
+.search-box {
+  display: flex;
+  align-items: center;
+  background-color: rgba(
+    255,
+    255,
+    255,
+    0.1
+  ); /* Glass background for the whole box */
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 30px; /* One big rounded pill */
+  padding: 2px 5px; /* Padding to keep elements away from edges */
+  width: 250px; /* Fixed width for consistency */
+  transition: all 0.3s ease;
+}
+
+/* Style the Input to be invisible/transparent inside the box */
+.search-box input {
+  background: transparent !important;
+  border: none !important;
+  color: #fff !important;
+  box-shadow: none !important;
+  padding-left: 15px;
+  font-size: 0.95rem;
+}
+
+.search-box input::placeholder {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+/* Style the Button to sit nicely at the end */
+.search-box button {
+  background: transparent;
+  border: none;
+  border-radius: 50%; /* Circle shape on hover */
+  width: 35px;
+  height: 35px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  margin-right: 2px;
+}
+
+/* Icon Sizing */
+.search-box button img {
+  width: 16px;
+  height: 16px;
+  opacity: 0.8;
+  transition: opacity 0.3s;
+}
+
+/* --- Hover & Focus Effects --- */
+
+/* When hovering the BUTTON, make it glow Ocean Green */
+.search-box button:hover {
+  background-color: rgba(29, 211, 176, 0.2); /* Your brand color tint */
+}
+
+/* When clicking the INPUT, light up the whole box border */
+.search-box:focus-within {
+  background-color: rgba(255, 255, 255, 0.15);
+  border-color: #1dd3b0; /* Brand Ocean Green */
+  box-shadow: 0 0 10px rgba(29, 211, 176, 0.3);
+}
+
+@media (min-width: 992px) {
+  /* Show dropdown on hover */
+  .nav-item.dropdown:hover .dropdown-menu {
+    display: block;
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+    margin-top: 0;
+  }
+
+  /* Initial hidden state for animation */
+  .dropdown-menu {
+    display: block; /* We keep it 'block' but hide it visually to animate */
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(20px);
+    transition: all 0.3s ease;
+    margin-top: 10px;
+  }
+}
+
+/* --- Dropdown Styling (Dark Theme) --- */
+.dropdown-menu {
+  background-color: #002a3d;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+  padding: 10px 0;
+}
+
+.dropdown-item {
+  color: #ccdfec; /* Light Grey Text */
+  padding: 10px 20px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.dropdown-item:hover {
+  background-color: rgba(29, 211, 176, 0.1); /* Slight Green Tint */
+  color: #1dd3b0; /* Ocean Green Text */
+  padding-left: 25px; /* Slight shift to the right */
+}
+
+.dropdown-divider {
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}

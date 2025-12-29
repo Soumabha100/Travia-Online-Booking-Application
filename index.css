@@ -672,6 +672,11 @@ a,
   transition: ease-in-out 0.2s;
 }
 
+.btn2 a {
+  color: #002a3d;
+  text-decoration: none;
+}
+
 .btn2:hover {
 background-color: #ffffff;
 color: #001f2d;
@@ -865,6 +870,14 @@ transform: translateY(-3px);
 
 /* Adjust Paragraph Size */
 .hero-caption p {
+  font-size: 1.3rem;
+  text-shadow: 1px 1px 4px rgba(0,0,0,0.6);
+  margin-bottom: 25px;
+  color: #eaf7f5;
+}
+
+.hero-caption p a {
+  list-style: none;
   font-size: 1.3rem;
   text-shadow: 1px 1px 4px rgba(0,0,0,0.6);
   margin-bottom: 25px;
