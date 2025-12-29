@@ -7,62 +7,130 @@
         "city": "Zurich",
         "price": "$999",
         "image": "https://images.unsplash.com/photo-1530122037265-a5f1f91d3b99?q=80&w=600&auto=format&fit=crop",
-        "desc": "Breathtaking Alps, pristine lakes, and world-class Swiss chocolate."
+        "desc": "Breathtaking Alps, pristine lakes, and world-class Swiss chocolate.",
+        "longDesc": "Immerse yourself in the pristine beauty of Switzerland. From the banking capital of Zurich to the adventure sports hub of Interlaken, this tour covers the best of the Swiss Alps. Enjoy scenic train rides, boat trips on crystal clear lakes, and visits to charming medieval towns.",
+        "rating": 4.9,
+        "reviews": 120,
+        "duration": "5 Days",
+        "groupSize": "Max 10",
+        "placesToVisit": ["Zurich", "Lucerne", "Interlaken", "Geneva", "Zermatt"]
       },
       {
         "name": "France",
-         "city": "Paris",
+        "city": "Paris",
         "price": "$899",
         "image": "https://images.unsplash.com/photo-1502602898657-3e91760cbb34?q=80&w=600&auto=format&fit=crop",
-        "desc": "Romance in Paris, the iconic Eiffel Tower, and exquisite cuisine."
+        "desc": "Romance in Paris, the iconic Eiffel Tower, and exquisite cuisine.",
+        "longDesc": "Experience the magic of France, starting with the romantic streets of Paris. Visit the Louvre, ascend the Eiffel Tower, and enjoy a cruise on the Seine. The journey continues to the wine regions and the glamorous French Riviera.",
+        "rating": 4.8,
+        "reviews": 95,
+        "duration": "6 Days",
+        "groupSize": "Max 12",
+        "placesToVisit": ["Paris", "Nice", "Lyon", "Bordeaux", "Versailles"]
       },
       {
         "name": "Italy",
+        "city": "Rome",
         "price": "$849",
         "image": "https://images.unsplash.com/photo-1523906834658-6e24ef2386f9?q=80&w=600&auto=format&fit=crop",
-        "desc": "Venetian canals, Roman history, and the stunning Amalfi Coast."
+        "desc": "Venetian canals, Roman history, and the stunning Amalfi Coast.",
+        "longDesc": "Walk through history in Italy. Explore the Colosseum and Vatican City in Rome, ride a gondola in Venice, and admire the art of Florence. The tour concludes with a relaxing stay on the breathtaking Amalfi Coast.",
+        "rating": 4.8,
+        "reviews": 210,
+        "duration": "7 Days",
+        "groupSize": "Max 15",
+        "placesToVisit": ["Rome", "Venice", "Florence", "Milan", "Amalfi Coast"]
       },
       {
         "name": "Germany",
+        "city": "Berlin",
         "price": "$899",
         "image": "https://i.ibb.co/XZcXG2Mh/Germany-1.webp",
-        "desc": "Historic Berlin, fairy-tale castles, and the vibrant culture of Munich."
+        "desc": "Historic Berlin, fairy-tale castles, and the vibrant culture of Munich.",
+        "longDesc": "Discover the heart of Europe in Germany. Witness the history of the Berlin Wall, explore the fairytale Neuschwanstein Castle, and enjoy the lively atmosphere of Munich's beer gardens.",
+        "rating": 4.7,
+        "reviews": 85,
+        "duration": "5 Days",
+        "groupSize": "Max 12",
+        "placesToVisit": ["Berlin", "Munich", "Hamburg", "Frankfurt", "Cologne"]
       },
       {
         "name": "Greece",
+        "city": "Athens",
         "price": "$799",
         "image": "https://i.ibb.co/N6Qvzfv1/Greece-1.webp",
-        "desc": "Ancient Athens, sunset views in Santorini, and crystal-clear Aegean waters."
+        "desc": "Ancient Athens, sunset views in Santorini, and crystal-clear Aegean waters.",
+        "longDesc": "Step back in time in Athens before island-hopping across the Aegean Sea. Watch the world-famous sunset in Santorini, party in Mykonos, and relax on the white sandy beaches.",
+        "rating": 4.9,
+        "reviews": 150,
+        "duration": "6 Days",
+        "groupSize": "Max 10",
+        "placesToVisit": ["Athens", "Santorini", "Mykonos", "Delphi", "Crete"]
       },
       {
         "name": "Portugal",
+        "city": "Lisbon",
         "price": "$749",
         "image": "https://i.ibb.co/j9Rx2d2s/Portugal-1.webp",
-        "desc": "Golden beaches of the Algarve, historic Lisbon trams, and Douro Valley wines."
+        "desc": "Golden beaches of the Algarve, historic Lisbon trams, and Douro Valley wines.",
+        "longDesc": "Portugal offers a perfect blend of culture and coast. Ride the historic trams of Lisbon, taste the famous wines of the Douro Valley, and soak up the sun on the golden beaches of the Algarve.",
+        "rating": 4.6,
+        "reviews": 70,
+        "duration": "5 Days",
+        "groupSize": "Max 10",
+        "placesToVisit": ["Lisbon", "Porto", "Sintra", "Algarve", "Faro"]
       },
       {
         "name": "Austria",
+        "city": "Vienna",
         "price": "$899",
         "image": "https://i.ibb.co/4ZrYzS5J/Austria-1.webp",
-        "desc": "Imperial palaces in Vienna, classical music heritage, and Alpine villages."
+        "desc": "Imperial palaces in Vienna, classical music heritage, and Alpine villages.",
+        "longDesc": "Experience the elegance of Austria. Visit the majestic Schönbrunn Palace in Vienna, the birthplace of Mozart in Salzburg, and the stunning lakeside village of Hallstatt nestled in the Alps.",
+        "rating": 4.7,
+        "reviews": 60,
+        "duration": "4 Days",
+        "groupSize": "Max 8",
+        "placesToVisit": ["Vienna", "Salzburg", "Hallstatt", "Innsbruck", "Graz"]
       },
       {
         "name": "United Kingdom",
+        "city": "London",
         "price": "$949",
         "image": "https://i.ibb.co/ZRHg06ry/UK-1.webp",
-        "desc": "London's iconic landmarks, Scottish Highlands, and royal history."
+        "desc": "London's iconic landmarks, Scottish Highlands, and royal history.",
+        "longDesc": "From the bustling streets of London to the rugged beauty of the Scottish Highlands. See Big Ben and Buckingham Palace, then travel north to explore ancient castles and the mysteries of Loch Ness.",
+        "rating": 4.7,
+        "reviews": 110,
+        "duration": "6 Days",
+        "groupSize": "Max 15",
+        "placesToVisit": ["London", "Edinburgh", "Manchester", "Bath", "Liverpool"]
       },
       {
         "name": "Netherlands",
+        "city": "Amsterdam",
         "price": "$899",
         "image": "https://i.ibb.co/Y6FtnX9/Netherlands-1.webp",
-        "desc": "Scenic Amsterdam canals, colorful tulip fields, and historic windmills."
+        "desc": "Scenic Amsterdam canals, colorful tulip fields, and historic windmills.",
+        "longDesc": "Explore the artistic heritage and intricate canal system of the Netherlands. Cycle through Amsterdam, visit the Van Gogh Museum, and see the iconic windmills of Zaanse Schans.",
+        "rating": 4.8,
+        "reviews": 130,
+        "duration": "4 Days",
+        "groupSize": "Max 12",
+        "placesToVisit": ["Amsterdam", "Rotterdam", "Utrecht", "The Hague", "Haarlem"]
       },
       {
         "name": "Croatia",
+        "city": "Dubrovnik",
         "price": "$699",
         "image": "https://i.ibb.co/ycNLr0Qr/Croatia-1.webp",
-        "desc": "Medieval walls of Dubrovnik, cascading waterfalls, and the Adriatic coast."
+        "desc": "Medieval walls of Dubrovnik, cascading waterfalls, and the Adriatic coast.",
+        "longDesc": "Discover the pearl of the Adriatic. Walk the medieval walls of Dubrovnik, explore the stunning Plitvice Lakes National Park, and sail around the Hvar islands.",
+        "rating": 4.9,
+        "reviews": 90,
+        "duration": "5 Days",
+        "groupSize": "Max 10",
+        "placesToVisit": ["Dubrovnik", "Split", "Hvar", "Plitvice Lakes", "Zagreb"]
       }
     ]
   },
@@ -71,15 +139,29 @@
     "countries": [
       {
         "name": "India",
+        "city": "New Delhi",
         "price": "$499",
         "image": "https://images.unsplash.com/photo-1524492412937-b28074a5d7da?q=80&w=600&auto=format&fit=crop",
-        "desc": "The majestic Taj Mahal, vibrant festivals, and diverse culinary spices."
+        "desc": "The majestic Taj Mahal, vibrant festivals, and diverse culinary spices.",
+        "longDesc": "A journey through the Golden Triangle. Start in the capital New Delhi, witness the breathtaking Taj Mahal in Agra, and explore the royal palaces of Jaipur in Rajasthan.",
+        "rating": 4.8,
+        "reviews": 300,
+        "duration": "7 Days",
+        "groupSize": "Max 20",
+        "placesToVisit": ["New Delhi", "Agra", "Jaipur", "Mumbai", "Goa"]
       },
       {
         "name": "Japan",
+        "city": "Tokyo",
         "price": "$1,099",
         "image": "https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?q=80&w=600&auto=format&fit=crop",
-        "desc": "Serene cherry blossoms, ancient temples, and Tokyo's neon future."
+        "desc": "Serene cherry blossoms, ancient temples, and Tokyo's neon future.",
+        "longDesc": "Experience the perfect blend of tradition and modernity. Visit the neon-lit streets of Tokyo, the ancient temples of Kyoto, and see the majestic Mount Fuji. A culinary and cultural adventure awaits.",
+        "rating": 4.9,
+        "reviews": 250,
+        "duration": "8 Days",
+        "groupSize": "Max 12",
+        "placesToVisit": ["Tokyo", "Kyoto", "Osaka", "Hiroshima", "Nara"]
       }
     ]
   }

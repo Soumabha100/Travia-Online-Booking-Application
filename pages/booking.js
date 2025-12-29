@@ -51,9 +51,10 @@ function updatePageContent(place) {
     document.getElementById("tour-title").textContent = `${place.name} Explorer`;
     
     // B. Update Description (Handle missing desc gracefully)
-    document.getElementById("tour-desc").textContent = place.desc || "Experience an unforgettable journey to this amazing destination.";
+    document.getElementById("tour-desc").textContent = place.longDesc || "Experience an unforgettable journey to this amazing destination.";
 
      document.getElementById("tour-city").textContent = `${place.city} , ${place.name}`
+     document.getElementById("tour-rating").textContent = `${place.rating} (${place.reviews})`
     
     // C. Update Prices
     document.getElementById("tour-price").textContent = place.price;
@@ -66,6 +67,18 @@ function updatePageContent(place) {
         imgElement.src = place.image;
         imgElement.alt = place.name;
     }
+
+    const highlightBoxes = document.querySelectorAll(".highlight-box");
+    highlightBoxes.forEach(box => {
+        const header = box.querySelector("h5").textContent.trim();
+        const valueP = box.querySelector("p");
+        
+        if (header === "Duration" && place.duration) {
+            valueP.textContent = place.duration;
+        } else if (header === "Group Size" && place.groupSize) {
+            valueP.textContent = place.groupSize;
+        }
+    });
 
     // E. SETUP DYNAMIC PRICING LOGIC
     // We need to convert "$1,200" string into the number 1200 for math.

@@ -1,0 +1,32 @@
+[
+  {
+    "name": "Switzerland",
+    "category": "Country",
+    "image": "https://images.unsplash.com/photo-1530122037265-a5f1f91d3b99?q=80&w=200&auto=format&fit=crop",
+    "link": "pages/bookings.html?destination=Switzerland"
+  },
+  {
+    "name": "Zurich",
+    "category": "City - Switzerland",
+    "image": "https://images.unsplash.com/photo-1530122037265-a5f1f91d3b99?q=80&w=200&auto=format&fit=crop",
+    "link": "pages/bookings.html?destination=Switzerland"
+  },
+  {
+    "name": "Paris",
+    "category": "City - France",
+    "image": "https://images.unsplash.com/photo-1502602898657-3e91760cbb34?q=80&w=200&auto=format&fit=crop",
+    "link": "pages/bookings.html?destination=France"
+  },
+  {
+    "name": "Europe",
+    "category": "Continent",
+    "image": "https://images.unsplash.com/photo-1471922694854-ff1b63b20054?q=80&w=200&auto=format&fit=crop",
+    "link": "pages/destinations.html"
+  },
+  {
+    "name": "Tokyo",
+    "category": "City - Japan",
+    "image": "https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?q=80&w=200&auto=format&fit=crop",
+    "link": "pages/bookings.html?destination=Japan"
+  }
+]

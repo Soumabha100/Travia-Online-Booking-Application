@@ -14,7 +14,7 @@ document.addEventListener("DOMContentLoaded", () => {
               c.name.toLowerCase().includes(searchQuery.toLowerCase())
             )
           };
-        }).filter(continent => continent.countries.length > 0); // Remove empty continents
+        }).filter(continent => continent.countries.length > 0); 
 
         renderDestinations(filteredData);
       } else {

@@ -249,8 +249,13 @@ h1, h2, h3, h4, h5 {
   color: #0f172a;
 }
 
-.btn-guest:hover {
-  background: #e2e8f0;
+
+.minus:hover {
+  background-color: rgba(255, 80, 27, 0.521);
+}
+
+.plus:hover {
+  background-color: rgba(27, 255, 179, 0.527);
 }
 
 #guestCount {
@@ -561,4 +566,84 @@ h1, h2, h3, h4, h5 {
 
 .dropdown-divider {
   border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Ensure the search box can anchor the dropdown */
+.search-box {
+  position: relative; /* Essential */
+}
+
+/* The Dropdown Box */
+.search-results-box {
+  position: absolute;
+  top: 100%; /* Push it directly below the input */
+  left: 0;
+  width: 100%; /* Matches width of search bar */
+  background: white;
+  border-radius: 15px; /* Matches your rounded theme */
+  box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+  z-index: 1050; /* Above everything */
+  max-height: 350px;
+  overflow-y: auto;
+  display: none; /* Hidden by default */
+  margin-top: 8px;
+  padding: 5px 0;
+  border: 1px solid rgba(0,0,0,0.05);
+}
+
+/* Individual Result Items */
+.search-item {
+  display: flex;
+  align-items: center;
+  padding: 10px 15px;
+  cursor: pointer;
+  border-bottom: 1px solid #f0f0f0;
+  transition: background 0.2s;
+}
+
+.search-item:last-child {
+  border-bottom: none;
+}
+
+.search-item:hover {
+  background-color: #f1f8f6; /* Very light tint of your Teal brand color */
+}
+
+/* Thumbnail Image */
+.search-item img {
+  width: 40px;
+  height: 40px;
+  border-radius: 8px;
+  object-fit: cover;
+  margin-right: 12px;
+}
+
+/* Text Info */
+.search-item .info {
+  display: flex;
+  flex-direction: column;
+}
+
+.search-item .info h6 {
+  margin: 0;
+  font-family: "Poppins", sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  color: #002a3d; /* Travia Dark Blue */
+}
+
+.search-item .info small {
+  font-size: 11px;
+  color: #1dd3b0; /* Travia Ocean Green for category */
+  text-transform: uppercase;
+  font-weight: 700;
+}
+
+/* Scrollbar Polish */
+.search-results-box::-webkit-scrollbar {
+  width: 5px;
+}
+.search-results-box::-webkit-scrollbar-thumb {
+  background-color: #ccc;
+  border-radius: 10px;
 }
