@@ -1,155 +1,233 @@
 document.addEventListener("DOMContentLoaded", () => {
-    const isPagesFolder = window.location.pathname.includes("/pages/");
-    const rootPath = isPagesFolder ? "../" : "./";
+  const isPagesFolder = window.location.pathname.includes("/pages/");
+  const rootPath = isPagesFolder ? "../" : "./";
+  const jsonPath = isPagesFolder
+    ? "destinations.json"
+    : "pages/destinations.json";
+
+  const navbarHTML = `
+      <nav class="navbar navbar-expand-lg navbar-dark fixed-top travia-navbar">
+        <div class="container">
+          <a class="navbar-brand fw-bold" href="${rootPath}index.html">
+            <img class="travia" src="${rootPath}assets/Travia.png" alt="Travia Logo" />
+          </a>
   
-    const navbarHTML = `
-    <nav class="navbar navbar-expand-lg navbar-dark fixed-top travia-navbar">
-      <div class="container">
-        <a class="navbar-brand fw-bold" href="${rootPath}index.html">
-          <img class="travia" src="${rootPath}assets/Travia.png" alt="Travia Logo" />
-        </a>
-
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#traviaNavbar">
-          <span class="navbar-toggler-icon"></span>
-        </button>
-
-        <div class="collapse navbar-collapse" id="traviaNavbar">
-          <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
-            <li class="nav-item">
-              <a class="nav-link" href="${rootPath}index.html" id="nav-home">Home</a>
-            </li>
-            <li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown">
-                Destinations
-              </a>
-              <ul class="dropdown-menu">
-                <li><a class="dropdown-item" href="${rootPath}pages/destinations.html">Popular Tours</a></li>
-                <li><a class="dropdown-item" href="#">Europe</a></li>
-                <li><a class="dropdown-item" href="#">America</a></li>
-                <li><a class="dropdown-item" href="#">Asia</a></li>
-                <li><hr class="dropdown-divider" /></li>
-                <li><a class="dropdown-item" href="${rootPath}pages/destinations.html">All Destinations</a></li>
-              </ul>
-            </li>
-            <li class="nav-item">
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#traviaNavbar">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+  
+          <div class="collapse navbar-collapse" id="traviaNavbar">
+            <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
+              <li class="nav-item">
+                <a class="nav-link" href="${rootPath}index.html" id="nav-home">Home</a>
+              </li>
+              <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown">
+                  Destinations
+                </a>
+                <ul class="dropdown-menu">
+                  <li><a class="dropdown-item" href="${rootPath}pages/destinations.html">Popular Tours</a></li>
+                  <li><a class="dropdown-item" href="#">Europe</a></li>
+                  <li><a class="dropdown-item" href="#">Asia</a></li>
+                  <li><hr class="dropdown-divider" /></li>
+                  <li><a class="dropdown-item" href="${rootPath}pages/destinations.html">All Destinations</a></li>
+                </ul>
+              </li>
+              <li class="nav-item">
               <a class="nav-link" href="#">Experiences</a>
             </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#">About</a>
-            </li>
-          </ul>
 
-          <div class="d-flex align-items-center">
-            <form class="search-box me-3 position-relative" role="search" autocomplete="off">
-              <input class="form-control" id="search-input" type="search" placeholder="Search..." aria-label="Search" />
-              <button type="submit">
-                <img src="${rootPath}assets/Search.svg" alt="Search" />
+              <li class="nav-item">
+                <a class="nav-link" href="#">About</a>
+              </li>
+            </ul>
+  
+            <div class="d-flex align-items-center">
+              <form class="search-box me-3 position-relative" role="search" autocomplete="off">
+                <input class="form-control" id="search-input" type="search" placeholder="Search tours, cities..." aria-label="Search" />
+                <button type="submit">
+                  <img src="${rootPath}assets/Search.svg" alt="Search" />
+                </button>
+                <div id="search-results" class="search-results-box"></div>
+              </form>
+              
+              <button type="button" class="btn btn-travia" data-bs-toggle="modal" data-bs-target="#authModal">
+                Login
               </button>
-              <div id="search-results" class="search-results-box"></div>
-            </form>
-            
-            <button type="button" class="btn btn-travia" data-bs-toggle="modal" data-bs-target="#authModal">
-              Login
-            </button>
+            </div>
           </div>
         </div>
-      </div>
-    </nav>
+      </nav>
     `;
 
-    const navbarContainer = document.getElementById("navbar-container");
-    if (navbarContainer) {
-        navbarContainer.innerHTML = navbarHTML;
-    }
+  const navbarContainer = document.getElementById("navbar-container");
+  if (navbarContainer) navbarContainer.innerHTML = navbarHTML;
 
-    highlightActiveLink();
+  highlightActiveLink();
 
-    // === NEW SEARCH LOGIC ===
-    const searchForm = document.querySelector(".search-box");
-    
-    if (searchForm) {
-        const searchInput = searchForm.querySelector("#search-input");
-        const resultsBox = document.getElementById("search-results");
-        let searchData = [];
+  const searchForm = document.querySelector(".search-box");
 
-        // 1. Fetch the data (Only once)
-        // Ensure search-data.json is in your root or adjust path
-        fetch(`${rootPath}search-data.json`) 
-            .then(res => res.json())
-            .then(data => { searchData = data; })
-            .catch(err => console.error("Search data missing:", err));
+  if (searchForm) {
+    const searchInput = searchForm.querySelector("#search-input");
+    const resultsBox = document.getElementById("search-results");
 
-        // 2. Real-time Search Listener
-        searchInput.addEventListener("input", (e) => {
-            const query = e.target.value.toLowerCase().trim();
-            resultsBox.innerHTML = ""; // Clear previous
+    // This will hold our flattened, searchable list of all tours/places
+    let searchIndex = [];
 
-            if (query.length < 1) {
-                resultsBox.style.display = "none";
-                return;
-            }
+    // LOAD JSON (With Error Handling)
+    fetch(jsonPath)
+      .then((res) => {
+        if (!res.ok) {
+          throw new Error(
+            `HTTP Error! Status: ${res.status} Path: ${jsonPath}`
+          );
+        }
+        return res.json();
+      })
+      .then((data) => {
+        searchIndex = buildSearchIndex(data, rootPath);
+        // console.log("Search Index Ready:", searchIndex.length, "items");
+      })
+      .catch((err) => {
+        console.error("Error loading inventory:", err);
+        // Optional: Show error in search box if needed
+      });
 
-            // Filter logic
-            const matches = searchData.filter(item => 
-                item.name.toLowerCase().includes(query) || 
-                item.category.toLowerCase().includes(query)
-            );
+    // Search Listener
+    searchInput.addEventListener("input", (e) => {
+      const query = e.target.value.toLowerCase().trim();
+      resultsBox.innerHTML = "";
 
-            // Render results
-            if (matches.length > 0) {
-                resultsBox.style.display = "block";
-                matches.forEach(match => {
-                    const div = document.createElement("div");
-                    div.classList.add("search-item");
-                    
-                    // Use rootPath for images and links to ensure they work from subfolders
-                    // Note: Assuming links in JSON are like "pages/booking.html"
-                    const correctLink = match.link.startsWith("http") ? match.link : rootPath + match.link;
-                    
-                    div.innerHTML = `
-                        <img src="${match.image}" alt="${match.name}">
-                        <div class="info">
-                            <h6>${match.name}</h6>
-                            <small>${match.category}</small>
-                        </div>
-                    `;
-                    
-                    div.addEventListener("click", () => {
-                        window.location.href = correctLink;
-                    });
+      if (query.length < 2) {
+        resultsBox.style.display = "none";
+        return;
+      }
 
-                    resultsBox.appendChild(div);
-                });
-            } else {
-                resultsBox.style.display = "none";
-            }
-        });
+      // Filter the Index
+      const matches = searchIndex.filter(
+        (item) =>
+          item.name.toLowerCase().includes(query) ||
+          item.parent.toLowerCase().includes(query)
+      );
 
-        // 3. Hide on Click Outside
-        document.addEventListener("click", (e) => {
-            if (!searchForm.contains(e.target)) {
-                resultsBox.style.display = "none";
-            }
-        });
+      renderResults(matches, resultsBox);
+    });
 
-        // 4. Keep existing Submit (Enter key) behavior
-        searchForm.addEventListener("submit", (e) => {
-            e.preventDefault(); 
-            const query = searchInput.value.trim(); 
-            if (query.length > 0) {
-                window.location.href = `${rootPath}pages/destinations.html?search=${encodeURIComponent(query)}`;
-            }
-        });
-    }
+    // Hide on Click Outside
+    document.addEventListener("click", (e) => {
+      if (!searchForm.contains(e.target)) {
+        resultsBox.style.display = "none";
+      }
+    });
+
+    // Prevent Default Submit
+    searchForm.addEventListener("submit", (e) => e.preventDefault());
+  }
 });
 
-function highlightActiveLink() {
-    const path = window.location.pathname;
-    const navLinks = document.querySelectorAll('.nav-link');
+// =========================================
+// HELPER FUNCTIONS
+// =========================================
 
-    navLinks.forEach(link => {
-        if (link.getAttribute('href') !== "#" && path.includes(link.getAttribute('href').replace("../", "").replace("./", ""))) {
-            link.classList.add('active');
+function buildSearchIndex(data, rootPath) {
+  let index = [];
+
+  data.forEach((continent) => {
+    if (continent.countries) {
+      continent.countries.forEach((tour) => {
+        // 1. Add the main Country Tour
+        index.push({
+          name: tour.name,
+          category: "Tour Package",
+          parent: continent.name,
+          image: tour.image,
+          // Link to bookings.html
+          link: `${rootPath}pages/bookings.html?destination=${encodeURIComponent(
+            tour.name
+          )}`,
+        });
+
+        // 2. Add the City (e.g., Zurich)
+        if (tour.city) {
+          index.push({
+            name: tour.city,
+            category: `City in ${tour.name}`,
+            parent: tour.name,
+            image: tour.image,
+            link: `${rootPath}pages/bookings.html?destination=${encodeURIComponent(
+              tour.name
+            )}`,
+          });
         }
+
+        // 3. Add "Places to Visit" (Lucerne, Zermatt, etc.)
+        if (tour.placesToVisit) {
+          tour.placesToVisit.forEach((place) => {
+            if (place !== tour.city) {
+              index.push({
+                name: place,
+                category: `Visit in ${tour.name}`,
+                parent: tour.name,
+                image: tour.image,
+                link: `${rootPath}pages/bookings.html?destination=${encodeURIComponent(
+                  tour.name
+                )}`,
+              });
+            }
+          });
+        }
+      });
+    }
+  });
+  return index;
+}
+
+function renderResults(matches, container) {
+  if (matches.length === 0) {
+    container.innerHTML =
+      '<div class="p-3 text-muted small text-center">No matching tours found.<br>Please enter a valid destination</div>';
+    container.style.display = "block";
+    return;
+  }
+
+  // Limit to 6 results
+  matches.slice(0, 6).forEach((match) => {
+    const div = document.createElement("div");
+    div.classList.add("search-item");
+
+    div.innerHTML = `
+            <img src="${match.image}" alt="${match.name}" onerror="this.src='https://via.placeholder.com/50'">
+            <div class="info">
+                <h6 class="mb-0 text-dark" style="font-size: 14px;">
+                    ${match.name}
+                </h6>
+                <small class="text-primary" style="font-size: 11px; text-transform:uppercase; font-weight:700;">
+                    ${match.category}
+                </small>
+            </div>
+            <i class="bi bi-chevron-right ms-auto text-muted" style="font-size: 12px;"></i>
+        `;
+
+    div.addEventListener("click", () => {
+      window.location.href = match.link;
     });
+
+    container.appendChild(div);
+  });
+
+  container.style.display = "block";
+}
+
+function highlightActiveLink() {
+  const path = window.location.pathname;
+  const navLinks = document.querySelectorAll(".nav-link");
+  navLinks.forEach((link) => {
+    const href = link.getAttribute("href");
+    if (href && href !== "#") {
+      const cleanHref = href.replace("../", "").replace("./", "");
+      if (path.includes(cleanHref)) {
+        link.classList.add("active");
+      }
+    }
+  });
 }

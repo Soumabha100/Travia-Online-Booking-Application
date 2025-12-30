@@ -1,9 +1,51 @@
 [
   {
+    "name": "Germany",
+    "category": "Country",
+    "image": "https://images.unsplash.com/photo-1530122037265-a5f1f91d3b99?q=80&w=200&auto=format&fit=crop",
+    "link": "pages/bookings.html?destination=Germany"
+  },
+  {
+    "name": "France",
+    "category": "Country",
+    "image": "https://images.unsplash.com/photo-1530122037265-a5f1f91d3b99?q=80&w=200&auto=format&fit=crop",
+    "link": "pages/bookings.html?destination=France"
+  },
+  {
+    "name": "Netherlands",
+    "category": "Country",
+    "image": "https://images.unsplash.com/photo-1530122037265-a5f1f91d3b99?q=80&w=200&auto=format&fit=crop",
+    "link": "pages/bookings.html?destination=Netherlands"
+  },
+  {
+    "name": "Greece",
+    "category": "Country",
+    "image": "https://images.unsplash.com/photo-1530122037265-a5f1f91d3b99?q=80&w=200&auto=format&fit=crop",
+    "link": "pages/bookings.html?destination=Greece"
+  },
+  {
+    "name": "Portugal",
+    "category": "Country",
+    "image": "https://images.unsplash.com/photo-1530122037265-a5f1f91d3b99?q=80&w=200&auto=format&fit=crop",
+    "link": "pages/bookings.html?destination=Portugal"
+  },
+  {
     "name": "Switzerland",
     "category": "Country",
     "image": "https://images.unsplash.com/photo-1530122037265-a5f1f91d3b99?q=80&w=200&auto=format&fit=crop",
     "link": "pages/bookings.html?destination=Switzerland"
+  },
+  {
+    "name": "Austria",
+    "category": "Country",
+    "image": "https://images.unsplash.com/photo-1530122037265-a5f1f91d3b99?q=80&w=200&auto=format&fit=crop",
+    "link": "pages/bookings.html?destination=Austria"
+  },
+  {
+    "name": "United Kingdom",
+    "category": "Country",
+    "image": "https://images.unsplash.com/photo-1530122037265-a5f1f91d3b99?q=80&w=200&auto=format&fit=crop",
+    "link": "pages/bookings.html?destination=United%20Kingdom"
   },
   {
     "name": "Zurich",
