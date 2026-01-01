@@ -647,3 +647,189 @@ h1, h2, h3, h4, h5 {
   background-color: #ccc;
   border-radius: 10px;
 }
+
+/* Footer wrapper */
+.travia-footer {
+  background: linear-gradient(180deg, #001f2d, #002a3d);
+}
+
+/* Brand */
+.footer-brand {
+  font-size: 1.8rem;
+  font-weight: 700;
+}
+
+.brand-highlight {
+  color: #1dd3b0;
+}
+
+/* Text */
+.footer-text {
+  color: #b5c7d3;
+  margin-top: 10px;
+  line-height: 1.7;
+}
+
+/* Titles */
+.footer-title {
+  font-weight: 600;
+  margin-bottom: 15px;
+  position: relative;
+}
+
+.footer-title::after {
+  content: "";
+  width: 40px;
+  height: 2px;
+  background: #1dd3b0;
+  display: block;
+  margin-top: 6px;
+}
+
+/* Links */
+.footer-links {
+  list-style: none;
+  padding: 0;
+}
+
+.footer-links li {
+  margin-bottom: 10px;
+}
+
+.footer-links a {
+  color: #b5c7d3;
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+
+.footer-links a:hover {
+  color: #1dd3b0;
+  padding-left: 5px;
+}
+
+/* Social icons */
+.footer-socials {
+  margin-top: 20px;
+}
+
+.footer-socials a {
+  color: #ffffff;
+  font-size: 1.2rem;
+  margin-right: 15px;
+  transition: transform 0.3s ease, color 0.3s ease;
+}
+
+.footer-socials a:hover {
+  color: #1dd3b0;
+  transform: translateY(-3px);
+}
+
+/* Newsletter */
+.footer-newsletter input {
+  border-radius: 30px;
+  border: none;
+  padding: 10px 15px;
+}
+
+.footer-newsletter input:focus {
+  box-shadow: none;
+}
+
+/* CTA Button (same as navbar) */
+.btn-travia {
+  background-color: #1dd3b0;
+  color: #002a3d;
+  border-radius: 30px;
+  font-weight: 600;
+  padding: 10px 20px;
+}
+
+.btn-travia:hover {
+  background-color: #14b8a6;
+}
+
+/* Bottom bar */
+.footer-bottom {
+  background-color: #001824;
+  color: #8faec0;
+  font-size: 0.9rem;
+}
+
+.footer-links li {
+  margin-bottom: 12px;
+}
+
+/* Contact List Styles */
+.footer-contact-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.footer-contact-list li {
+  display: flex;
+  align-items: flex-start;
+  margin-bottom: 15px;
+  color: #b5c7d3;
+  font-size: 0.95rem;
+}
+
+.footer-contact-list i {
+  color: #1dd3b0; /* Ocean Green Icon */
+  margin-right: 12px;
+  font-size: 1.1rem;
+  margin-top: -2px; /* Align icon with text */
+}
+
+/* Better Input Group for Newsletter */
+.footer-newsletter .input-group {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 30px;
+  padding: 4px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.footer-newsletter input {
+  background: transparent !important;
+  border: none !important;
+  color: #fff !important;
+  box-shadow: none !important;
+  padding-left: 15px;
+}
+
+.footer-newsletter input::placeholder {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.footer-newsletter .btn-travia {
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Bottom Bar Legal Links */
+.footer-legal a {
+  color: #8faec0;
+  text-decoration: none;
+  font-size: 0.9rem;
+  transition: color 0.3s;
+}
+
+.footer-legal a:hover {
+  color: #1dd3b0;
+}
+
+/* Responsive tweak for bottom bar */
+@media (max-width: 768px) {
+  .footer-bottom .container {
+    flex-direction: column;
+    text-align: center;
+  }
+  .footer-legal {
+    margin-top: 10px;
+  }
+}
