@@ -1,5 +1,5 @@
 document.addEventListener("DOMContentLoaded", () => {
-  fetch("destinations.json")
+  fetch("http://localhost:8001/api/destinations")
     .then((response) => response.json())
     .then((data) => {
       const params = new URLSearchParams(window.location.search);

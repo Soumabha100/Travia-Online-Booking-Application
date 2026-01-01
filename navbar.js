@@ -1,9 +1,7 @@
 document.addEventListener("DOMContentLoaded", () => {
   const isPagesFolder = window.location.pathname.includes("/pages/");
   const rootPath = isPagesFolder ? "../" : "./";
-  const jsonPath = isPagesFolder
-    ? "destinations.json"
-    : "pages/destinations.json";
+  const API_URL = "http://localhost:8001/api/destinations"
 
   const navbarHTML = `
       <nav class="navbar navbar-expand-lg navbar-dark fixed-top travia-navbar">
@@ -71,29 +69,26 @@ document.addEventListener("DOMContentLoaded", () => {
     const searchInput = searchForm.querySelector("#search-input");
     const resultsBox = document.getElementById("search-results");
 
-    // This will hold our flattened, searchable list of all tours/places
     let searchIndex = [];
 
-    // LOAD JSON (With Error Handling)
-    fetch(jsonPath)
+    fetch(API_URL)
       .then((res) => {
         if (!res.ok) {
-          throw new Error(
-            `HTTP Error! Status: ${res.status} Path: ${jsonPath}`
-          );
+          throw new Error(`Server Returned Status: ${res.status}`);
         }
         return res.json();
       })
       .then((data) => {
+        if (!Array.isArray(data)) {
+          throw new Error("received data is not an ArrayQ")
+        }
         searchIndex = buildSearchIndex(data, rootPath);
-        // console.log("Search Index Ready:", searchIndex.length, "items");
+        console.log(`✅ MondoDatabae Cloud Loaded ${searchIndex.length} searchable items.`)
       })
       .catch((err) => {
-        console.error("Error loading inventory:", err);
-        // Optional: Show error in search box if needed
+        console.error("❌ API Connection Failed", err);
       });
 
-    // Search Listener
     searchInput.addEventListener("input", (e) => {
       const query = e.target.value.toLowerCase().trim();
       resultsBox.innerHTML = "";
@@ -102,8 +97,6 @@ document.addEventListener("DOMContentLoaded", () => {
         resultsBox.style.display = "none";
         return;
       }
-
-      // Filter the Index
       const matches = searchIndex.filter(
         (item) =>
           item.name.toLowerCase().includes(query) ||
@@ -113,21 +106,15 @@ document.addEventListener("DOMContentLoaded", () => {
       renderResults(matches, resultsBox);
     });
 
-    // Hide on Click Outside
     document.addEventListener("click", (e) => {
       if (!searchForm.contains(e.target)) {
         resultsBox.style.display = "none";
       }
     });
 
-    // Prevent Default Submit
     searchForm.addEventListener("submit", (e) => e.preventDefault());
   }
 });
-
-// =========================================
-// HELPER FUNCTIONS
-// =========================================
 
 function buildSearchIndex(data, rootPath) {
   let index = [];
@@ -135,19 +122,16 @@ function buildSearchIndex(data, rootPath) {
   data.forEach((continent) => {
     if (continent.countries) {
       continent.countries.forEach((tour) => {
-        // 1. Add the main Country Tour
         index.push({
           name: tour.name,
           category: "Tour Package",
           parent: continent.name,
           image: tour.image,
-          // Link to bookings.html
           link: `${rootPath}pages/bookings.html?destination=${encodeURIComponent(
             tour.name
           )}`,
         });
 
-        // 2. Add the City (e.g., Zurich)
         if (tour.city) {
           index.push({
             name: tour.city,
@@ -159,8 +143,6 @@ function buildSearchIndex(data, rootPath) {
             )}`,
           });
         }
-
-        // 3. Add "Places to Visit" (Lucerne, Zermatt, etc.)
         if (tour.placesToVisit) {
           tour.placesToVisit.forEach((place) => {
             if (place !== tour.city) {
@@ -190,8 +172,7 @@ function renderResults(matches, container) {
     return;
   }
 
-  // Limit to 6 results
-  matches.slice(0, 6).forEach((match) => {
+  matches.slice(0, 10).forEach((match) => {
     const div = document.createElement("div");
     div.classList.add("search-item");
 

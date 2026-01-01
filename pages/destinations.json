@@ -141,14 +141,14 @@
         "name": "India",
         "city": "New Delhi",
         "price": "$499",
-        "image": "https://images.unsplash.com/photo-1524492412937-b28074a5d7da?q=80&w=600&auto=format&fit=crop",
+        "image": "https://i.ibb.co/RGM4PYJ8/India1.webp",
         "desc": "The majestic Taj Mahal, vibrant festivals, and diverse culinary spices.",
         "longDesc": "A journey through the Golden Triangle. Start in the capital New Delhi, witness the breathtaking Taj Mahal in Agra, and explore the royal palaces of Jaipur in Rajasthan.",
         "rating": 4.8,
         "reviews": 300,
         "duration": "7 Days",
         "groupSize": "Max 20",
-        "placesToVisit": ["New Delhi", "Agra", "Jaipur", "Mumbai", "Goa"]
+        "placesToVisit": ["New Delhi", "Agra", "Jaipur", "Mumbai", "Goa", "Kolkata", "Chennai"]
       },
       {
         "name": "Japan",
@@ -162,6 +162,71 @@
         "duration": "8 Days",
         "groupSize": "Max 12",
         "placesToVisit": ["Tokyo", "Kyoto", "Osaka", "Hiroshima", "Nara"]
+      },
+      {
+        "name": "Thailand",
+        "city": "Bangkok",
+        "price": "$699",
+        "image": "https://i.ibb.co/QvsGhs3W/Thailand.webp",
+        "desc": "Golden temples, bustling street markets, and turquoise island waters.",
+        "longDesc": "Explore the Land of Smiles. From the vibrant street life and temples of Bangkok to the relaxing beaches of Phuket and the historic ruins of Ayutthaya, Thailand offers an unforgettable escape.",
+        "rating": 4.7,
+        "reviews": 420,
+        "duration": "6 Days",
+        "groupSize": "Max 15",
+        "placesToVisit": ["Bangkok", "Phuket", "Chiang Mai", "Ayutthaya", "Krabi"]
+      },
+      {
+        "name": "Indonesia",
+        "city": "Bali",
+        "price": "$799",
+        "image": "https://images.unsplash.com/photo-1537996194471-e657df975ab4?q=80&w=600&auto=format&fit=crop",
+        "desc": "Tropical beaches, lush rice terraces, and spiritual temple retreats.",
+        "longDesc": "A tropical paradise awaits in Indonesia. Discover the spiritual heart of Ubud, surf the waves in Seminyak, and witness the stunning cliffs of Nusa Penida. Perfect for both relaxation and adventure.",
+        "rating": 4.8,
+        "reviews": 380,
+        "duration": "7 Days",
+        "groupSize": "Max 10",
+        "placesToVisit": ["Bali", "Ubud", "Jakarta", "Nusa Penida", "Komodo Island"]
+      },
+      {
+        "name": "Vietnam",
+        "city": "Hanoi",
+        "price": "$599",
+        "image": "https://images.unsplash.com/photo-1528127269322-539801943592?q=80&w=600&auto=format&fit=crop",
+        "desc": "Limestone islands, deep history, and world-famous street food.",
+        "longDesc": "Cruise through the emerald waters of Halong Bay, wander the lantern-lit streets of Hoi An, and experience the bustling energy of Hanoi. Vietnam offers a rich history and incredible natural beauty.",
+        "rating": 4.6,
+        "reviews": 210,
+        "duration": "9 Days",
+        "groupSize": "Max 18",
+        "placesToVisit": ["Hanoi", "Halong Bay", "Ho Chi Minh City", "Hoi An", "Da Nang"]
+      },
+      {
+        "name": "South Korea",
+        "city": "Seoul",
+        "price": "$1,299",
+        "image": "https://i.ibb.co/YFXjk46D/South-Korea1.webp",
+        "desc": "K-Pop culture, futuristic cities, and majestic royal palaces.",
+        "longDesc": "Where ancient tradition meets modern technology. Visit the grand Gyeongbokgung Palace, shop in the trendy districts of Myeongdong, and enjoy the vibrant nightlife and BBQ of Seoul.",
+        "rating": 4.9,
+        "reviews": 180,
+        "duration": "7 Days",
+        "groupSize": "Max 14",
+        "placesToVisit": ["Seoul", "Busan", "Jeju Island", "Incheon", "Gyeongju"]
+      },
+      {
+        "name": "United Arab Emirates",
+        "city": "Dubai",
+        "price": "$1,499",
+        "image": "https://i.ibb.co/4wp7YW15/Dubai.webp",
+        "desc": "Futuristic skylines, luxury shopping, and desert safaris.",
+        "longDesc": "Experience ultimate luxury in the desert. Ascend the Burj Khalifa, the world's tallest building, shop at the massive Dubai Mall, and take a thrilling 4x4 safari across the golden sand dunes.",
+        "rating": 4.8,
+        "reviews": 310,
+        "duration": "5 Days",
+        "groupSize": "Max 25",
+        "placesToVisit": ["Dubai", "Abu Dhabi", "Palm Jumeirah", "Desert Safari", "Sharjah"]
       }
     ]
   }

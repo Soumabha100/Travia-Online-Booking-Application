@@ -1,49 +1,51 @@
 document.addEventListener("DOMContentLoaded", async () => {
-  // 1. GET THE DESTINATION FROM URL
-  // Example: bookings.html?destination=Japan -> destinationName = "Japan"
-  const params = new URLSearchParams(window.location.search);
-  const destinationName = params.get("destination");
+    const params = new URLSearchParams(window.location.search);
+    const destinationName = params.get("destination");
 
-  // Safety Check: If no destination is provided, stop or show default
-  if (!destinationName) {
-    console.warn("No destination specified in URL.");
-    // Optional: window.location.href = "destinations.html"; // Redirect back
-    return;
-  }
-
-  try {
-    // 2. FETCH DATA FROM JSON ("BACKEND")
-    const response = await fetch("destinations.json");
-    const data = await response.json();
-
-    // 3. FIND THE MATCHING COUNTRY OBJECT
-    let selectedPlace = null;
-
-    // Our JSON is structured by Continents, so we loop through them first
-    for (const continent of data) {
-      // .find() looks for the first item that matches the condition
-      const found = continent.countries.find((c) => c.name === destinationName);
-      if (found) {
-        selectedPlace = found;
-        break; // Stop searching once found
-      }
+    if (!destinationName) {
+        console.warn("No destination specified.");
+        return; 
     }
 
-    // 4. UPDATE THE PAGE CONTENT
-    if (selectedPlace) {
-      updatePageContent(selectedPlace);
-    } else {
-      document.querySelector(
-        ".booking-section"
-      ).innerHTML = `<div class="container text-center py-5">
-            <h2>Destination Not Found</h2>
-            <p>Sorry, we don't have a package for <strong>${destinationName}</strong> yet.</p>
-            <a href="destinations.html" class="btn btn-primary">See available tours</a>
-         </div>`;
+    const API_URL = "http://localhost:8001/api/destinations";
+
+    try {
+        const response = await fetch(API_URL);
+        
+        if (!response.ok) {
+            throw new Error("Could not connect to Backend API");
+        }
+
+        const data = await response.json();
+        let selectedPlace = null;
+        
+        for (const continent of data) {
+            const found = continent.countries.find(c => c.name === destinationName);
+            if (found) {
+                selectedPlace = found;
+                break; 
+            }
+        }
+
+        if (selectedPlace) {
+            updatePageContent(selectedPlace);
+        } else {
+            document.querySelector(".booking-section").innerHTML = 
+                `<div class="container text-center py-5">
+                    <h2>Destination Not Found</h2>
+                    <p class="text-muted">We couldn't find "${destinationName}" in our database.</p>
+                    <a href="destinations.html" class="btn btn-primary mt-3">Go Back</a>
+                 </div>`;
+        }
+
+    } catch (error) {
+        console.error("Error loading tour data:", error);
+        document.querySelector(".booking-section").innerHTML = 
+            `<div class="container text-center py-5 text-danger">
+                <h3>Server Error</h3>
+                <p>Ensure your backend (node server.js) is running on port 5000.</p>
+             </div>`;
     }
-  } catch (error) {
-    console.error("Error loading tour data:", error);
-  }
 });
 
 // === LOGIC TO UPDATE HTML ELEMENTS ===
