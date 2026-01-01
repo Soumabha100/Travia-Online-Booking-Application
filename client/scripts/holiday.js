@@ -1,5 +1,5 @@
 document.addEventListener("DOMContentLoaded", () => {
-  fetch("holidays.json")
+  fetch("/client/holidays.json")
     .then((response) => response.json())
     .then((holidays) => loadHolidays(holidays))
     .catch((error) => console.error("Error:", error));

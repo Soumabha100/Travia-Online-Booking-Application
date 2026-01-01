@@ -55,15 +55,15 @@ a,
 }
 
 .parallax-1 {
-  background-image: url(images/BG1.jpg);
+  background-image: url(../public/images/BG1.jpg);
 }
 
 .parallax-2 {
-  background-image: url(images/BG2.jpg);
+  background-image: url(../public/images/BG2.jpg);
 }
 
 .parallax-3 {
-  background-image: url(images/BG3.jpg);
+  background-image: url(../public/images/BG3.jpg);
 }
 
 .cards {

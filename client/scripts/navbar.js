@@ -6,8 +6,8 @@ document.addEventListener("DOMContentLoaded", () => {
   const navbarHTML = `
       <nav class="navbar navbar-expand-lg navbar-dark fixed-top travia-navbar">
         <div class="container">
-          <a class="navbar-brand fw-bold" href="${rootPath}index.html">
-            <img class="travia" src="${rootPath}assets/Travia.png" alt="Travia Logo" />
+          <a class="navbar-brand fw-bold" href="${rootPath}pages/index.html">
+            <img class="travia" src="${rootPath}public/assets/Travia.png" alt="Travia Logo" />
           </a>
   
           <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#traviaNavbar">
@@ -17,7 +17,7 @@ document.addEventListener("DOMContentLoaded", () => {
           <div class="collapse navbar-collapse" id="traviaNavbar">
             <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
               <li class="nav-item">
-                <a class="nav-link" href="${rootPath}index.html" id="nav-home">Home</a>
+                <a class="nav-link" href="${rootPath}pages/index.html" id="nav-home">Home</a>
               </li>
               <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown">
@@ -44,7 +44,7 @@ document.addEventListener("DOMContentLoaded", () => {
               <form class="search-box me-3 position-relative" role="search" autocomplete="off">
                 <input class="form-control" id="search-input" type="search" placeholder="Search tours, cities..." aria-label="Search" />
                 <button type="submit">
-                  <img src="${rootPath}assets/Search.svg" alt="Search" />
+                  <img src="${rootPath}public/assets/Search.svg" alt="Search" />
                 </button>
                 <div id="search-results" class="search-results-box"></div>
               </form>
