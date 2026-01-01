@@ -31,7 +31,8 @@ const userSchema = new mongoose.Schema({
 
 }, { timestamps: true });
 
-userSchema.pre('save', async function (next) {
+
+userSchema.pre('save', async function () {
     if (this.isNew) {
         try {
             const counter = await Counter.findOneAndUpdate(
@@ -40,12 +41,10 @@ userSchema.pre('save', async function (next) {
                 { new: true, upsert: true }
             );
             this.memberId = counter.seq;
-            next();
         } catch (error) {
-            next(error);
+            console.error("Error generating Member ID:", error);
+            throw error; 
         }
-    } else {
-        next();
     }
 });
 

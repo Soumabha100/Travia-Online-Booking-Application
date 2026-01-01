@@ -4,6 +4,8 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const User = require('../models/User');
 
+console.log("✅ Auth Routes File Loaded!");
+
 const JWT_SECRET = process.env.JWT_SECRET || "travia_secret_key1836821";
 
 // Register Logic

@@ -1119,3 +1119,41 @@ transform: translateY(-3px);
   background-color: #ccc;
   border-radius: 10px;
 }
+
+/* === TOAST NOTIFICATIONS (Booking.com style) === */
+.toast-container {
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 10000; /* On top of everything */
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.toast {
+    background: #333;
+    color: white;
+    padding: 12px 24px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 0.95rem;
+    opacity: 0;
+    transform: translateY(-20px);
+    transition: all 0.3s ease;
+    min-width: 300px;
+}
+
+.toast.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.toast.success { background-color: #008080; /* Teal */ }
+.toast.error { background-color: #dc3545; /* Red */ }
+
+.toast i { font-size: 1.2rem; }

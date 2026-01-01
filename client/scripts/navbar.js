@@ -10,6 +10,37 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 function injectNavbar(rootPath) {
+  const token = localStorage.getItem("token");
+  const userStr = localStorage.getItem("user");
+  const user = userStr ? JSON.parse(userStr) : null;
+
+  let authButtonHTML = "";
+
+  if (token && user) {
+
+    authButtonHTML = `
+        <div class="dropdown ms-3">
+          <a href="#" class="d-flex align-items-center text-decoration-none dropdown-toggle" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+             <img src="${user.avatar || 'https://ui-avatars.com/api/?name=' + user.username + '&background=008080&color=fff'}" 
+                  alt="mdo" width="35" height="35" class="rounded-circle border border-2 border-white me-2">
+             <span class="text-white fw-bold d-none d-lg-block">${user.username}</span>
+          </a>
+          <ul class="dropdown-menu dropdown-menu-end text-small shadow" aria-labelledby="userDropdown">
+            <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#profileModal"><i class="bi bi-person me-2"></i>My Profile</a></li>
+            <li><a class="dropdown-item" href="${rootPath}pages/bookings.html"><i class="bi bi-ticket-perforated me-2"></i>My Bookings</a></li>
+            <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item text-danger" href="#" id="logoutBtn"><i class="bi bi-box-arrow-right me-2"></i>Logout</a></li>
+          </ul>
+        </div>
+    `;
+  } else {
+    // === GUEST STATE (Login Button) ===
+    authButtonHTML = `
+        <button type="button" class="btn btn-travia ms-3" data-bs-toggle="modal" data-bs-target="#authModal">Login</button>
+    `;
+  }
+
+  // === 2. INJECT NAVBAR HTML ===
   const navbarHTML = `
       <nav class="navbar navbar-expand-lg navbar-dark fixed-top travia-navbar">
         <div class="container">
@@ -43,12 +74,14 @@ function injectNavbar(rootPath) {
             </ul>
   
             <div class="d-flex align-items-center">
-              <form class="search-box me-3 position-relative" role="search" autocomplete="off">
+              <form class="search-box position-relative" role="search" autocomplete="off">
                 <input class="form-control" id="search-input" type="search" placeholder="Search tours..." aria-label="Search" />
                 <button type="submit"><img src="${rootPath}public/assets/Search.svg" alt="Search" /></button>
                 <div id="search-results" class="search-results-box"></div>
               </form>
-              <button type="button" class="btn btn-travia" data-bs-toggle="modal" data-bs-target="#authModal">Login</button>
+              
+              ${authButtonHTML}
+
             </div>
           </div>
         </div>
@@ -56,8 +89,28 @@ function injectNavbar(rootPath) {
     `;
 
   const navbarContainer = document.getElementById("navbar-container");
-  if (navbarContainer) navbarContainer.innerHTML = navbarHTML;
+  if (navbarContainer) {
+    navbarContainer.innerHTML = navbarHTML;
+
+    // === 3. ACTIVATE LOGOUT BUTTON ===
+    // We attach the listener AFTER the HTML is injected
+    const logoutBtn = document.getElementById("logoutBtn");
+    if (logoutBtn) {
+      logoutBtn.addEventListener("click", (e) => {
+        e.preventDefault();
+        // Clear storage
+        localStorage.removeItem("token");
+        localStorage.removeItem("user");
+        // Reload page to reset UI to Guest mode
+        window.location.reload();
+      });
+    }
+  }
 }
+
+// =========================================================
+//  EXISTING CODE BELOW (FOOTER, SEARCH, ETC.) - UNTOUCHED
+// =========================================================
 
 function injectFooter(rootPath) {
   const footerHTML = `
