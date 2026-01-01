@@ -1,5 +1,6 @@
 document.addEventListener("DOMContentLoaded", () => {
-  fetch("http://localhost:8001/api/destinations")
+    const API_URL = window.TraviaAPI.destinations;
+  fetch(API_URL)
     .then((response) => response.json())
     .then((data) => {
       const params = new URLSearchParams(window.location.search);

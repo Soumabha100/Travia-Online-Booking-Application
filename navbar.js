@@ -1,7 +1,7 @@
 document.addEventListener("DOMContentLoaded", () => {
   const isPagesFolder = window.location.pathname.includes("/pages/");
   const rootPath = isPagesFolder ? "../" : "./";
-  const API_URL = "http://localhost:8001/api/destinations"
+  const API_URL = window.TraviaAPI.destinations;
 
   const navbarHTML = `
       <nav class="navbar navbar-expand-lg navbar-dark fixed-top travia-navbar">

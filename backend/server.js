@@ -5,6 +5,9 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 
+const destinationRoutes = require('./routes/destinationRoutes');
+const bookingRoutes = require('./routes/bookingRoutes');
+
 const app = express();
 
 app.use(cors());
@@ -24,74 +27,11 @@ const connectDB = async () => {
 
 connectDB();
 
-// Database Schemas 
+// Use Routes ->
 
-const destinationSchema = new mongoose.Schema ({
-    name: String,
-    countries: [
-        {
-            name: String,  
-            city: String,  
-            price: String,
-            image: String,
-            desc: String,
-            longDesc: String,
-            rating: Number,
-            reviews: Number,
-            duration: String,
-            groupSize: String,
-            placesToVisit: [String] 
-        }
-    ]
-});
+app.use('/api/destinations' , destinationRoutes);
+app.use('/api/booking', bookingRoutes);
 
-const bookingSchema = new mongoose.Schema({
-    guestName: String,
-    destination: String,
-    date: Date,
-    guests: Number,
-    totalPrice: String,
-    tax: String,
-    status: { type: String, default: 'Confirmed' },
-    createdAt: { type: Date, default: Date.now }
-});
-
-// Models
-
-const Destination = mongoose.model("Destination", destinationSchema);
-const Booking = mongoose.model("Booking", bookingSchema);
-
-// API Routes
-
-app.get("/api/destinations", async (req, res) => {
-    try {
-        // console.log("📡 API Hit: Fetching destinations...");
-        const getAllDestinations = await Destination.find();
-
-        if (!getAllDestinations || getAllDestinations.length === 0) {
-            console.log( "⚠️ Database is Empty!");
-            return res.status(404).json({message: "No Data is Found!"});
-        }
-        res.json(getAllDestinations);
-        // console.log(`✅ Sent ${getAllDestinations.length} objects to frontend`)
-
-    } catch (error) {
-        console.error("❌ API Error!", error);
-        res.status(500).json({ message: "Server Error!"});
-    }
-});
-
-app.post("/api/bookings", async (req, res) => {
-    try {
-        const newBooking = new Booking(req.body);
-
-        await newBooking.save();
-
-         res.status(201).json({ message: "Booking Saved!", booking: newBooking});
-    } catch (error) {
-        res.status(500).json({ message: "Error Saving the Booking!"});
-    }
-});
 
 const PORT = 8001;
 

@@ -7,7 +7,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         return; 
     }
 
-    const API_URL = "http://localhost:8001/api/destinations";
+    const API_URL = window.TraviaAPI.destinations;
 
     try {
         const response = await fetch(API_URL);
