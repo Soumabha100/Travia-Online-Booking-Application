@@ -833,3 +833,20 @@ h1, h2, h3, h4, h5 {
     margin-top: 10px;
   }
 }
+
+.nav-link img {
+    width: 40px;
+    height: 40px;
+    object-fit: cover;
+    border-radius: 50%; /* Makes it a circle */
+    border: 2px solid #ffffff; /* Optional: Adds a nice white border */
+    margin-right: 8px; /* Adds space between image and text */
+}
+
+/* Ensure the logo stays correct size in case of conflicts */
+.navbar-brand img.travia {
+    width: auto;
+    height: 50px;
+    border-radius: 0;
+    border: none;
+}

@@ -1,0 +1,334 @@
+@import url("https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
+
+:root {
+    --travia-dark: #002a3d;
+    --travia-darker: #001f2d;
+    --travia-teal: #1dd3b0;
+    --travia-teal-hover: #14b8a6;
+    --text-muted: #64748b;
+    --bg-light: #f9fafb;
+    --sidebar-width: 280px;
+}
+
+body {
+    background-color: var(--bg-light);
+    font-family: "Open Sans", sans-serif;
+    overflow-x: hidden;
+    color: #334155;
+}
+
+h1, h2, h3, h4, h5 {
+    font-family: "Poppins", sans-serif;
+    color: var(--travia-dark);
+    font-weight: 700;
+}
+
+/* === SIDEBAR DESIGN === */
+#wrapper {
+    display: flex;
+    width: 100%;
+    min-height: 100vh;
+}
+
+#sidebar-wrapper {
+    min-width: var(--sidebar-width);
+    max-width: var(--sidebar-width);
+    background: linear-gradient(180deg, var(--travia-darker), var(--travia-dark));
+    color: white;
+    transition: all 0.3s ease;
+    box-shadow: 4px 0 20px rgba(0,0,0,0.1);
+    z-index: 100;
+}
+
+.sidebar-heading {
+    padding: 2rem 1.5rem;
+    font-size: 1.5rem;
+    font-family: "Poppins", sans-serif;
+    letter-spacing: 1px;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+    color: white;
+}
+
+.sidebar-heading i {
+    color: var(--travia-teal);
+}
+
+.list-group-item {
+    background: transparent !important;
+    color: #b5c7d3 !important;
+    border: none;
+    padding: 16px 30px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    border-left: 4px solid transparent;
+    font-family: "Poppins", sans-serif;
+}
+
+.list-group-item:hover {
+    color: var(--travia-teal) !important;
+    background: rgba(255,255,255,0.05) !important;
+    padding-left: 35px;
+}
+
+.list-group-item.active {
+    color: white !important;
+    background: linear-gradient(90deg, rgba(29, 211, 176, 0.15), transparent) !important;
+    border-left-color: var(--travia-teal);
+}
+
+/* === MAIN CONTENT AREA === */
+#page-content-wrapper {
+    flex: 1;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Navbar inside Admin */
+.admin-navbar {
+    background: white;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.03);
+    padding: 15px 30px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+/* === STATS CARDS (Using Travia-Card Style) === */
+.stats-card {
+    background: white;
+    border-radius: 20px;
+    padding: 25px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+    transition: all 0.3s ease;
+    border: 1px solid rgba(0,0,0,0.02);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 100%;
+}
+
+.stats-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+    border-color: var(--travia-teal);
+}
+
+.stats-value {
+    font-size: 2.5rem;
+    font-weight: 800;
+    color: var(--travia-dark);
+    line-height: 1;
+    margin-bottom: 5px;
+}
+
+.stats-label {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.stats-icon {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.8rem;
+}
+
+.icon-blue { background: rgba(13, 110, 253, 0.1); color: #0d6efd; }
+.icon-teal { background: rgba(29, 211, 176, 0.15); color: var(--travia-teal); }
+.icon-purple { background: rgba(111, 66, 193, 0.1); color: #6f42c1; }
+.icon-orange { background: rgba(253, 126, 20, 0.1); color: #fd7e14; }
+
+/* === BUTTONS (Travia Pill Style) === */
+.btn-travia-primary {
+    background-color: var(--travia-teal);
+    color: var(--travia-dark);
+    padding: 10px 24px;
+    border-radius: 50px;
+    font-weight: 700;
+    border: none;
+    transition: all 0.3s ease;
+}
+
+.btn-travia-primary:hover {
+    background-color: var(--travia-teal-hover);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(29, 211, 176, 0.4);
+}
+
+.btn-travia-outline {
+    background: transparent;
+    border: 2px solid var(--travia-teal);
+    color: var(--travia-dark);
+    padding: 8px 20px;
+    border-radius: 50px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.btn-travia-outline:hover {
+    background: var(--travia-teal);
+    color: var(--travia-dark);
+}
+
+/* === DATA GRID (Destination Cards) === */
+.card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 24px;
+    padding: 10px 0;
+}
+
+.dest-card {
+    background: white;
+    border-radius: 24px;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+    transition: all 0.4s ease;
+    border: 1px solid transparent;
+    display: flex;
+    flex-direction: column;
+}
+
+.dest-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+    border-color: var(--travia-teal);
+}
+
+.dest-card-img-wrapper {
+    height: 200px;
+    position: relative;
+    overflow: hidden;
+}
+
+.dest-card-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.6s ease;
+}
+
+.dest-card:hover .dest-card-img {
+    transform: scale(1.1);
+}
+
+.dest-card-body {
+    padding: 20px;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.dest-card-title {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--travia-dark);
+    margin-bottom: 8px;
+}
+
+.dest-card-desc {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    line-height: 1.5;
+    margin-bottom: 20px;
+}
+
+/* === MODAL STYLING (The Popup) === */
+.modal-content {
+    border-radius: 24px;
+    border: none;
+    box-shadow: 0 25px 50px rgba(0,0,0,0.2);
+    overflow: hidden;
+}
+
+.modal-header {
+    background: var(--travia-dark);
+    color: white;
+    padding: 20px 30px;
+    border-bottom: none;
+}
+
+.modal-title {
+    font-family: "Poppins", sans-serif;
+    font-weight: 700;
+}
+
+.btn-close-white {
+    filter: invert(1) grayscale(100%) brightness(200%);
+}
+
+.modal-body {
+    padding: 30px;
+    background: #ffffff;
+}
+
+/* Form Inputs inside Modal */
+.form-label {
+    font-weight: 600;
+    color: var(--travia-dark);
+    margin-bottom: 8px;
+    font-size: 0.9rem;
+}
+
+.form-control, .form-select {
+    padding: 12px 15px;
+    border-radius: 12px;
+    border: 1px solid #e2e8f0;
+    background: #f8fafc;
+    transition: all 0.3s ease;
+    font-size: 0.95rem;
+}
+
+.form-control:focus, .form-select:focus {
+    background: #ffffff;
+    border-color: var(--travia-teal);
+    box-shadow: 0 0 0 4px rgba(29, 211, 176, 0.1);
+}
+
+.input-group-text {
+    border-radius: 12px 0 0 12px;
+    background: #e2e8f0;
+    border: 1px solid #e2e8f0;
+    color: var(--text-muted);
+}
+
+.modal-footer {
+    padding: 20px 30px;
+    background: #f8fafc;
+    border-top: 1px solid #edf2f7;
+}
+
+/* Table Styling */
+.table-hover tbody tr:hover {
+    background-color: rgba(29, 211, 176, 0.05);
+}
+
+.badge-travia-admin {
+    background-color: var(--travia-dark);
+    color: var(--travia-teal);
+    border: 1px solid var(--travia-teal);
+    padding: 5px 10px;
+    border-radius: 20px;
+}
+
+/* Animations */
+.admin-view {
+    animation: fadeUp 0.4s ease-out forwards;
+}
+
+@keyframes fadeUp {
+    from { opacity: 0; transform: translateY(15px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Mobile Toggle */
+.toggled #sidebar-wrapper {
+    margin-left: calc(-1 * var(--sidebar-width));
+}

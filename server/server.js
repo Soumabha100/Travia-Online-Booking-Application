@@ -7,7 +7,8 @@ const cors = require('cors');
 
 const destinationRoutes = require('./routes/destinationRoutes');
 const bookingRoutes = require('./routes/bookingRoutes');
-const authRoutes = require('./routes/authRoutes')
+const authRoutes = require('./routes/authRoutes');
+const adminRoutes = require('./routes/adminRoutes');
 
 const app = express();
 
@@ -33,6 +34,7 @@ connectDB();
 app.use('/api/destinations' , destinationRoutes);
 app.use('/api/booking', bookingRoutes);
 app.use('/api/auth', authRoutes);
+app.use('/api/admin', adminRoutes);
 
 
 const PORT = 8001;

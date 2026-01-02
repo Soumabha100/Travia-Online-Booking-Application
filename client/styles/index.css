@@ -1153,7 +1153,7 @@ transform: translateY(-3px);
     transform: translateY(0);
 }
 
-.toast.success { background-color: #009875; /* Teal */ }
+.toast.success { background-color: #009898; /* Teal */ }
 .toast.error { background-color: #dc3545; /* Red */ }
 
 .toast i { font-size: 1.2rem; }

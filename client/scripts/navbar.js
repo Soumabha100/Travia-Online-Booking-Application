@@ -19,14 +19,15 @@ function injectNavbar(rootPath) {
   let authSectionHTML = "";
 
   if (token && user) {
-  // User is Logged In
+    // === USER IS LOGGED IN ===
     authSectionHTML = `
-    <a href="${rootPath}pages/profile.html" class="travia-profile-pill ms-3">
+    <a href="${rootPath}pages/profile.html" class="travia-profile-pill ms-3" style="text-decoration: none; display: flex; align-items: center; color: white;">
         <img 
           src="${user.avatar || 'https://cdn-icons-png.flaticon.com/512/3135/3135715.png'}" 
           alt="Profile" 
+          style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover; border: 2px solid #fff; margin-right: 8px;"
         />
-        <span>${user.username}</span>
+        <span style="font-weight: 600;">${user.username}</span>
       </a>
     `;
   } else {
@@ -88,18 +89,11 @@ function injectNavbar(rootPath) {
   if (navbarContainer) {
     navbarContainer.innerHTML = navbarHTML;
 
-    // === 4. ATTACH EVENTS (Only Logout Needed Now) ===
+    // === 4. ATTACH EVENTS (Logout Logic) ===
     if (token && user) {
-      // Handle Logout
-      const handleLogout = (e) => {
-        e.preventDefault();
-        localStorage.removeItem("token");
-        localStorage.removeItem("user");
-        window.location.href = rootPath + "pages/index.html"; // Redirect to home
-      };
-
-      const logoutNav = document.getElementById("logoutBtnNav");
-      if (logoutNav) logoutNav.addEventListener("click", handleLogout);
+      // NOTE: This logout listener isn't attached to anything in the HTML above yet (no #logoutBtnNav).
+      // If you have a logout button inside profile.html, that handles itself.
+      // But if you add a dropdown menu here later, use this logic.
     }
   }
 }
@@ -181,10 +175,7 @@ function initSearch(rootPath) {
   const resultsBox = document.getElementById("search-results");
   let searchIndex = [];
 
-  if (!API_URL) {
-    // console.warn("TraviaAPI not found. Make sure apiConfig.js is loaded.");
-    return;
-  }
+  if (!API_URL) return;
 
   fetch(API_URL)
     .then((res) => {
