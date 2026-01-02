@@ -1,65 +1,77 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
-const Tour = require('../models/Tour');
+// We now use the 'Tour' model instead of the old 'Destination' model
+const Tour = require("../models/Tour");
 
-// Public Route: GET /api/destinations
-router.get('/', async (req, res) => {
-    try {
-        // 1. Fetch Tours with all related "Intelligence"
-        const tours = await Tour.find()
-            .populate('countryId')
-            .populate('cityId');
+router.get("/", async (req, res) => {
+  try {
+    // 1. Fetch all Tours and populate their linked Country and City data
+    // This pulls in the "Real" data (Currency, Visa, Prices)
+    const tours = await Tour.find()
+        .populate('countryId')
+        .populate('cityId');
 
-        // 2. The "Translator" Logic
-        const responseData = [];
+    if (!tours || tours.length === 0) {
+        console.log("⚠️ No Tours found in database.");
+        return res.status(404).json({ message: "No Data Found" });
+    }
 
-        for (const tour of tours) {
-            const country = tour.countryId;
-            const city = tour.cityId;
-            
-            if (!country || !city) continue;
+    // 2. Translate the data into the structure the Frontend expects
+    // Structure: [ { name: "Europe", countries: [ { ...tourData } ] }, ... ]
+    const responseData = [];
 
-            const continentName = country.continent;
+    for (const tour of tours) {
+        // Skip if data is incomplete
+        if (!tour.countryId || !tour.cityId) continue;
 
-            // Find or Create Continent bucket
-            let continent = responseData.find(c => c.name === continentName);
-            if (!continent) {
-                continent = { name: continentName, countries: [] };
-                responseData.push(continent);
-            }
+        const country = tour.countryId;
+        const city = tour.cityId;
+        const continentName = country.continent;
 
-            // Create the "Smart Card" data
-            continent.countries.push({
-                _id: tour._id,
-                
-                // Display Info
-                name: country.name,           // "France"
-                city: tour.name,              // "Paris Essentials" (Tour Name)
-                realCityName: city.name,      // "Paris" (For filters)
-                
-                // Inventory & Price
-                price: `$${tour.price}`,
-                image: tour.images[0],
-                desc: tour.overview,
-                
-                // Realism Data (The New Fields)
-                rating: tour.stats.rating,
-                reviews: tour.stats.reviewsCount,
-                duration: tour.duration,
-                groupSize: tour.groupSize,
-                
-                // Strategic Badges
-                visa: country.visaPolicy,
-                currency: country.currency,
-                isTrending: tour.stats.isTrending,
-                yieldTier: country.marketYieldTier // Used for styling (Gold border for High yield?)
-            });
+        // A. Find or Create the Continent Bucket
+        let continent = responseData.find(c => c.name === continentName);
+        if (!continent) {
+            continent = { name: continentName, countries: [] };
+            responseData.push(continent);
         }
 
-        res.json(responseData);
-    } catch (err) {
-        res.status(500).json({ error: err.message });
+        // B. Format the Tour Object
+        // This maps your database fields to the names used in 'destinations.js'
+        continent.countries.push({
+            _id: tour._id,
+            
+            // Titles
+            name: country.name,             // e.g., "France" (Subtitle)
+            city: tour.name,                // e.g., "Paris Essentials" (Main Title)
+            realCityName: city.name,        // e.g., "Paris" (For searching)
+            
+            // Inventory
+            price: `$${tour.price}`,        // Format as string for frontend
+            image: tour.images && tour.images.length > 0 ? tour.images[0] : "",
+            desc: tour.overview,
+            
+            // Stats
+            rating: tour.stats?.rating || 4.5,
+            reviews: tour.stats?.reviewsCount || 0,
+            
+            // Details
+            duration: tour.duration,
+            groupSize: tour.groupSize,
+            
+            // Intelligence Data (The New Realism Fields)
+            visa: country.visaPolicy,
+            currency: country.currency,
+            isTrending: tour.stats?.isTrending
+        });
     }
+
+    // 3. Send the formatted data
+    res.json(responseData);
+
+  } catch (error) {
+    console.error("❌ API Error in destinationRoutes:", error);
+    res.status(500).json({ message: "Server Error fetching destinations" });
+  }
 });
 
 module.exports = router;
