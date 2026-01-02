@@ -935,3 +935,50 @@ a {
     border-radius: 0;
     border: none;
 }
+
+* Ensure cards are equal height */
+.dest-card {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    border: 1px solid #e0e0e0; /* Subtle border */
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.dest-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+}
+
+/* Image wrapper needs relative positioning for the badges */
+.dest-card-img-wrapper {
+    position: relative;
+    height: 200px; /* Fixed height for images */
+    overflow: hidden;
+}
+
+.dest-card-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* Flex body to push footer to bottom */
+.dest-card-body {
+    padding: 1rem;
+    flex: 1; /* Takes up remaining space */
+    display: flex;
+    flex-direction: column;
+    background: #fff;
+}
+
+/* Badges Polish */
+.badge {
+    font-weight: 500;
+    letter-spacing: 0.5px;
+}
+
+/* Price & Button Footer */
+.dest-card-footer {
+    margin-top: auto; /* Pushes to bottom */
+}

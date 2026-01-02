@@ -1,5 +1,4 @@
-// --- CONFIGURATION ---
-const API_BASE = "http://localhost:8001/api";
+const API_BASE = "https://travia-online-booking-application-backend.onrender.com/api";
 let packageModal; // Bootstrap Modal Instance
 
 document.addEventListener("DOMContentLoaded", async () => {
@@ -124,33 +123,36 @@ document.addEventListener("DOMContentLoaded", async () => {
                     const safePkg = encodeURIComponent(JSON.stringify(pkg));
 
                     card.innerHTML = `
-                        <div class="dest-card-img-wrapper">
-                            <img src="${pkg.image}" class="dest-card-img" alt="${pkg.city}" onerror="this.src='../public/images/placeholder.jpg'">
-                            <span class="badge bg-dark position-absolute top-0 start-0 m-2 shadow">${region.name}</span>
-                        </div>
-                        <div class="dest-card-body">
-                            <h5 class="dest-card-title">${pkg.city}, ${pkg.name}</h5>
-                            <p class="dest-card-desc text-truncate">${pkg.desc}</p>
-                            
-                            <div class="dest-card-footer mt-auto">
-                                <div class="dest-price text-success fw-bold">
-                                    ${pkg.price}
-                                </div>
-                                <div class="d-flex gap-2">
-                                    <button class="btn btn-sm btn-outline-danger btn-delete" 
-                                        data-region="${region._id}" 
-                                        data-pkg="${pkg._id}">
-                                        <i class="bi bi-trash"></i>
-                                    </button>
-                                    <button class="btn btn-sm btn-primary btn-edit" 
-                                        data-region="${region._id}" 
-                                        data-pkg="${safePkg}">
-                                        <i class="bi bi-pencil-square"></i> Edit
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    `;
+    <div class="dest-card-img-wrapper">
+        <img src="${pkg.image}" 
+             class="dest-card-img" 
+             alt="${pkg.city}" 
+             onerror="this.onerror=null; this.src='../public/assets/Travia.png'"> 
+        <span class="badge bg-dark position-absolute top-0 start-0 m-2 shadow">${region.name}</span>
+    </div>
+    <div class="dest-card-body">
+        <h5 class="dest-card-title">${pkg.city}, ${pkg.name}</h5>
+        <p class="dest-card-desc text-truncate">${pkg.desc}</p>
+        
+        <div class="dest-card-footer mt-auto">
+            <div class="dest-price text-success fw-bold">
+                ${pkg.price}
+            </div>
+            <div class="d-flex gap-2">
+                <button class="btn btn-sm btn-outline-danger btn-delete" 
+                    data-region="${region._id}" 
+                    data-pkg="${pkg._id}">
+                    <i class="bi bi-trash"></i>
+                </button>
+                <button class="btn btn-sm btn-primary btn-edit" 
+                    data-region="${region._id}" 
+                    data-pkg="${safePkg}">
+                    <i class="bi bi-pencil-square"></i> Edit
+                </button>
+            </div>
+        </div>
+    </div>
+`;
                     grid.appendChild(card);
                 });
             });

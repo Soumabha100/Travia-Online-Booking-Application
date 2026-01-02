@@ -23,7 +23,10 @@ function injectNavbar(rootPath) {
     authSectionHTML = `
     <a href="${rootPath}pages/profile.html" class="travia-profile-pill ms-3" style="text-decoration: none; display: flex; align-items: center; color: white;">
         <img 
-          src="${user.avatar || 'https://cdn-icons-png.flaticon.com/512/3135/3135715.png'}" 
+          src="${
+            user.avatar ||
+            "https://cdn-icons-png.flaticon.com/512/3135/3135715.png"
+          }" 
           alt="Profile" 
           style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover; border: 2px solid #fff; margin-right: 8px;"
         />
@@ -275,7 +278,8 @@ function renderResults(matches, container) {
     const div = document.createElement("div");
     div.classList.add("search-item");
     div.innerHTML = `
-            <img src="${match.image}" alt="${match.name}" onerror="this.src='https://via.placeholder.com/50'">
+            <img src="${match.image}" alt="${match.name}" 
+     onerror="this.onerror=null; this.src='../public/assets/Travia.png'">
             <div class="info">
                 <h6 class="mb-0 text-dark" style="font-size: 14px;">${match.name}</h6>
                 <small class="text-primary" style="font-size: 11px; text-transform:uppercase; font-weight:700;">${match.category}</small>
