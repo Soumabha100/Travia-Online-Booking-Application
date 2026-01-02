@@ -10,57 +10,33 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 function injectNavbar(rootPath) {
-  // 1. Get User Data
+  // 1. Get User Data from Local Storage
   const token = localStorage.getItem("token");
   const userStr = localStorage.getItem("user");
   const user = userStr ? JSON.parse(userStr) : null;
 
+  // 2. Decide what to show (Login Button vs. User Profile)
   let authSectionHTML = "";
 
   if (token && user) {
-    // === LOGGED IN (Show Avatar & Dropdown) ===
-    // NOTICE: We added 'data-bs-toggle="modal"' to the profile link. 
-    // This forces the modal to open without needing complex JavaScript.
+  // User is Logged In
     authSectionHTML = `
-        <div class="dropdown ms-3">
-          <a href="#" class="d-flex align-items-center text-decoration-none dropdown-toggle" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-             <img src="${user.avatar || 'https://cdn-icons-png.flaticon.com/512/3135/3135715.png'}" 
-                  alt="Profile" width="40" height="40" class="rounded-circle border border-2 border-white me-2">
-             <div class="d-none d-lg-block text-start">
-                <div class="text-white fw-bold" style="font-size: 0.9rem;">${user.username}</div>
-                <div class="text-white-50" style="font-size: 0.75rem;">Member</div>
-             </div>
-          </a>
-          <ul class="dropdown-menu dropdown-menu-end shadow" aria-labelledby="userDropdown">
-            <li>
-                <a class="dropdown-item py-2" href="#" 
-                   data-bs-toggle="modal" data-bs-target="#profileModal" 
-                   id="openProfileBtn">
-                    <i class="bi bi-person-circle me-2 text-primary"></i> My Profile
-                </a>
-            </li>
-            <li>
-                <a class="dropdown-item py-2" href="${rootPath}pages/bookings.html">
-                    <i class="bi bi-ticket-perforated me-2 text-success"></i> My Bookings
-                </a>
-            </li>
-            <li><hr class="dropdown-divider"></li>
-            <li>
-                <a class="dropdown-item py-2 text-danger" href="#" id="logoutBtnNav">
-                    <i class="bi bi-box-arrow-right me-2"></i> Logout
-                </a>
-            </li>
-          </ul>
-        </div>
+    <a href="${rootPath}pages/profile.html" class="travia-profile-pill ms-3">
+        <img 
+          src="${user.avatar || 'https://cdn-icons-png.flaticon.com/512/3135/3135715.png'}" 
+          alt="Profile" 
+        />
+        <span>${user.username}</span>
+      </a>
     `;
   } else {
-    // === GUEST (Show Login Button) ===
+    // === GUEST (NOT LOGGED IN) ===
     authSectionHTML = `
         <button type="button" class="btn btn-travia ms-3" data-bs-toggle="modal" data-bs-target="#authModal">Login</button>
     `;
   }
 
-  // 2. Inject HTML
+  // 3. The Navbar HTML
   const navbarHTML = `
       <nav class="navbar navbar-expand-lg navbar-dark fixed-top travia-navbar">
         <div class="container">
@@ -74,11 +50,18 @@ function injectNavbar(rootPath) {
   
           <div class="collapse navbar-collapse" id="traviaNavbar">
             <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
-              <li class="nav-item"><a class="nav-link" href="${rootPath}pages/index.html">Home</a></li>
+              <li class="nav-item">
+                <a class="nav-link" href="${rootPath}pages/index.html">Home</a>
+              </li>
               <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown">Destinations</a>
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown">
+                  Destinations
+                </a>
                 <ul class="dropdown-menu">
                   <li><a class="dropdown-item" href="${rootPath}pages/destinations.html">Popular Tours</a></li>
+                  <li><a class="dropdown-item" href="#">Europe</a></li>
+                  <li><a class="dropdown-item" href="#">Asia</a></li>
+                  <li><hr class="dropdown-divider" /></li>
                   <li><a class="dropdown-item" href="${rootPath}pages/destinations.html">All Destinations</a></li>
                 </ul>
               </li>
@@ -94,6 +77,7 @@ function injectNavbar(rootPath) {
               </form>
               
               ${authSectionHTML}
+
             </div>
           </div>
         </div>
@@ -104,41 +88,18 @@ function injectNavbar(rootPath) {
   if (navbarContainer) {
     navbarContainer.innerHTML = navbarHTML;
 
-    // === 3. ACTIVATE LOGIC (Logout & Profile Data Fill) ===
+    // === 4. ATTACH EVENTS (Only Logout Needed Now) ===
     if (token && user) {
-      
-      // LOGOUT
-      const logoutBtn = document.getElementById("logoutBtnNav");
-      if (logoutBtn) {
-        logoutBtn.addEventListener("click", (e) => {
-          e.preventDefault();
-          localStorage.removeItem("token");
-          localStorage.removeItem("user");
-          window.location.reload();
-        });
-      }
+      // Handle Logout
+      const handleLogout = (e) => {
+        e.preventDefault();
+        localStorage.removeItem("token");
+        localStorage.removeItem("user");
+        window.location.href = rootPath + "pages/index.html"; // Redirect to home
+      };
 
-      // FILL PROFILE DATA WHEN CLICKED
-      const profileBtn = document.getElementById("openProfileBtn");
-      if (profileBtn) {
-        profileBtn.addEventListener("click", () => {
-          // Fill the modal with user info
-          document.getElementById("profileName").textContent = user.username;
-          document.getElementById("profileEmail").textContent = user.email;
-          document.getElementById("profileId").textContent = "#" + (user.memberId || "---");
-          if(user.avatar) document.getElementById("profileAvatar").src = user.avatar;
-          
-          // Connect the Logout button INSIDE the modal
-          const modalLogout = document.getElementById("logoutBtnModal");
-          if(modalLogout) {
-             modalLogout.onclick = () => {
-                 localStorage.removeItem("token");
-                 localStorage.removeItem("user");
-                 window.location.reload();
-             };
-          }
-        });
-      }
+      const logoutNav = document.getElementById("logoutBtnNav");
+      if (logoutNav) logoutNav.addEventListener("click", handleLogout);
     }
   }
 }
@@ -220,7 +181,10 @@ function initSearch(rootPath) {
   const resultsBox = document.getElementById("search-results");
   let searchIndex = [];
 
-  if (!API_URL) return;
+  if (!API_URL) {
+    // console.warn("TraviaAPI not found. Make sure apiConfig.js is loaded.");
+    return;
+  }
 
   fetch(API_URL)
     .then((res) => {
@@ -271,7 +235,9 @@ function buildSearchIndex(data, rootPath) {
           category: "Tour Package",
           parent: continent.name,
           image: tour.image,
-          link: `${rootPath}pages/bookings.html?destination=${encodeURIComponent(tour.name)}`,
+          link: `${rootPath}pages/bookings.html?destination=${encodeURIComponent(
+            tour.name
+          )}`,
         });
 
         if (tour.city) {
@@ -280,7 +246,9 @@ function buildSearchIndex(data, rootPath) {
             category: `City in ${tour.name}`,
             parent: tour.name,
             image: tour.image,
-            link: `${rootPath}pages/bookings.html?destination=${encodeURIComponent(tour.name)}`,
+            link: `${rootPath}pages/bookings.html?destination=${encodeURIComponent(
+              tour.name
+            )}`,
           });
         }
         if (tour.placesToVisit) {
@@ -291,7 +259,9 @@ function buildSearchIndex(data, rootPath) {
                 category: `Visit in ${tour.name}`,
                 parent: tour.name,
                 image: tour.image,
-                link: `${rootPath}pages/bookings.html?destination=${encodeURIComponent(tour.name)}`,
+                link: `${rootPath}pages/bookings.html?destination=${encodeURIComponent(
+                  tour.name
+                )}`,
               });
             }
           });
@@ -304,7 +274,8 @@ function buildSearchIndex(data, rootPath) {
 
 function renderResults(matches, container) {
   if (matches.length === 0) {
-    container.innerHTML = '<div class="p-3 text-muted small text-center">No matching tours found.</div>';
+    container.innerHTML =
+      '<div class="p-3 text-muted small text-center">No matching tours found.</div>';
     container.style.display = "block";
     return;
   }

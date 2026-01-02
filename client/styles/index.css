@@ -1153,7 +1153,41 @@ transform: translateY(-3px);
     transform: translateY(0);
 }
 
-.toast.success { background-color: #008080; /* Teal */ }
+.toast.success { background-color: #009875; /* Teal */ }
 .toast.error { background-color: #dc3545; /* Red */ }
 
 .toast i { font-size: 1.2rem; }
+
+/* --- Profile Pill in Navbar --- */
+.travia-profile-pill {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  background: rgba(255, 255, 255, 0.15); /* Subtle glass background */
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  padding: 5px 15px 5px 5px; /* Space on right for text */
+  border-radius: 50px; /* Full rounded pill shape */
+  transition: all 0.3s ease;
+}
+
+.travia-profile-pill:hover {
+  background: rgba(255, 255, 255, 0.3);
+  border-color: #fff;
+  transform: translateY(-1px);
+}
+
+.travia-profile-pill img {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #fff;
+  margin-right: 10px;
+}
+
+.travia-profile-pill span {
+  color: #fff;
+  font-weight: 600;
+  font-size: 0.95rem;
+  letter-spacing: 0.3px;
+}

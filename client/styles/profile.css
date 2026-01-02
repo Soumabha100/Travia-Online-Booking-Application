@@ -1,0 +1,168 @@
+/* client/styles/profile.css */
+
+body {
+  background-color: #f0f2f5;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* --- Hero Background --- */
+.profile-header-bg {
+  background: linear-gradient(135deg, #0d6efd 0%, #0dcaf0 100%);
+  height: 250px;
+  width: 100%;
+  border-radius: 0 0 50% 50% / 40px;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Decorative circles in background */
+.profile-header-bg::before,
+.profile-header-bg::after {
+  content: "";
+  position: absolute;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 50%;
+}
+
+.profile-header-bg::before {
+  width: 300px;
+  height: 300px;
+  top: -100px;
+  left: -50px;
+}
+
+.profile-header-bg::after {
+  width: 200px;
+  height: 200px;
+  bottom: -50px;
+  right: 10%;
+}
+
+/* --- Profile Card --- */
+.profile-card {
+  margin-top: -120px; /* Pulls the card up into the blue header */
+  border: none;
+  border-radius: 20px;
+  background: #ffffff;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  transition: transform 0.3s ease;
+}
+
+.profile-card:hover {
+  transform: translateY(-5px);
+}
+
+/* Avatar Styling */
+.profile-avatar-wrapper {
+  position: relative;
+  width: 160px;
+  height: 160px;
+  margin: 0 auto 20px;
+}
+
+.profile-avatar-container {
+  width: 100%;
+  height: 100%;
+  padding: 6px;
+  background: #fff;
+  border-radius: 50%;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+}
+
+.profile-avatar {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+/* Status Indicator (Green Dot) */
+.profile-status-indicator {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  width: 32px;
+  height: 32px;
+  background-color: #198754; /* Bootstrap Success Green */
+  border: 4px solid #fff;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 14px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+
+/* --- Typography & Details --- */
+.profile-name {
+  color: #2c3e50;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+}
+
+.profile-email {
+  color: #6c757d;
+  font-weight: 500;
+}
+
+.stat-box {
+  background-color: #f8f9fa;
+  border: 1px solid #e9ecef;
+  border-radius: 12px;
+  padding: 15px;
+  transition: all 0.2s ease;
+}
+
+.stat-box:hover {
+  background-color: #fff;
+  border-color: #0dcaf0;
+  box-shadow: 0 5px 15px rgba(13, 202, 240, 0.15);
+}
+
+.stat-label {
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: #adb5bd;
+  margin-bottom: 5px;
+  display: block;
+}
+
+.stat-value {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #212529;
+}
+
+/* --- Buttons --- */
+.btn-profile-action {
+  padding: 12px;
+  font-weight: 600;
+  border-radius: 10px;
+  transition: all 0.2s;
+}
+
+.btn-profile-edit {
+  border: 2px solid #0d6efd;
+  color: #0d6efd;
+  background: transparent;
+}
+
+.btn-profile-edit:hover:not(:disabled) {
+  background: #0d6efd;
+  color: #fff;
+}
+
+.btn-profile-logout {
+  background: #fff0f0;
+  color: #dc3545;
+  border: none;
+}
+
+.btn-profile-logout:hover {
+  background: #dc3545;
+  color: white;
+  box-shadow: 0 4px 12px rgba(220, 53, 69, 0.3);
+}
