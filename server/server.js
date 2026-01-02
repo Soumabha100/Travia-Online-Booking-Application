@@ -37,7 +37,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/admin', adminRoutes);
 
 
-const PORT = 8001;
+const PORT = process.env.PORT;
 
 app.listen(PORT, () => {
     console.log(`🚀 Server is Running on localhost:${PORT}`);
