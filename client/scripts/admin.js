@@ -1,332 +1,398 @@
-const API_BASE = "https://travia-online-booking-application-backend.onrender.com/api";
-let packageModal; // Bootstrap Modal Instance
+// --- CONFIGURATION ---
+const API_BASE =
+  "https://travia-online-booking-application-backend.onrender.com/api";
+let cmsModal;
+let currentType = null; // 'country', 'city', 'tour'
+let editingId = null;
+let token = localStorage.getItem("token");
 
+// --- INITIALIZATION ---
 document.addEventListener("DOMContentLoaded", async () => {
-    // 1. Security Check
-    const token = localStorage.getItem("token");
-    const user = JSON.parse(localStorage.getItem("user") || "{}");
+  // Auth Check
+  const user = JSON.parse(localStorage.getItem("user") || "{}");
+  if (!token || !user.isAdmin) {
+    alert("Access Denied");
+    window.location.href = "../pages/index.html";
+    return;
+  }
 
-    if (!token || !user.isAdmin) {
-        alert("ACCESS DENIED: Admins only.");
-        window.location.href = "../pages/index.html";
-        return;
-    }
+  cmsModal = new bootstrap.Modal(document.getElementById("cmsModal"));
 
-    // Initialize Modal
-    const modalEl = document.getElementById('packageModal');
-    packageModal = new bootstrap.Modal(modalEl);
-
-    // 2. Navigation
-    const links = {
-        stats: document.getElementById("menu-stats"),
-        manage: document.getElementById("menu-manage"),
-        users: document.getElementById("menu-users")
-    };
-    const views = {
-        stats: document.getElementById("view-stats"),
-        manage: document.getElementById("view-manage"),
-        users: document.getElementById("view-users")
-    };
-
-    function switchView(viewName) {
-        Object.values(links).forEach(el => el.classList.remove("active"));
-        Object.values(views).forEach(el => el.classList.add("d-none"));
-        
-        links[viewName].classList.add("active");
-        views[viewName].classList.remove("d-none");
-    }
-
-    links.stats.addEventListener("click", () => switchView('stats'));
-    links.manage.addEventListener("click", () => {
-        switchView('manage');
-        loadManageGrid();
+  // Sidebar Navigation
+  const tabs = ["dashboard", "countries", "cities", "tours", "users"];
+  tabs.forEach((tab) => {
+    document.getElementById(`menu-${tab}`).addEventListener("click", (e) => {
+      e.preventDefault();
+      switchView(tab);
     });
-    links.users.addEventListener("click", () => {
-        switchView('users');
-        loadUsers();
-    });
+  });
 
-    // Sidebar Toggle
-    document.getElementById("menu-toggle").onclick = () => {
-        document.getElementById("wrapper").classList.toggle("toggled");
-    };
+  // Save Button Handler
+  document.getElementById("btn-save-cms").addEventListener("click", handleSave);
 
-    // Open Modal Button
-    document.getElementById("btn-open-modal").addEventListener("click", () => {
-        resetForm();
-        loadRegionsForDropdown();
-        packageModal.show();
-    });
-    
-    // Create Region Button
-    document.getElementById("btn-create-region").addEventListener("click", async () => {
-        const name = prompt("Enter new Region Name (e.g. 'South America'):");
-        if(name) {
-            try {
-                await fetch(`${API_BASE}/admin/region`, {
-                    method: 'POST',
-                    headers: { "Content-Type": "application/json", "Authorization": `Bearer ${token}` },
-                    body: JSON.stringify({ name })
-                });
-                alert("Region Created!");
-                loadManageGrid();
-            } catch(e) { alert("Error creating region"); }
-        }
-    });
+  // Initial Load
+  await loadStats();
+});
 
-    // Clear Button
-    document.getElementById("btn-clear-form").addEventListener("click", resetForm);
+function switchView(viewName) {
+  document
+    .querySelectorAll(".admin-view")
+    .forEach((el) => el.classList.add("d-none"));
+  document.getElementById(`view-${viewName}`).classList.remove("d-none");
 
-    // Load Initial Data
-    await loadStats();
-    await loadManageGrid();
+  document
+    .querySelectorAll(".list-group-item")
+    .forEach((el) => el.classList.remove("active"));
+  document.getElementById(`menu-${viewName}`).classList.add("active");
 
-    // ==========================================
-    //            CORE LOGIC
-    // ==========================================
+  document.getElementById("page-title").innerText =
+    viewName.charAt(0).toUpperCase() + viewName.slice(1);
 
-    async function loadStats() {
-        try {
-            const res = await fetch(`${API_BASE}/admin/stats`, {
-                headers: { "Authorization": `Bearer ${token}` }
-            });
-            const data = await res.json();
-            document.getElementById("stat-users").innerText = data.users || 0;
-            document.getElementById("stat-bookings").innerText = data.bookings || 0;
-            document.getElementById("stat-packages").innerText = data.packages || 0;
-            document.getElementById("stat-regions").innerText = data.regions || 0;
-        } catch (err) {
-            console.error(err);
-        }
-    }
+  if (viewName === "countries") loadCountries();
+  if (viewName === "cities") loadCities();
+  if (viewName === "tours") loadTours();
+  if (viewName === "users") loadUsers();
+}
 
-    async function loadManageGrid() {
-        const grid = document.getElementById("manage-grid");
-        grid.innerHTML = '<div class="text-center w-100 mt-5"><div class="spinner-border text-primary"></div></div>';
+// --- DATA LOADERS ---
 
-        try {
-            const res = await fetch(`${API_BASE}/destinations`);
-            const regions = await res.json();
-            grid.innerHTML = "";
+async function loadStats() {
+  const res = await fetch(`${API_BASE}/admin/stats`, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+  const data = await res.json();
+  document.getElementById("stat-tours").innerText = data.tours;
+  document.getElementById("stat-countries").innerText = data.countries;
+  document.getElementById("stat-cities").innerText = data.cities;
+  document.getElementById("stat-bookings").innerText = data.bookings;
+}
 
-            if (regions.length === 0) {
-                grid.innerHTML = "<p class='text-muted'>No tours found.</p>";
-                return;
-            }
+async function loadCountries() {
+  const res = await fetch(`${API_BASE}/admin/countries`, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+  const data = await res.json();
+  const tbody = document.querySelector("#table-countries tbody");
+  tbody.innerHTML = data
+    .map(
+      (c) => `
+        <tr>
+            <td><strong>${c.name}</strong><br><small class="text-muted">${
+        c.continent
+      }</small></td>
+            <td>${c.isoCode}</td>
+            <td><span class="badge bg-info text-dark">${
+              c.visaPolicy
+            }</span></td>
+            <td>${c.currency}</td>
+            <td>${(c.annualVisitors / 1000000).toFixed(1)}M</td>
+            <td>
+                <button class="btn btn-sm btn-outline-primary" onclick='editItem("country", ${JSON.stringify(
+                  c
+                )})'><i class="bi bi-pencil"></i></button>
+                <button class="btn btn-sm btn-outline-danger" onclick='deleteItem("countries", "${
+                  c._id
+                }")'><i class="bi bi-trash"></i></button>
+            </td>
+        </tr>
+    `
+    )
+    .join("");
+}
 
-            regions.forEach(region => {
-                region.countries.forEach(pkg => {
-                    const card = document.createElement('div');
-                    card.className = 'dest-card';
-                    
-                    // Encode data safely for the Edit button
-                    const safePkg = encodeURIComponent(JSON.stringify(pkg));
+async function loadCities() {
+  const res = await fetch(`${API_BASE}/admin/cities`, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+  const data = await res.json();
+  const tbody = document.querySelector("#table-cities tbody");
+  tbody.innerHTML = data
+    .map(
+      (c) => `
+        <tr>
+            <td><strong>${c.name}</strong></td>
+            <td>${c.countryId ? c.countryId.name : "Unknown"}</td>
+            <td>$${c.economics?.minDailyBudget || 0}</td>
+            <td>${c.popularityIndex}/100</td>
+            <td>
+                <button class="btn btn-sm btn-outline-primary" onclick='editItem("city", ${JSON.stringify(
+                  c
+                )})'><i class="bi bi-pencil"></i></button>
+                <button class="btn btn-sm btn-outline-danger" onclick='deleteItem("cities", "${
+                  c._id
+                }")'><i class="bi bi-trash"></i></button>
+            </td>
+        </tr>
+    `
+    )
+    .join("");
+}
 
-                    card.innerHTML = `
-    <div class="dest-card-img-wrapper">
-        <img src="${pkg.image}" 
-             class="dest-card-img" 
-             alt="${pkg.city}" 
-             onerror="this.onerror=null; this.src='../public/assets/Travia.png'"> 
-        <span class="badge bg-dark position-absolute top-0 start-0 m-2 shadow">${region.name}</span>
-    </div>
-    <div class="dest-card-body">
-        <h5 class="dest-card-title">${pkg.city}, ${pkg.name}</h5>
-        <p class="dest-card-desc text-truncate">${pkg.desc}</p>
-        
-        <div class="dest-card-footer mt-auto">
-            <div class="dest-price text-success fw-bold">
-                ${pkg.price}
-            </div>
-            <div class="d-flex gap-2">
-                <button class="btn btn-sm btn-outline-danger btn-delete" 
-                    data-region="${region._id}" 
-                    data-pkg="${pkg._id}">
-                    <i class="bi bi-trash"></i>
-                </button>
-                <button class="btn btn-sm btn-primary btn-edit" 
-                    data-region="${region._id}" 
-                    data-pkg="${safePkg}">
-                    <i class="bi bi-pencil-square"></i> Edit
-                </button>
+async function loadTours() {
+  const res = await fetch(`${API_BASE}/admin/tours`, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+  const data = await res.json();
+  const grid = document.getElementById("tours-grid");
+  grid.innerHTML = data
+    .map(
+      (t) => `
+        <div class="col-md-4">
+            <div class="card h-100 shadow-sm">
+                <img src="${
+                  t.images[0] || "../public/assets/Travia.png"
+                }" class="card-img-top" style="height: 180px; object-fit: cover;">
+                <div class="card-body">
+                    <h6 class="card-title fw-bold">${t.name}</h6>
+                    <p class="small text-muted mb-1"><i class="bi bi-geo-alt"></i> ${
+                      t.countryId?.name || "N/A"
+                    }</p>
+                    <div class="d-flex justify-content-between align-items-center mt-2">
+                        <span class="text-primary fw-bold">$${t.price}</span>
+                        <small>${t.duration}</small>
+                    </div>
+                </div>
+                <div class="card-footer bg-white d-flex justify-content-between">
+                    <button class="btn btn-sm btn-outline-primary" onclick='editItem("tour", ${JSON.stringify(
+                      t
+                    )})'>Edit</button>
+                    <button class="btn btn-sm btn-outline-danger" onclick='deleteItem("tours", "${
+                      t._id
+                    }")'>Delete</button>
+                </div>
             </div>
         </div>
-    </div>
-`;
-                    grid.appendChild(card);
-                });
-            });
+    `
+    )
+    .join("");
+}
 
-            attachActionListeners();
+// --- DYNAMIC FORMS & MODAL ---
 
-        } catch (err) {
-            console.error(err);
-            grid.innerHTML = "<p class='text-danger'>Failed to load tours.</p>";
-        }
-    }
+window.openModal = async (type) => {
+  currentType = type;
+  editingId = null;
+  document.getElementById("modalTitle").innerText = `Add New ${
+    type.charAt(0).toUpperCase() + type.slice(1)
+  }`;
+  await renderForm(type);
+  cmsModal.show();
+};
 
-    function attachActionListeners() {
-        // DELETE
-        document.querySelectorAll('.btn-delete').forEach(btn => {
-            btn.addEventListener('click', async (e) => {
-                if(!confirm("Delete this package permanently?")) return;
-                const { region, pkg } = btn.dataset;
-                
-                try {
-                    const res = await fetch(`${API_BASE}/admin/package/${region}/${pkg}`, {
-                        method: 'DELETE',
-                        headers: { "Authorization": `Bearer ${token}` }
-                    });
-                    if(res.ok) {
-                        btn.closest('.dest-card').remove();
-                        loadStats();
-                    }
-                } catch(err) { alert("Server Error"); }
-            });
-        });
+window.editItem = async (type, data) => {
+  currentType = type;
+  editingId = data._id;
+  document.getElementById("modalTitle").innerText = `Edit ${
+    type.charAt(0).toUpperCase() + type.slice(1)
+  }`;
+  await renderForm(type, data);
+  cmsModal.show();
+};
 
-        // EDIT
-        document.querySelectorAll('.btn-edit').forEach(btn => {
-            btn.addEventListener('click', async () => {
-                const pkg = JSON.parse(decodeURIComponent(btn.dataset.pkg));
-                const regionId = btn.dataset.region;
-                
-                await loadRegionsForDropdown(); // Ensure dropdown is populated
-                populateForm(regionId, pkg);
-                packageModal.show();
-            });
-        });
-    }
+async function renderForm(type, data = {}) {
+  const container = document.getElementById("modalBody");
+  let html = "";
 
-    // ==========================================
-    //            FORM HANDLERS
-    // ==========================================
-
-    async function loadRegionsForDropdown() {
-        const select = document.getElementById("packageRegionSelect");
-        select.innerHTML = '<option value="">Select Region...</option>';
-        
-        const res = await fetch(`${API_BASE}/destinations`);
-        const data = await res.json();
-        data.forEach(d => {
-            const opt = document.createElement("option");
-            opt.value = d._id;
-            opt.innerText = d.name;
-            select.appendChild(opt);
-        });
-    }
-
-    function populateForm(regionId, pkg) {
-        document.getElementById("modalTitle").innerText = "Edit Tour";
-        
-        // Hidden IDs
-        document.getElementById("edit-region-id").value = regionId;
-        document.getElementById("edit-pkg-id").value = pkg._id;
-
-        // Fields
-        document.getElementById("packageRegionSelect").value = regionId;
-        document.getElementById("pkgName").value = pkg.name;
-        document.getElementById("pkgCity").value = pkg.city;
-        document.getElementById("pkgPrice").value = pkg.price;
-        document.getElementById("pkgImage").value = pkg.image;
-        document.getElementById("pkgDuration").value = pkg.duration || "";
-        document.getElementById("pkgGroup").value = pkg.groupSize || "";
-        document.getElementById("pkgRating").value = pkg.rating || 4.5;
-        document.getElementById("pkgReviews").value = pkg.reviews || 0;
-        document.getElementById("pkgDesc").value = pkg.desc || "";
-        document.getElementById("pkgLongDesc").value = pkg.longDesc || "";
-
-        // Array Conversion (Array -> String)
-        if(pkg.placesToVisit && Array.isArray(pkg.placesToVisit)) {
-            document.getElementById("pkgPlaces").value = pkg.placesToVisit.join(", ");
-        } else {
-            document.getElementById("pkgPlaces").value = "";
-        }
-    }
-
-    function resetForm() {
-        document.getElementById("form-package").reset();
-        document.getElementById("modalTitle").innerText = "Add New Tour";
-        document.getElementById("edit-region-id").value = "";
-        document.getElementById("edit-pkg-id").value = "";
-    }
-
-    // SAVE (Submit)
-    document.getElementById("form-package").addEventListener("submit", async (e) => {
-        e.preventDefault();
-        
-        const btn = document.getElementById("btn-save-pkg");
-        btn.disabled = true;
-        btn.innerText = "Saving...";
-
-        // 1. Collect Data
-        const placesInput = document.getElementById("pkgPlaces").value;
-        // Convert string "Paris, Lyon" -> Array ["Paris", "Lyon"]
-        const placesArray = placesInput.split(",").map(s => s.trim()).filter(s => s.length > 0);
-
-        const payload = {
-            name: document.getElementById("pkgName").value,
-            city: document.getElementById("pkgCity").value,
-            price: document.getElementById("pkgPrice").value,
-            image: document.getElementById("pkgImage").value,
-            desc: document.getElementById("pkgDesc").value,
-            longDesc: document.getElementById("pkgLongDesc").value,
-            duration: document.getElementById("pkgDuration").value,
-            groupSize: document.getElementById("pkgGroup").value,
-            rating: document.getElementById("pkgRating").value,
-            reviews: document.getElementById("pkgReviews").value,
-            placesToVisit: placesArray
-        };
-
-        // 2. Determine Mode (Add vs Edit)
-        const regionId = document.getElementById("packageRegionSelect").value;
-        const pkgId = document.getElementById("edit-pkg-id").value;
-        const isEdit = !!pkgId;
-
-        let url = isEdit 
-            ? `${API_BASE}/admin/package/${document.getElementById("edit-region-id").value}/${pkgId}`
-            : `${API_BASE}/admin/package`;
-
-        let method = isEdit ? 'PUT' : 'POST';
-        let bodyData = isEdit ? payload : { regionId, packageData: payload };
-
-        try {
-            const res = await fetch(url, {
-                method: method,
-                headers: { "Content-Type": "application/json", "Authorization": `Bearer ${token}` },
-                body: JSON.stringify(bodyData)
-            });
-
-            if(!res.ok) throw new Error("Failed to save");
-
-            alert(isEdit ? "Tour Updated!" : "Tour Added!");
-            packageModal.hide();
-            loadManageGrid();
-            loadStats();
-
-        } catch (err) {
-            alert("Error saving: " + err.message);
-        } finally {
-            btn.disabled = false;
-            btn.innerText = "Save Package";
-        }
+  if (type === "country") {
+    html = `
+            <div class="row g-3">
+                <div class="col-6"><label>Name</label><input class="form-control" id="f-name" value="${
+                  data.name || ""
+                }"></div>
+                <div class="col-6"><label>Continent</label><input class="form-control" id="f-continent" value="${
+                  data.continent || ""
+                }"></div>
+                <div class="col-4"><label>ISO Code</label><input class="form-control" id="f-iso" value="${
+                  data.isoCode || ""
+                }"></div>
+                <div class="col-4"><label>Currency</label><input class="form-control" id="f-currency" value="${
+                  data.currency || "USD"
+                }"></div>
+                <div class="col-4"><label>Visa Policy</label>
+                    <select class="form-select" id="f-visa">
+                        <option value="Schengen">Schengen</option>
+                        <option value="Visa Free">Visa Free</option>
+                        <option value="E-Visa">E-Visa</option>
+                        <option value="Visa Required">Visa Required</option>
+                        <option value="Visa On Arrival">Visa On Arrival</option>
+                    </select>
+                </div>
+                <div class="col-6"><label>Visitors (Annual)</label><input type="number" class="form-control" id="f-visitors" value="${
+                  data.annualVisitors || 0
+                }"></div>
+                <div class="col-6"><label>Yield Tier</label><select class="form-select" id="f-yield"><option value="High">High</option><option value="Medium">Medium</option><option value="Low">Low</option></select></div>
+            </div>`;
+  } else if (type === "city") {
+    // Fetch Countries for Dropdown
+    const cRes = await fetch(`${API_BASE}/admin/countries`, {
+      headers: { Authorization: `Bearer ${token}` },
     });
+    const countries = await cRes.json();
+    const options = countries
+      .map(
+        (c) =>
+          `<option value="${c._id}" ${
+            data.countryId?._id === c._id ? "selected" : ""
+          }>${c.name}</option>`
+      )
+      .join("");
 
-    async function loadUsers() {
-        /* ... Same as before ... */
-        const tbody = document.getElementById("users-table-body");
-        tbody.innerHTML = "<tr><td colspan='5' class='text-center'>Loading...</td></tr>";
-        try {
-            const res = await fetch(`${API_BASE}/admin/users`, { headers: { "Authorization": `Bearer ${token}` } });
-            const users = await res.json();
-            tbody.innerHTML = users.map(u => `
-                <tr>
-                    <td>#${u.memberId || 'N/A'}</td>
-                    <td><div class="d-flex align-items-center"><img src="${u.avatar}" class="rounded-circle me-2" width="30"><strong>${u.username}</strong></div></td>
-                    <td>${u.email}</td>
-                    <td>${u.isAdmin ? '<span class="badge bg-danger">Admin</span>' : '<span class="badge bg-success">User</span>'}</td>
-                    <td>${new Date(u.createdAt).toLocaleDateString()}</td>
-                </tr>`).join('');
-        } catch(e) { tbody.innerHTML = "<tr><td colspan='5'>Error loading users</td></tr>"; }
-    }
-});
+    html = `
+            <div class="row g-3">
+                <div class="col-6"><label>City Name</label><input class="form-control" id="f-name" value="${
+                  data.name || ""
+                }"></div>
+                <div class="col-6"><label>Country</label><select class="form-select" id="f-country">${options}</select></div>
+                <div class="col-4"><label>Daily Budget ($)</label><input type="number" class="form-control" id="f-budget" value="${
+                  data.economics?.minDailyBudget || 0
+                }"></div>
+                <div class="col-4"><label>Lat</label><input type="number" class="form-control" id="f-lat" value="${
+                  data.location?.coordinates[1] || 0
+                }"></div>
+                <div class="col-4"><label>Lng</label><input type="number" class="form-control" id="f-lng" value="${
+                  data.location?.coordinates[0] || 0
+                }"></div>
+            </div>`;
+  } else if (type === "tour") {
+    // Cascading Setup
+    const cRes = await fetch(`${API_BASE}/admin/countries`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    const countries = await cRes.json();
+    const ciRes = await fetch(`${API_BASE}/admin/cities`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    const cities = await ciRes.json();
+
+    const cOptions = countries
+      .map(
+        (c) =>
+          `<option value="${c._id}" ${
+            data.countryId?._id === c._id ? "selected" : ""
+          }>${c.name}</option>`
+      )
+      .join("");
+    const ciOptions = cities
+      .map(
+        (c) =>
+          `<option value="${c._id}" ${
+            data.cityId?._id === c._id ? "selected" : ""
+          }>${c.name}</option>`
+      )
+      .join("");
+
+    html = `
+            <div class="row g-3">
+                <div class="col-12"><label>Tour Name</label><input class="form-control" id="f-name" value="${
+                  data.name || ""
+                }"></div>
+                <div class="col-6"><label>Country</label><select class="form-select" id="f-country">${cOptions}</select></div>
+                <div class="col-6"><label>City</label><select class="form-select" id="f-city">${ciOptions}</select></div>
+                <div class="col-4"><label>Price ($)</label><input type="number" class="form-control" id="f-price" value="${
+                  data.price || 0
+                }"></div>
+                <div class="col-4"><label>Duration</label><input class="form-control" id="f-duration" value="${
+                  data.duration || "5 Days"
+                }"></div>
+                <div class="col-4"><label>Group Size</label><input class="form-control" id="f-group" value="${
+                  data.groupSize || "Max 10"
+                }"></div>
+                <div class="col-12"><label>Image URL</label><input class="form-control" id="f-image" value="${
+                  data.images?.[0] || ""
+                }"></div>
+                <div class="col-12"><label>Overview</label><textarea class="form-control" id="f-overview">${
+                  data.overview || ""
+                }</textarea></div>
+            </div>`;
+  }
+
+  container.innerHTML = html;
+
+  // Set Enum Values if editing
+  if (type === "country" && data.visaPolicy)
+    document.getElementById("f-visa").value = data.visaPolicy;
+}
+
+// --- CRUD ACTIONS ---
+
+async function handleSave() {
+  const payload = {};
+
+  if (currentType === "country") {
+    payload.name = document.getElementById("f-name").value;
+    payload.continent = document.getElementById("f-continent").value;
+    payload.isoCode = document.getElementById("f-iso").value;
+    payload.currency = document.getElementById("f-currency").value;
+    payload.visaPolicy = document.getElementById("f-visa").value;
+    payload.annualVisitors = document.getElementById("f-visitors").value;
+    payload.marketYieldTier = document.getElementById("f-yield").value;
+  } else if (currentType === "city") {
+    payload.name = document.getElementById("f-name").value;
+    payload.countryId = document.getElementById("f-country").value;
+    payload.location = {
+      coordinates: [
+        document.getElementById("f-lng").value,
+        document.getElementById("f-lat").value,
+      ],
+    };
+    payload.economics = {
+      minDailyBudget: document.getElementById("f-budget").value,
+    };
+  } else if (currentType === "tour") {
+    payload.name = document.getElementById("f-name").value;
+    payload.countryId = document.getElementById("f-country").value;
+    payload.cityId = document.getElementById("f-city").value;
+    payload.price = document.getElementById("f-price").value;
+    payload.duration = document.getElementById("f-duration").value;
+    payload.groupSize = document.getElementById("f-group").value;
+    payload.images = [document.getElementById("f-image").value];
+    payload.overview = document.getElementById("f-overview").value;
+  }
+
+  const endpoint =
+    currentType === "country"
+      ? "countries"
+      : currentType === "city"
+      ? "cities"
+      : "tours";
+  const method = editingId ? "PUT" : "POST";
+  const url = editingId
+    ? `${API_BASE}/admin/${endpoint}/${editingId}`
+    : `${API_BASE}/admin/${endpoint}`;
+
+  try {
+    const res = await fetch(url, {
+      method: method,
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(payload),
+    });
+    if (!res.ok) throw new Error("Save failed");
+
+    cmsModal.hide();
+    if (currentType === "country") loadCountries();
+    if (currentType === "city") loadCities();
+    if (currentType === "tour") loadTours();
+    loadStats();
+  } catch (err) {
+    alert(err.message);
+  }
+}
+
+window.deleteItem = async (endpoint, id) => {
+  if (!confirm("Are you sure? This cannot be undone.")) return;
+  try {
+    await fetch(`${API_BASE}/admin/${endpoint}/${id}`, {
+      method: "DELETE",
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    if (endpoint === "countries") loadCountries();
+    if (endpoint === "cities") loadCities();
+    if (endpoint === "tours") loadTours();
+    loadStats();
+  } catch (err) {
+    alert("Error deleting");
+  }
+};
