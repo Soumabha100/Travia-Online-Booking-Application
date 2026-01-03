@@ -167,6 +167,45 @@ async function loadTours() {
     .join("");
 }
 
+async function loadUsers() {
+    try {
+        const res = await fetch(`${API_BASE}/admin/users`, { 
+            headers: { "Authorization": `Bearer ${token}` } 
+        });
+        
+        if (!res.ok) throw new Error("Failed to fetch users");
+        
+        const data = await res.json();
+        const tbody = document.querySelector("#table-users tbody");
+        
+        if (data.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="3" class="text-center text-muted">No users found</td></tr>';
+            return;
+        }
+
+        tbody.innerHTML = data.map(u => `
+            <tr>
+                <td>
+                    <div class="d-flex align-items-center">
+                        <div class="bg-light rounded-circle p-2 me-2 text-primary">
+                            <i class="bi bi-person-fill"></i>
+                        </div>
+                        <strong>${u.username || u.name || 'User'}</strong>
+                    </div>
+                </td>
+                <td>${u.email}</td>
+                <td>
+                    ${u.isAdmin 
+                        ? '<span class="badge bg-primary">Admin</span>' 
+                        : '<span class="badge bg-secondary">User</span>'}
+                </td>
+            </tr>
+        `).join('');
+    } catch (err) {
+        console.error("Error loading users:", err);
+    }
+}
+
 // --- DYNAMIC FORMS & MODAL ---
 
 window.openModal = async (type) => {

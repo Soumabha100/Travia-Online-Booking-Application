@@ -1,147 +1,115 @@
 document.addEventListener("DOMContentLoaded", async () => {
+    // 1. Get the Destination Name from URL (e.g., ?destination=Paris%20Essentials)
     const params = new URLSearchParams(window.location.search);
-    const destinationName = params.get("destination");
+    const targetTourName = params.get("destination"); // This corresponds to 'place.city' from the API
 
-    if (!destinationName) {
-        console.warn("No destination specified.");
-        return; 
+    if (!targetTourName) {
+        alert("No destination selected. Redirecting to home.");
+        window.location.href = "index.html";
+        return;
     }
 
-    const API_URL = window.TraviaAPI.destinations;
-
+    // 2. Fetch All Tours
     try {
-        const response = await fetch(API_URL);
+        const API_URL = window.TraviaAPI.destinations; // Ensure apiConfig.js is loaded
+        const res = await fetch(API_URL);
+        if (!res.ok) throw new Error("Failed to load tours");
         
-        if (!response.ok) {
-            throw new Error("Could not connect to Backend API");
-        }
-
-        const data = await response.json();
-        let selectedPlace = null;
+        const nestedData = await res.json();
         
-        for (const continent of data) {
-            const found = continent.countries.find(c => c.name === destinationName);
-            if (found) {
-                selectedPlace = found;
-                break; 
+        // 3. FLATTEN THE DATA (Crucial Step)
+        // The API returns [ { name: "Europe", countries: [ { ...tour } ] } ]
+        // We need a single list of all tours to search through.
+        let allTours = [];
+        nestedData.forEach(continent => {
+            if (continent.countries) {
+                allTours = [...allTours, ...continent.countries];
             }
+        });
+
+        // 4. Find the Specific Tour
+        // Note: In your API, 'tour.city' holds the Tour Name (e.g. "Paris Essentials")
+        const selectedTour = allTours.find(t => t.city === targetTourName);
+
+        if (!selectedTour) {
+            console.error("Tour not found:", targetTourName);
+            alert("Sorry, we couldn't find details for this booking.");
+            return;
         }
 
-        if (selectedPlace) {
-            updatePageContent(selectedPlace);
-        } else {
-            document.querySelector(".booking-section").innerHTML = 
-                `<div class="container text-center py-5">
-                    <h2>Destination Not Found</h2>
-                    <p class="text-muted">We couldn't find "${destinationName}" in our database.</p>
-                    <a href="destinations.html" class="btn btn-primary mt-3">Go Back</a>
-                 </div>`;
-        }
+        // 5. Populate the UI
+        populateBookingPage(selectedTour);
 
     } catch (error) {
-        console.error("Error loading tour data:", error);
-        document.querySelector(".booking-section").innerHTML = 
-            `<div class="container text-center py-5 text-danger">
-                <h3>Server Error</h3>
-                <p>Ensure your backend (node server.js) is running on port 5000.</p>
-             </div>`;
+        console.error("Booking Error:", error);
     }
 });
 
-// === LOGIC TO UPDATE HTML ELEMENTS ===
-function updatePageContent(place) {
-  // A. Update Text Headers
-  document.title = `Booking ${place.name} | Travia`;
-  document.getElementById("breadcrumb-current").textContent = place.name;
-  document.getElementById("tour-title").textContent = `${place.name} Explorer`;
+function populateBookingPage(tour) {
+    // Basic Info
+    document.getElementById("tour-title").innerText = tour.city; 
+    document.getElementById("tour-city").innerText = tour.name; 
+    
+    // Rating
+    document.getElementById("tour-rating").innerText = `${tour.rating} (${tour.reviews} Reviews)`;
 
-  // B. Update Description (Handle missing desc gracefully)
-  document.getElementById("tour-desc").textContent =
-    place.longDesc ||
-    "Experience an unforgettable journey to this amazing destination.";
+    // Image
+    const imgEl = document.getElementById("tour-image");
+    if(imgEl) imgEl.src = tour.image || '../public/assets/Travia.png';
 
-  document.getElementById(
-    "tour-city"
-  ).textContent = `${place.city} , ${place.name}`;
-  document.getElementById(
-    "tour-rating"
-  ).textContent = `${place.rating} (${place.reviews})`;
+    // NEW: Highlights
+    document.getElementById("tour-duration-text").innerText = tour.duration;
+    document.getElementById("tour-group-text").innerText = tour.groupSize;
+    
+    const currEl = document.getElementById("tour-currency-text");
+    if(currEl) currEl.innerText = tour.currency;
 
-  // C. Update Prices
-  document.getElementById("tour-price").textContent = place.price;
-  document.getElementById("base-total").textContent = place.price;
-  console.log(place.price);
-
-  // D. Update Image
-  const imgElement = document.getElementById("tour-image");
-  if (place.image) {
-    imgElement.src = place.image;
-    imgElement.alt = place.name;
-  }
-
-  const highlightBoxes = document.querySelectorAll(".highlight-box");
-  highlightBoxes.forEach((box) => {
-    const header = box.querySelector("h5").textContent.trim();
-    const valueP = box.querySelector("p");
-
-    if (header === "Duration" && place.duration) {
-      valueP.textContent = place.duration;
-    } else if (header === "Group Size" && place.groupSize) {
-      valueP.textContent = place.groupSize;
+    // NEW: Visa Badge Logic
+    const visaBadge = document.getElementById("tour-visa-badge");
+    const visaText = document.getElementById("visa-text");
+    if(tour.visa) {
+        visaText.innerText = tour.visa; // e.g. "Schengen"
+        visaBadge.classList.remove("d-none"); // Show it
     }
-  });
 
-  // E. SETUP DYNAMIC PRICING LOGIC
-  // We need to convert "$1,200" string into the number 1200 for math.
-  // .replace(/[^0-9]/g, '') removes '$' and ',' leaving only digits.
-  const numericPrice = parseInt(place.price.replace(/[^0-9]/g, "")) || 0;
+    // NEW: Trending Badge Logic
+    const trendBadge = document.getElementById("tour-trending");
+    if(trendBadge && tour.isTrending) {
+        trendBadge.classList.remove("d-none");
+    }
 
-  // Store this base price in the DOM (HTML) so the calculator function can access it later
-  // 'dataset.basePrice' corresponds to <input data-base-price="1200">
-  const guestInput = document.getElementById("guestCount");
-  guestInput.dataset.basePrice = numericPrice;
+    // Description
+    document.getElementById("tour-desc").innerText = tour.desc;
 
-  // F. Run the calculator once to set initial totals
-  updateGuests(0);
+    // Pricing
+    const priceDisplay = document.getElementById("price-display");
+    if(priceDisplay) {
+        const rawPrice = tour.price.replace(/[^0-9.]/g, '');
+        priceDisplay.innerText = `$${rawPrice}`;
+        priceDisplay.dataset.rawPrice = rawPrice;
+        
+        // Also update the sidebar currency note
+        const currDisplay = document.getElementById("tour-currency-display");
+        if(currDisplay) currDisplay.innerText = `Prices in ${tour.currency || 'USD'}`;
+        
+        // Trigger calc
+        const guestInput = document.getElementById("guestCount");
+        if(guestInput) guestInput.dispatchEvent(new Event('input'));
+    }
 }
 
-// === CALCULATOR LOGIC ===
-// This function is called by the +/- buttons in HTML
-// It must be attached to the 'window' object to be accessible from onclick="..." attributes
-window.updateGuests = function (change) {
-  const input = document.getElementById("guestCount");
-  let count = parseInt(input.value);
-
-  // Apply the change (+1 or -1)
-  if (change !== 0) count += change;
-
-  // Enforce Limits (Min 1, Max 10)
-  if (count < 1) count = 1;
-  if (count > 10) count = 10;
-
-  // Update the input field value
-  input.value = count;
-
-  // --- PRICE CALCULATION ---
-  // 1. Retrieve the base price we stored earlier
-  const basePrice = parseInt(input.dataset.basePrice) || 0;
-  const serviceFee = 50; // Fixed fee
-
-  // 2. Calculate Totals
-  const subtotal = basePrice * count;
-  const finalTotal = subtotal + serviceFee;
-
-  // 3. Update the UI Text
-  // .toLocaleString() adds commas back (e.g., 3000 -> "3,000")
-  document.getElementById(
-    "base-calc"
-  ).textContent = `$${basePrice.toLocaleString()} x ${count} guest${
-    count > 1 ? "s" : ""
-  }`;
-  document.getElementById(
-    "base-total"
-  ).textContent = `$${subtotal.toLocaleString()}`;
-  document.getElementById(
-    "final-total"
-  ).textContent = `$${finalTotal.toLocaleString()}`;
-};
+// --- CALCULATION LOGIC (Optional, if you have a calculator) ---
+// You can add an event listener to the "Guests" input to update Total Price
+const guestInput = document.getElementById("guests");
+if (guestInput) {
+    guestInput.addEventListener("input", (e) => {
+        const guests = parseInt(e.target.value) || 1;
+        const priceDisplay = document.getElementById("price-display");
+        const totalPriceEl = document.getElementById("total-price");
+        
+        if (priceDisplay && totalPriceEl) {
+            const unitPrice = parseFloat(priceDisplay.dataset.rawPrice || 0);
+            totalPriceEl.innerText = `$${(unitPrice * guests).toFixed(2)}`;
+        }
+    });
+}

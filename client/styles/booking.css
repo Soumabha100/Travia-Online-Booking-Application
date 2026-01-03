@@ -850,3 +850,99 @@ h1, h2, h3, h4, h5 {
     border-radius: 0;
     border: none;
 }
+
+:root {
+    --travia-teal: #1dd3b0;
+    --travia-dark: #0f172a;
+    --soft-teal: rgba(29, 211, 176, 0.15);
+}
+
+/* 2. Soft Badge Styling (New) */
+.bg-soft-teal {
+    background-color: var(--soft-teal);
+    font-weight: 600;
+    padding: 8px 12px;
+    border-radius: 8px;
+    font-size: 0.9rem;
+}
+.text-teal {
+    color: #0d967c; /* Darker teal for text readability */
+}
+
+/* 3. Image Vibrancy */
+.tour-gallery {
+    position: relative;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15) !important; /* Deeper shadow */
+    transition: transform 0.3s ease;
+}
+.tour-gallery:hover {
+    transform: translateY(-5px); /* Lift effect */
+}
+
+/* 4. Highlight Boxes - Glassy Hover */
+.highlight-box {
+    background: #fff;
+    border: 1px solid #f1f5f9;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.03);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.highlight-box:hover {
+    background: linear-gradient(145deg, #ffffff, #f0fffb);
+    border-color: var(--travia-teal);
+    transform: translateY(-5px) scale(1.02);
+    box-shadow: 0 10px 25px rgba(29, 211, 176, 0.15);
+}
+.highlight-box i {
+    transition: transform 0.3s ease;
+}
+.highlight-box:hover i {
+    transform: scale(1.2); /* Icon pop */
+}
+
+/* 5. Booking Sidebar - Sticky & Modern */
+.booking-sidebar {
+    border: none;
+    box-shadow: 0 15px 50px rgba(0,0,0,0.08); /* Float effect */
+    border-top: 5px solid var(--travia-teal); /* Brand accent top */
+}
+
+/* 6. Form Inputs - Polished */
+.form-control:focus, .form-select:focus {
+    border-color: var(--travia-teal);
+    box-shadow: 0 0 0 4px rgba(29, 211, 176, 0.1);
+}
+
+/* 7. Book Now Button - Gradient Animation */
+.btn-book-now {
+    background: linear-gradient(135deg, #1dd3b0 0%, #14b8a6 100%);
+    border: none;
+    position: relative;
+    overflow: hidden;
+    z-index: 1;
+    letter-spacing: 0.5px;
+}
+.btn-book-now::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: linear-gradient(135deg, #14b8a6 0%, #0f766e 100%);
+    opacity: 0;
+    z-index: -1;
+    transition: opacity 0.3s ease;
+}
+.btn-book-now:hover::before {
+    opacity: 1; /* Smooth gradient shift on hover */
+}
+.btn-book-now:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(29, 211, 176, 0.4);
+}
+
+/* 8. Price Tag Pop */
+.price-tag {
+    background: -webkit-linear-gradient(#1dd3b0, #0d9488);
+    background: linear-gradient(#1dd3b0, #0d9488);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent; /* Gradient Text */
+}
