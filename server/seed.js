@@ -129,27 +129,36 @@ const legacyData = [
   }
 ];
 
-// 3. SEEDING LOGIC
+// 3. MIGRATION & SEEDING LOGIC
 const seedDatabase = async () => {
     try {
         await mongoose.connect(process.env.MONGO_URI);
-        console.log("Connected to MongoDB for Seeding...");
+        console.log("Connected to MongoDB for Migration...");
         
-        // A. CLEAR OLD DATA
-        await Country.deleteMany({});
-        await City.deleteMany({});
-        await Tour.deleteMany({});
-        console.log("Cleaned existing database.");
+        // We do NOT delete anymore. We only update.
 
         let tourCount = 0;
 
-        // B. ITERATE OVER LEGACY DATA
+        // AUTHENTIC DATA MAPPINGS (New Data Source)
+        const cityCategories = {
+            "Zurich": "Nature", "Paris": "Culture", "Rome": "History", "Berlin": "History",
+            "Athens": "History", "Lisbon": "Culture", "Vienna": "History", "London": "History",
+            "Amsterdam": "Culture", "Dubrovnik": "History", "New Delhi": "Culture", "Tokyo": "Culture",
+            "Bangkok": "Food", "Bali": "Nature", "Hanoi": "Food", "Seoul": "Culture",
+            "Dubai": "Adventure", "New York City": "Culture", "Banff": "Nature", "Cancun": "Relaxation",
+            "Rio de Janeiro": "Culture", "Cusco": "History", "Buenos Aires": "Culture", "Cairo": "History",
+            "Cape Town": "Nature", "Marrakech": "Culture", "Sydney": "Adventure", "Queenstown": "Adventure"
+        };
+
+        const standardAmenities = ["Professional Guide", "Hotel Pickup", "Breakfast Included", "Free Wifi", "Air Conditioned Transport"];
+
+        // B. ITERATE AND UPDATE
         for (const continentData of legacyData) {
             const continentName = continentData.name;
 
             for (const countryData of continentData.countries) {
                 
-                // === STEP A: UPSERT COUNTRY ===
+                // === STEP A: UPDATE COUNTRY ===
                 const cName = countryData.name;
                 const intel = countryIntelligence[cName] || { 
                     iso: cName.substring(0, 2).toUpperCase(), 
@@ -159,84 +168,109 @@ const seedDatabase = async () => {
                     visitors: 1000000
                 };
 
-                let country = await Country.findOne({ name: cName });
-                if (!country) {
-                    country = await Country.create({
-                        name: cName,
-                        continent: continentName,
-                        isoCode: intel.iso,
-                        marketYieldTier: intel.yield,
-                        annualVisitors: intel.visitors,
-                        visaPolicy: intel.visa,
-                        currency: intel.currency,
-                        backgroundImage: countryData.image 
-                    });
-                }
-
-                // === STEP B: UPSERT CITY ===
-                const cityName = countryData.city;
-                const cityIntel = cityIntelligence[cityName] || { 
-                    lat: 0, 
-                    lng: 0, 
-                    budget: 150 
-                };
-
-                let city = await City.findOne({ name: cityName });
-                if (!city) {
-                    city = await City.create({
-                        name: cityName,
-                        countryId: country._id,
-                        location: { 
-                            type: 'Point', 
-                            coordinates: [cityIntel.lng, cityIntel.lat] 
-                        },
-                        economics: {
-                            minDailyBudget: cityIntel.budget,
-                            accommodationCost: Math.floor(cityIntel.budget * 0.5),
-                            mealIndex: Math.floor(cityIntel.budget * 0.3),
-                            transitCost: Math.floor(cityIntel.budget * 0.1),
-                            currencyStrength: "Stable"
-                        },
-                        timeZone: "UTC", 
-                        popularityIndex: 90 
-                    });
-                }
-
-                // === STEP C: CREATE TOUR ===
-                const numericPrice = parseInt(countryData.price.replace(/[^0-9]/g, '')) || 999;
-
-                await Tour.create({
-                    name: `${cityName} & ${cName} Explorer`, 
-                    cityId: city._id,
-                    countryId: country._id,
-                    price: numericPrice,
-                    duration: countryData.duration,
-                    groupSize: countryData.groupSize,
-                    stats: {
-                        rating: countryData.rating,
-                        reviewsCount: countryData.reviews,
-                        isTrending: countryData.rating > 4.8,
-                        breakdown: {
-                            verified: Math.floor(countryData.rating * 20),
-                            volume: 90,
-                            nlpSentiment: 95
+                // Find Country by Name -> Update or Create if missing
+                const country = await Country.findOneAndUpdate(
+                    { name: cName },
+                    {
+                        $set: {
+                            continent: continentName,
+                            isoCode: intel.iso,
+                            marketYieldTier: intel.yield,
+                            annualVisitors: intel.visitors,
+                            visaPolicy: intel.visa,
+                            currency: intel.currency,
+                            backgroundImage: countryData.image 
                         }
                     },
-                    images: [countryData.image],
-                    overview: countryData.longDesc || countryData.desc,
-                    amenities: countryData.placesToVisit 
-                });
+                    { new: true, upsert: true } // Return the updated doc, create if not exists
+                );
+
+                // === STEP B: UPDATE CITY (Injecting Content) ===
+                const cityName = countryData.city;
+                const cityIntel = cityIntelligence[cityName] || { lat: 0, lng: 0, budget: 150 };
+
+                const city = await City.findOneAndUpdate(
+                    { name: cityName },
+                    {
+                        $set: {
+                            countryId: country._id,
+                            
+                            // NEW FIELDS INJECTED HERE
+                            description: countryData.longDesc, 
+                            topAttractions: countryData.placesToVisit,
+                            images: [countryData.image], 
+                            
+                            // Ensure Economy & Location are synced
+                            location: { type: 'Point', coordinates: [cityIntel.lng, cityIntel.lat] },
+                            economics: {
+                                minDailyBudget: cityIntel.budget,
+                                accommodationCost: Math.floor(cityIntel.budget * 0.5),
+                                mealIndex: Math.floor(cityIntel.budget * 0.3),
+                                transitCost: Math.floor(cityIntel.budget * 0.1),
+                                currencyStrength: "Stable"
+                            },
+                            timeZone: "UTC", 
+                            popularityIndex: countryData.rating >= 4.8 ? 95 : 80
+                        }
+                    },
+                    { new: true, upsert: true }
+                );
+
+                // === STEP C: UPDATE TOUR (Injecting Categories & Highlights) ===
+                const numericPrice = parseInt(countryData.price.replace(/[^0-9]/g, '')) || 999;
+                const tourName = `${cityName} & ${cName} Explorer`;
+
+                await Tour.findOneAndUpdate(
+                    { name: tourName },
+                    {
+                        $set: {
+                            cityId: city._id,
+                            countryId: country._id,
+                            price: numericPrice,
+                            duration: countryData.duration,
+                            groupSize: countryData.groupSize,
+                            
+                            // NEW FIELDS INJECTED HERE
+                            category: cityCategories[cityName] || 'Culture',
+                            highlights: countryData.placesToVisit.slice(0, 4),
+                            amenities: standardAmenities,
+                            isFeatured: countryData.rating >= 4.9,
+                            
+                            stats: {
+                                rating: countryData.rating,
+                                reviewsCount: countryData.reviews,
+                                isTrending: countryData.rating > 4.8,
+                                breakdown: {
+                                    verified: Math.floor(countryData.rating * 20),
+                                    volume: 90,
+                                    nlpSentiment: 95
+                                }
+                            },
+                            images: [countryData.image],
+                            overview: countryData.desc,
+                            
+                            // Keep Itinerary or Set Default
+                            itinerary: [
+                                { day: 1, title: "Arrival & Welcome", desc: `Arrive in ${cityName} and transfer to your hotel.` },
+                                { day: 2, title: "City Tour", desc: `Guided tour visiting ${countryData.placesToVisit[0]} and ${countryData.placesToVisit[1]}.` },
+                                { day: 3, title: "Cultural Immersion", desc: `Experience local culture and visit ${countryData.placesToVisit[2]}.` },
+                                { day: 4, title: "Leisure & Departure", desc: "Free time for shopping before departure." }
+                            ]
+                        }
+                    },
+                    { new: true, upsert: true }
+                );
                 
                 tourCount++;
             }
         }
 
-        console.log(`Database Successfully Seeded!`);
-        console.log(`- ${tourCount} Tours Created.`);
+        console.log(`Database Successfully Updated!`);
+        console.log(`- ${tourCount} Tours Processed (Updated or Created).`);
         process.exit();
 
     } catch (error) {
-        console.error("Seeding Error:", error);
+        console.error("Migration Error:", error);
         process.exit(1);
     }
 };

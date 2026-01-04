@@ -79,14 +79,61 @@
           </div>
         </div>
 
-        <div id="view-tours" class="admin-view d-none">
-          <div class="d-flex justify-content-between align-items-center mb-4">
-            <h5 class="mb-0 fw-bold">Tour Packages</h5>
-            <button class="btn btn-primary" onclick="openModal('tour')">
-              <i class="bi bi-plus-lg"></i> New Package
-            </button>
+        <div id="view-tours" class="admin-view">
+          
+          <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-4 gap-3">
+            <div>
+              <h5 class="mb-1 fw-bold">Tour Packages</h5>
+              <p class="text-muted small mb-0">Manage your tour inventory and details</p>
+            </div>
+
+            <div class="d-flex gap-2">
+              <div class="btn-group" role="group">
+                <button type="button" class="btn btn-outline-primary active" id="btn-view-grid" onclick="toggleTourView('grid')">
+                  <i class="bi bi-grid-fill"></i>
+                </button>
+                <button type="button" class="btn btn-outline-primary" id="btn-view-table" onclick="toggleTourView('table')">
+                  <i class="bi bi-list-ul"></i>
+                </button>
+              </div>
+
+              <button class="btn btn-primary" onclick="openModal('tour')">
+                <i class="bi bi-plus-lg"></i> New Package
+              </button>
+            </div>
           </div>
-          <div id="tours-grid" class="row g-4"></div>
+
+          <div id="tours-grid" class="row g-4">
+            </div>
+
+          <div id="tours-table-view" class="table-container d-none">
+            <div class="table-responsive">
+              <table class="table-custom" id="table-tours">
+                <thead>
+                  <tr>
+                    <th>Tour Name</th>
+                    <th>Location</th>
+                    <th>Category</th>
+                    <th>Price</th>
+                    <th>Duration</th>
+                    <th>Group Size</th>
+                    <th>Rating</th>
+                    <th>Review</th>
+                    <th>Is Trending</th>
+                    <th>Description</th>
+                    <th>Category</th>
+                    <th>Updated At</th>
+
+                    <th>Status</th>
+                    <th class="text-end">Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="tbody-tours">
+                  </tbody>
+              </table>
+            </div>
+          </div>
+
         </div>
       </div>
     </main>
