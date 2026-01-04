@@ -1,122 +1,131 @@
-// --- CONFIGURATION ---
 const API_BASE =
   "https://travia-online-booking-application-backend.onrender.com/api";
-let cmsModal;
-let toastEl;
-let currentType = null;
-let editingId = null;
-let token = localStorage.getItem("token");
+const token = localStorage.getItem("token");
+let cmsModal; // Bootstrap Modal Instance
+let currentType = null; // 'country', 'city', 'tour'
+let editingId = null; // ID if editing, null if new
 
-// --- INITIALIZATION ---
+// Initialize
 document.addEventListener("DOMContentLoaded", async () => {
-  // Auth Check
+
+
+  // Security Check (Main)
   const user = JSON.parse(localStorage.getItem("user") || "{}");
+
+  // 1. Security Check
   if (!token || !user.isAdmin) {
     window.location.href = "../pages/index.html";
     return;
   }
 
-  // Init Bootstrap Components
-  cmsModal = new bootstrap.Modal(document.getElementById("cmsModal"));
-  toastEl = new bootstrap.Toast(document.getElementById("liveToast"));
+  // 2. Setup Components
+ const modalEl = document.getElementById("cmsModal");
+  if (modalEl) {
+      cmsModal = new bootstrap.Modal(modalEl);
+  } else {
+      console.warn("CMS Modal element not found on this page.");
+  }
 
-  // Sidebar Logic
-  const tabs = ["dashboard", "countries", "cities", "tours", "users"];
-  tabs.forEach((tab) => {
-    document.getElementById(`menu-${tab}`).addEventListener("click", (e) => {
-      e.preventDefault();
-      switchView(tab);
-    });
-  });
+  // 2. Sidebar & View Logic (The Fix)
+    const path = window.location.pathname;
+    const page = path.split("/").pop().replace(".html", "") || "dashboard"; 
 
-  // Mobile Toggle
-  document.getElementById("toggle-sidebar")?.addEventListener("click", () => {
-    document.getElementById("sidebar").classList.toggle("d-none");
-  });
+    // A. Auto-Highlight Sidebar
+    // Remove 'active' from all links first
+    document.querySelectorAll('.sidebar-link').forEach(link => link.classList.remove('active'));
+    const currentLink = document.getElementById(`menu-${page}`);
+    if (currentLink) currentLink.classList.add('active');
 
-  document.getElementById("btn-save-cms").addEventListener("click", handleSave);
+    // B. Force-Show Content (Fixes White Page)
+    // This removes 'd-none' from any content wrapper if it was accidentally copied over
+    document.querySelectorAll('.admin-view').forEach(el => el.classList.remove('d-none'));
 
-  // Initial Load
-  await loadStats();
+  // 3. Sidebar Navigation
+
+  if (path.includes("dashboard")) {
+    loadDashboardStats();
+  } else if (path.includes("cities")) {
+    loadCities();
+  } else if (path.includes("countries")) {
+    loadCountries();
+  } else if (path.includes("tours")) {
+    loadTours();
+  } else if (path.includes("users")) {
+    loadUsers();
+  }
+
+ // 4. Global Event Listeners
+  
+  // Safety Check: Only add listener if the Save Button actually exists
+  const saveBtn = document.getElementById("btn-save-cms");
+  if (saveBtn) {
+      saveBtn.addEventListener("click", handleSave);
+  }
+
+  // Safety Check: Only add listener if Sidebar Toggle exists
+  const toggleBtn = document.getElementById("toggle-sidebar");
+  if (toggleBtn) {
+      toggleBtn.addEventListener("click", () => {
+          const sidebar = document.getElementById("sidebar");
+          if (sidebar) sidebar.classList.toggle("show");
+      });
+  }
+
+  // 5. Initial Load
+  loadDashboardStats();
 });
 
-function switchView(viewName) {
-  document
-    .querySelectorAll(".admin-view")
-    .forEach((el) => el.classList.add("d-none"));
-  document.getElementById(`view-${viewName}`).classList.remove("d-none");
+// ==========================================
+// DATA FETCHING & RENDERING
+// ==========================================
 
-  document
-    .querySelectorAll(".sidebar-link")
-    .forEach((el) => el.classList.remove("active"));
-  document.getElementById(`menu-${viewName}`).classList.add("active");
-
-  if (viewName === "countries") loadCountries();
-  if (viewName === "cities") loadCities();
-  if (viewName === "tours") loadTours();
-  if (viewName === "users") loadUsers();
-}
-
-function showToast(msg, isError = false) {
-  const toastDiv = document.getElementById("liveToast");
-  document.getElementById("toast-msg").innerText = msg;
-  toastDiv.classList.remove(isError ? "bg-primary" : "bg-danger");
-  toastDiv.classList.add(isError ? "bg-danger" : "bg-primary");
-  toastEl.show();
-}
-
-// --- DATA LOADERS (READ) ---
-
-async function loadStats() {
+async function loadDashboardStats() {
+  if (!document.getElementById("stat-tours")) return;
   try {
     const res = await fetch(`${API_BASE}/admin/stats`, {
       headers: { Authorization: `Bearer ${token}` },
     });
     const data = await res.json();
+
     document.getElementById("stat-tours").innerText = data.tours || 0;
     document.getElementById("stat-countries").innerText = data.countries || 0;
     document.getElementById("stat-cities").innerText = data.cities || 0;
     document.getElementById("stat-bookings").innerText = data.bookings || 0;
+    document.getElementById("stat-users").innerText = data.users || 0;
   } catch (e) {
-    console.error(e);
+    console.error("Stats Error", e);
   }
 }
 
 async function loadCountries() {
+  if (!document.getElementById("table-countries")) return;
   const res = await fetch(`${API_BASE}/admin/countries`, {
     headers: { Authorization: `Bearer ${token}` },
   });
   const data = await res.json();
+
   const tbody = document.querySelector("#table-countries tbody");
-
-  const getBadge = (tier) => {
-    if (tier === "High")
-      return '<span class="badge badge-yield-high px-2 py-1">High Yield</span>';
-    if (tier === "Low")
-      return '<span class="badge bg-light text-muted px-2 py-1">Volume</span>';
-    return '<span class="badge badge-yield-med px-2 py-1">Standard</span>';
-  };
-
   tbody.innerHTML = data
     .map(
-      (c) => `
+      (item) => `
         <tr>
-            <td>
-                <div class="fw-bold">${c.name}</div>
-                <div class="small text-muted">${c.continent}</div>
-            </td>
-            <td><span class="badge badge-visa-free">${
-              c.visaPolicy || "Standard"
+            <td class="fw-bold text-dark">${item.name}</td>
+            <td>${item.continent}</td>
+            <td><span class="badge bg-light text-dark border">${
+              item.isoCode
             }</span></td>
-            <td>${c.currency}</td>
-            <td>${getBadge(c.marketYieldTier)}</td>
-            <td>
-                <button class="btn btn-sm btn-light border" onclick='editItem("country", ${JSON.stringify(
-                  c
-                )})'><i class="bi bi-pencil-fill text-primary"></i></button>
-                <button class="btn btn-sm btn-light border" onclick='deleteItem("countries", "${
-                  c._id
-                }")'><i class="bi bi-trash-fill text-danger"></i></button>
+            <td>${item.marketYieldTier || "-"}</td>
+            <td>${item.visaPolicy || "-"}</td>
+            <td>${item.annualVisitors || 0}</td>
+            <td>${item.currency}</td>
+            <td>${item.backgroundImage}</td>
+            <td class="text-end">
+                <button class="btn btn-sm btn-outline-primary me-1" onclick='openForm("country", ${JSON.stringify(
+                  item
+                )})'><i class="bi bi-pencil"></i></button>
+                <button class="btn btn-sm btn-outline-danger" onclick='deleteItem("countries", "${
+                  item._id
+                }")'><i class="bi bi-trash"></i></button>
             </td>
         </tr>
     `
@@ -125,44 +134,36 @@ async function loadCountries() {
 }
 
 async function loadCities() {
+  if (!document.getElementById("table-cities")) return;
   const res = await fetch(`${API_BASE}/admin/cities`, {
     headers: { Authorization: `Bearer ${token}` },
   });
   const data = await res.json();
-  const tbody = document.querySelector("#table-cities tbody");
 
+  const tbody = document.querySelector("#table-cities tbody");
   tbody.innerHTML = data
     .map(
-      (c) => `
+      (item) => `
         <tr>
-            <td class="fw-bold">${c.name}</td>
-            <td>${c.countryId ? c.countryId.name : "Unknown"}</td>
-            <td>
-                <h6 class="mb-0 text-success fw-bold">$${
-                  c.economics?.minDailyBudget || 0
-                }</h6>
-                <small class="text-muted">per day</small>
-            </td>
-            <td>
-                <div class="d-flex gap-2 small text-muted">
-                    <span><i class="bi bi-house"></i> $${
-                      c.economics?.components?.accommodationCost || 0
-                    }</span>
-                    <span><i class="bi bi-cup-hot"></i> $${
-                      c.economics?.components?.mealCost || 0
-                    }</span>
-                    <span><i class="bi bi-bus-front"></i> $${
-                      c.economics?.components?.transitCost || 0
-                    }</span>
-                </div>
-            </td>
-            <td>
-                <button class="btn btn-sm btn-light border" onclick='editItem("city", ${JSON.stringify(
-                  c
-                )})'><i class="bi bi-pencil-fill text-primary"></i></button>
-                <button class="btn btn-sm btn-light border" onclick='deleteItem("cities", "${
-                  c._id
-                }")'><i class="bi bi-trash-fill text-danger"></i></button>
+            <td class="fw-bold text-dark">${item.name}</td>
+            <td class="text-primary fw-semibold">${
+              item.countryId ? item.countryId.name : "Unlinked"
+            }</td>
+            <td>${item.location.coordinates}</td>
+            <td>$${item.economics?.minDailyBudget || 0} / day</td>
+            <td>$${item.economics.accommodationCost || 0} / day</td>
+            <td>$${item.economics.mealIndex || 0} / day</td>
+            <td>$${item.economics.transitCost || 0} / day</td>
+            <td>${item.economics.currencyStrength || 0} </td>
+            <td>${item.timeZone}</td>
+            <td>${item.popularityIndex}</td>
+            <td class="text-end">
+                <button class="btn btn-sm btn-outline-primary me-1" onclick='openForm("city", ${JSON.stringify(
+                  item
+                )})'><i class="bi bi-pencil"></i></button>
+                <button class="btn btn-sm btn-outline-danger" onclick='deleteItem("cities", "${
+                  item._id
+                }")'><i class="bi bi-trash"></i></button>
             </td>
         </tr>
     `
@@ -171,183 +172,199 @@ async function loadCities() {
 }
 
 async function loadTours() {
-  const res = await fetch(`${API_BASE}/admin/tours`, {
-    headers: { Authorization: `Bearer ${token}` },
-  });
-  const data = await res.json();
-  document.getElementById("tours-grid").innerHTML = data
-    .map(
-      (t) => `
-        <div class="col-md-4">
-            <div class="card h-100 border-0 shadow-sm">
-                <img src="${
-                  t.images[0] || "../public/assets/Travia.png"
-                }" class="card-img-top" style="height: 160px; object-fit: cover;">
+  if (!document.getElementById("tours-grid")) return;
+  try {
+    const res = await fetch(`${API_BASE}/admin/tours`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    const data = await res.json();
+
+    const grid = document.getElementById("tours-grid");
+
+    // Fallback image constant
+    const fallbackImage = "../../public/assets/Travia.png";
+
+    grid.innerHTML = data
+      .map((item) => {
+        // Determine initial image URL
+        const imgUrl = item.images?.[0] || fallbackImage;
+
+        return `
+        <div class="col-md-4 col-lg-4">
+            <div class="card h-100 border-0 shadow-sm" style="border-radius: 16px; overflow: hidden;">
+                <div style="height: 180px; position: relative; background-color: #f8f9fa;">
+                    <img 
+                        src="${imgUrl}" 
+                        alt="${item.name}"
+                        style="width: 100%; height: 100%; object-fit: cover;"
+                        loading="lazy"
+                        onerror="this.onerror=null; this.src='${fallbackImage}'"
+                    >
+                </div>
+                
                 <div class="card-body">
-                    <h6 class="fw-bold mb-1">${t.name}</h6>
-                    <p class="small text-muted mb-2"><i class="bi bi-geo-alt"></i> ${
-                      t.cityId?.name || "City"
-                    }, ${t.countryId?.name || "Country"}</p>
-                    <div class="d-flex justify-content-between align-items-center mt-3">
-                        <span class="text-primary fw-bold fs-5">$${
-                          t.price
-                        }</span>
-                        <span class="badge bg-light text-dark border">${
-                          t.duration
+                    <div class="d-flex justify-content-between align-items-start mb-2">
+                        <h5 class="card-title fw-bold mb-0 text-truncate" title="${
+                          item.name
+                        }">${item.name}</h5>
+                        <span class="badge bg-success bg-opacity-10 text-success">$${
+                          item.price
                         }</span>
                     </div>
-                </div>
-                <div class="card-footer bg-white border-top-0 d-flex justify-content-between pb-3">
-                    <button class="btn btn-sm btn-outline-primary" onclick='editItem("tour", ${JSON.stringify(
-                      t
-                    )})'>Edit Details</button>
-                    <button class="btn btn-sm btn-outline-danger" onclick='deleteItem("tours", "${
-                      t._id
-                    }")'>Remove</button>
+                    <p class="small text-muted mb-3">
+                        <i class="bi bi-geo-alt-fill"></i> ${
+                          item.cityId?.name || "Unknown"
+                        }, ${item.countryId?.name || "Unknown"}
+                    </p>
+                    
+                    <div class="d-flex gap-2">
+                        <button class="btn btn-sm btn-light flex-grow-1" onclick='openForm("tour", ${JSON.stringify(
+                          item
+                        )})'>Edit Details</button>
+                        <button class="btn btn-sm btn-light text-danger" onclick='deleteItem("tours", "${
+                          item._id
+                        }")'><i class="bi bi-trash"></i></button>
+                    </div>
                 </div>
             </div>
         </div>
-    `
-    )
-    .join("");
+      `;
+      })
+      .join("");
+  } catch (err) {
+    console.error("Failed to load tours:", err);
+  }
 }
-
 async function loadUsers() {
+  if (!document.getElementById("table-users")) return;
   const res = await fetch(`${API_BASE}/admin/users`, {
     headers: { Authorization: `Bearer ${token}` },
   });
   const data = await res.json();
+
   document.querySelector("#table-users tbody").innerHTML = data
     .map(
-      (u) => `
+      (user) => `
         <tr>
             <td>
-                <div class="d-flex align-items-center">
-                    <div class="bg-primary bg-opacity-10 text-primary rounded-circle p-2 me-2"><i class="bi bi-person-fill"></i></div>
-                    <div><strong>${u.username}</strong></div>
+                <div class="d-flex align-items-center gap-2">
+                    <div class="bg-light rounded-circle p-2"><i class="bi bi-person"></i></div>
+                    <span class="fw-semibold">${user.username}</span>
                 </div>
             </td>
-            <td>${u.email}</td>
+            <td>${user.email}</td>
             <td>${
-              u.isAdmin
-                ? '<span class="badge bg-primary">Administrator</span>'
-                : '<span class="badge bg-secondary">Traveler</span>'
+              user.isAdmin
+                ? '<span class="badge bg-primary">Admin</span>'
+                : '<span class="badge bg-secondary">User</span>'
             }</td>
-            <td><span class="badge bg-success">Active</span></td>
+            <td><span class="badge bg-success bg-opacity-10 text-success border border-success">Active</span></td>
         </tr>
     `
     )
     .join("");
 }
 
-// --- INTELLIGENT FORMS (CREATE/UPDATE) ---
+// ==========================================
+// MODAL & FORMS
+// ==========================================
 
-window.openModal = async (type) => {
+// Helper to open modal clean
+window.openModal = (type) => openForm(type, {});
+
+window.openForm = async (type, data) => {
   currentType = type;
-  editingId = null;
-  document.getElementById("modalTitle").innerText = `Create New ${
-    type.charAt(0).toUpperCase() + type.slice(1)
-  }`;
-  await renderForm(type);
-  cmsModal.show();
-};
+  editingId = data._id || null;
 
-window.editItem = async (type, data) => {
-  currentType = type;
-  editingId = data._id;
-  document.getElementById("modalTitle").innerText = `Edit ${
-    type.charAt(0).toUpperCase() + type.slice(1)
-  }`;
-  await renderForm(type, data);
-  cmsModal.show();
-};
+  document.getElementById("modalTitle").innerText = editingId
+    ? `Edit ${type.toUpperCase()}`
+    : `Add New ${type.toUpperCase()}`;
+  const body = document.getElementById("modalBody");
+  body.innerHTML =
+    '<div class="text-center py-5"><div class="spinner-border text-primary"></div></div>'; // Loading state
 
-async function renderForm(type, data = {}) {
-  const container = document.getElementById("modalBody");
-  let html = "";
+  cmsModal.show();
+
+  // Build Forms
+  let formHtml = "";
 
   if (type === "country") {
-    html = `
-        <div class="row g-3">
-            <div class="col-md-6">
-                <label class="form-label small fw-bold text-muted">Country Name</label>
-                <input class="form-control" id="f-name" value="${
-                  data.name || ""
-                }" placeholder="e.g. France">
-            </div>
-            <div class="col-md-6">
-                <label class="form-label small fw-bold text-muted">Continent</label>
-                <select class="form-select" id="f-continent">
-                    <option value="Europe" ${
-                      data.continent === "Europe" ? "selected" : ""
-                    }>Europe</option>
-                    <option value="Asia" ${
-                      data.continent === "Asia" ? "selected" : ""
-                    }>Asia</option>
-                    <option value="North America" ${
-                      data.continent === "North America" ? "selected" : ""
-                    }>North America</option>
-                    <option value="Africa" ${
-                      data.continent === "Africa" ? "selected" : ""
-                    }>Africa</option>
-                </select>
-            </div>
-            <div class="col-md-4">
-                <label class="form-label small fw-bold text-muted">ISO Code</label>
-                <input class="form-control" id="f-iso" value="${
-                  data.isoCode || ""
-                }" maxlength="2" style="text-transform:uppercase" placeholder="FR">
-            </div>
-            <div class="col-md-4">
-                <label class="form-label small fw-bold text-muted">Currency</label>
-                <input class="form-control" id="f-currency" value="${
-                  data.currency || "USD"
-                }">
-            </div>
-            <div class="col-md-4">
-                <label class="form-label small fw-bold text-muted">Visa Policy</label>
-                <select class="form-select" id="f-visa">
-                    <option value="Schengen" ${
-                      data.visaPolicy === "Schengen" ? "selected" : ""
-                    }>Schengen Area</option>
-                    <option value="Visa Free" ${
-                      data.visaPolicy === "Visa Free" ? "selected" : ""
-                    }>Visa Free</option>
-                    <option value="E-Visa" ${
-                      data.visaPolicy === "E-Visa" ? "selected" : ""
-                    }>Electronic Visa</option>
-                    <option value="Visa Required" ${
-                      data.visaPolicy === "Visa Required" ? "selected" : ""
-                    }>Embassy Visa</option>
-                </select>
-            </div>
-            <div class="col-md-6">
-                <label class="form-label small fw-bold text-muted">Market Yield Tier</label>
-                <select class="form-select" id="f-yield">
-                    <option value="High" ${
-                      data.marketYieldTier === "High" ? "selected" : ""
-                    }>High Yield (Luxury focus)</option>
-                    <option value="Medium" ${
-                      data.marketYieldTier === "Medium" ? "selected" : ""
-                    }>Medium Yield</option>
-                    <option value="Low" ${
-                      data.marketYieldTier === "Low" ? "selected" : ""
-                    }>Low Yield (Volume focus)</option>
-                </select>
-            </div>
-             <div class="col-md-6">
-                <label class="form-label small fw-bold text-muted">Annual Visitors</label>
-                <input type="number" class="form-control" id="f-visitors" value="${
-                  data.annualVisitors || 0
-                }">
-            </div>
-        </div>`;
+    formHtml = `
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <label class="form-label">Country Name</label>
+                    <input id="f-name" class="form-control" value="${
+                      data.name || ""
+                    }" placeholder="e.g. France">
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Continent</label>
+                    <input id="f-continent" class="form-control" value="${
+                      data.continent || ""
+                    }" placeholder="e.g. Europe">
+                </div>
+                
+                <div class="col-md-4">
+                    <label class="form-label">ISO Code</label>
+                    <input id="f-iso" class="form-control" value="${
+                      data.isoCode || ""
+                    }" maxlength="3" placeholder="FRA">
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Market Yield Tier</label>
+                    <select id="f-market" class="form-select">
+                        <option value="Low" ${
+                          data.marketYieldTier === "Low" ? "selected" : ""
+                        }>Low</option>
+                        <option value="Medium" ${
+                          data.marketYieldTier === "Medium" ? "selected" : ""
+                        }>Medium</option>
+                        <option value="High" ${
+                          data.marketYieldTier === "High" ? "selected" : ""
+                        }>High</option>
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Currency</label>
+                    <input id="f-curr" class="form-control" value="${
+                      data.currency || ""
+                    }" placeholder="EUR">
+                </div>
+                
+                <div class="col-md-6">
+                    <label class="form-label">Visa Policy</label>
+                    <select id="f-visa" class="form-select">
+                        <option value="Schengen" ${
+                          data.visaPolicy === "Schengen" ? "selected" : ""
+                        }>Schengen</option>
+                        <option value="Visa Free" ${
+                          data.visaPolicy === "Visa Free" ? "selected" : ""
+                        }>Visa Free</option>
+                        <option value="Visa Required" ${
+                          data.visaPolicy === "Visa Required" ? "selected" : ""
+                        }>Visa Required</option>
+                    </select>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Annual Visitors</label>
+                    <input id="f-visitors" type="number" class="form-control" value="${
+                      data.annualVisitors || ""
+                    }" placeholder="0">
+                </div>
+                
+                <div class="col-12">
+                    <label class="form-label">Background Image URL</label>
+                    <input id="f-img" class="form-control" value="${
+                      data.backgroundImage || ""
+                    }" placeholder="https://...">
+                </div>
+            </div>`;
   } else if (type === "city") {
-    // Dynamic Dropdown Fetch for City
-    const cRes = await fetch(`${API_BASE}/admin/countries`, {
+    // Fetch countries for the dropdown
+    const res = await fetch(`${API_BASE}/admin/countries`, {
       headers: { Authorization: `Bearer ${token}` },
     });
-    const countries = await cRes.json();
+    const countries = await res.json();
     const options = countries
       .map(
         (c) =>
@@ -357,219 +374,297 @@ async function renderForm(type, data = {}) {
       )
       .join("");
 
-    html = `
-        <div class="row g-3">
-            <div class="col-md-7">
-                <label class="form-label small fw-bold text-muted">City Name</label>
-                <input class="form-control" id="f-name" value="${
-                  data.name || ""
-                }">
-            </div>
-            <div class="col-md-5">
-                <label class="form-label small fw-bold text-muted">Country</label>
-                <select class="form-select" id="f-country">${options}</select>
-            </div>
-            
-            <div class="col-12 mt-4">
-                <div class="p-3 bg-light rounded border">
-                    <h6 class="fw-bold text-primary mb-3"><i class="bi bi-calculator"></i> Economic Modelling</h6>
-                    <div class="row g-2">
-                        <div class="col-md-4">
-                            <label class="small text-muted">Accom. (1 Night)</label>
-                            <input type="number" class="form-control calc-input" id="f-cost-accom" value="${
-                              data.economics?.components?.accommodationCost || 0
-                            }">
+    // Safely access coordinates (Default to empty if missing)
+    const [lng, lat] = data.location?.coordinates || [0, 0];
+
+    formHtml = `
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <label class="form-label">City Name</label>
+                    <input id="f-name" class="form-control" value="${
+                      data.name || ""
+                    }" placeholder="e.g. Tokyo">
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Country</label>
+                    <select id="f-country" class="form-select">${options}</select>
+                </div>
+
+                <div class="col-12"><label class="form-label text-muted small fw-bold">GEOLOCATION</label></div>
+                <div class="col-md-6">
+                    <label class="form-label">Longitude</label>
+                    <input id="f-lng" type="number" step="any" class="form-control" value="${lng}" placeholder="e.g. 139.69">
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Latitude</label>
+                    <input id="f-lat" type="number" step="any" class="form-control" value="${lat}" placeholder="e.g. 35.68">
+                </div>
+
+                <div class="col-12"><label class="form-label text-muted small fw-bold">ECONOMICS</label></div>
+                <div class="col-md-3">
+                    <label class="form-label">Daily Budget ($)</label>
+                    <input id="f-budget" type="number" class="form-control" value="${
+                      data.economics?.minDailyBudget || 0
+                    }">
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">Hotel Cost ($)</label>
+                    <input id="f-accom" type="number" class="form-control" value="${
+                      data.economics?.accommodationCost || 0
+                    }">
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">Meal Index ($)</label>
+                    <input id="f-meal" type="number" class="form-control" value="${
+                      data.economics?.mealIndex || 0
+                    }">
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">Transit Cost ($)</label>
+                    <input id="f-transit" type="number" class="form-control" value="${
+                      data.economics?.transitCost || 0
+                    }">
+                </div>
+                
+                <div class="col-12"><label class="form-label text-muted small fw-bold">METADATA</label></div>
+                <div class="col-md-4">
+                    <label class="form-label">Currency Strength</label>
+                    <select id="f-strength" class="form-select">
+                        <option value="Weak" ${
+                          data.economics?.currencyStrength === "Weak"
+                            ? "selected"
+                            : ""
+                        }>Weak</option>
+                        <option value="Stable" ${
+                          data.economics?.currencyStrength === "Stable"
+                            ? "selected"
+                            : ""
+                        }>Stable</option>
+                        <option value="Strong" ${
+                          data.economics?.currencyStrength === "Strong"
+                            ? "selected"
+                            : ""
+                        }>Strong</option>
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Time Zone</label>
+                    <input id="f-timezone" class="form-control" value="${
+                      data.timeZone || ""
+                    }" placeholder="e.g. Asia/Tokyo">
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Popularity (0-100)</label>
+                    <input id="f-pop" type="number" min="0" max="100" class="form-control" value="${
+                      data.popularityIndex || 0
+                    }">
+                </div>
+            </div>`;
+  } else if (type === 'tour') {
+        // 1. Fetch Relations
+        const [cRes, ciRes] = await Promise.all([
+            fetch(`${API_BASE}/admin/countries`, { headers: { Authorization: `Bearer ${token}` } }),
+            fetch(`${API_BASE}/admin/cities`, { headers: { Authorization: `Bearer ${token}` } })
+        ]);
+        const countries = await cRes.json();
+        const cities = await ciRes.json();
+
+        // 2. Build Dropdowns
+        const countryOpts = countries.map(c => `<option value="${c._id}" ${data.countryId?._id === c._id ? 'selected':''}>${c.name}</option>`).join("");
+        // Pre-select city if it exists, otherwise just list all (or you could filter by country if you added that logic)
+        const cityOpts = cities.map(c => `<option value="${c._id}" ${data.cityId?._id === c._id ? 'selected':''}>${c.name}</option>`).join("");
+
+        // 3. Format Array Data for Display
+        const amenitiesStr = data.amenities ? data.amenities.join(', ') : '';
+        const itineraryJson = data.itinerary ? JSON.stringify(data.itinerary, null, 2) : '[\n  { "day": 1, "title": "Arrival", "desc": "..." }\n]';
+        const imagesStr = data.images ? data.images.join('\n') : '';
+
+        formHtml = `
+            <ul class="nav nav-tabs mb-3" id="tourTab" role="tablist">
+                <li class="nav-item"><button class="nav-link active" data-bs-toggle="tab" data-bs-target="#tab-basic">Basic Info</button></li>
+                <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-stats">Sentiment & Stats</button></li>
+                <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-details">Details & Itinerary</button></li>
+            </ul>
+
+            <div class="tab-content">
+                <div class="tab-pane fade show active" id="tab-basic">
+                    <div class="row g-3">
+                        <div class="col-12">
+                            <label class="form-label">Tour Title</label>
+                            <input id="f-name" class="form-control" value="${data.name || ''}">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Country</label>
+                            <select id="f-country" class="form-select">${countryOpts}</select>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">City</label>
+                            <select id="f-city" class="form-select">${cityOpts}</select>
                         </div>
                         <div class="col-md-4">
-                            <label class="small text-muted">Meals (Daily)</label>
-                            <input type="number" class="form-control calc-input" id="f-cost-meal" value="${
-                              data.economics?.components?.mealCost || 0
-                            }">
+                            <label class="form-label">Price ($)</label>
+                            <input id="f-price" type="number" class="form-control" value="${data.price || 0}">
                         </div>
                         <div class="col-md-4">
-                            <label class="small text-muted">Transit</label>
-                            <input type="number" class="form-control calc-input" id="f-cost-transit" value="${
-                              data.economics?.components?.transitCost || 0
-                            }">
+                            <label class="form-label">Duration</label>
+                            <input id="f-dur" class="form-control" value="${data.duration || ''}" placeholder="e.g. 5 Days">
                         </div>
-                        <div class="col-12 mt-2">
-                            <label class="small fw-bold">Total Min. Daily Budget (Auto-Calc)</label>
-                            <input type="number" class="form-control fw-bold text-success" id="f-budget" value="${
-                              data.economics?.minDailyBudget || 0
-                            }" readonly>
-                            <small class="text-muted fst-italic">Formula: Accom + (Meals x 0.8) + Transit</small>
+                        <div class="col-md-4">
+                            <label class="form-label">Group Size</label>
+                            <input id="f-group" class="form-control" value="${data.groupSize || ''}" placeholder="e.g. Max 12">
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label">Image URLs (One per line)</label>
+                            <textarea id="f-images" class="form-control" rows="3" placeholder="https://...">${imagesStr}</textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tab-pane fade" id="tab-stats">
+                    <div class="row g-3">
+                        <div class="col-12">
+                            <div class="form-check form-switch p-3 bg-light rounded">
+                                <input class="form-check-input" type="checkbox" id="f-trending" ${data.stats?.isTrending ? 'checked' : ''}>
+                                <label class="form-check-label fw-bold" for="f-trending">Mark as Trending Tour</label>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Overall Rating (0-5)</label>
+                            <input id="f-rating" type="number" step="0.1" class="form-control" value="${data.stats?.rating || 0}">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Review Count</label>
+                            <input id="f-reviews" type="number" class="form-control" value="${data.stats?.reviewsCount || 0}">
+                        </div>
+                        <div class="col-12"><hr class="text-muted"></div>
+                        <div class="col-md-4">
+                            <label class="form-label text-muted small">Verified Score</label>
+                            <input id="f-verified" type="number" step="0.1" class="form-control" value="${data.stats?.breakdown?.verified || 0}">
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label text-muted small">Volume Score</label>
+                            <input id="f-volume" type="number" step="0.1" class="form-control" value="${data.stats?.breakdown?.volume || 0}">
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label text-muted small">AI Sentiment</label>
+                            <input id="f-nlp" type="number" step="0.1" class="form-control" value="${data.stats?.breakdown?.nlpSentiment || 0}">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tab-pane fade" id="tab-details">
+                    <div class="row g-3">
+                        <div class="col-12">
+                            <label class="form-label">Overview</label>
+                            <textarea id="f-overview" class="form-control" rows="3">${data.overview || ''}</textarea>
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label">Amenities (Comma separated)</label>
+                            <input id="f-amenities" class="form-control" value="${amenitiesStr}" placeholder="WiFi, Pool, Guide">
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label">Itinerary JSON</label>
+                            <textarea id="f-itinerary" class="form-control font-monospace" rows="8" style="font-size: 0.85rem;">${itineraryJson}</textarea>
+                            <div class="form-text">Format: [{"day": 1, "title": "...", "desc": "..."}]</div>
                         </div>
                     </div>
                 </div>
             </div>
+        `;
+    }
 
-            <div class="col-md-6"><label class="small text-muted">Latitude</label><input type="number" class="form-control" id="f-lat" value="${
-              data.location?.coordinates[1] || 0
-            }"></div>
-            <div class="col-md-6"><label class="small text-muted">Longitude</label><input type="number" class="form-control" id="f-lng" value="${
-              data.location?.coordinates[0] || 0
-            }"></div>
-        </div>`;
-  } else if (type === "tour") {
-    // --- FULLY RESTORED TOUR FORM ---
+  body.innerHTML = formHtml;
+  // Set selects if needed
+  if (type === "country" && data.visaPolicy)
+    document.getElementById("f-visa").value = data.visaPolicy;
+};
 
-    // 1. Fetch data for dropdowns
-    const cRes = await fetch(`${API_BASE}/admin/countries`, {
-      headers: { Authorization: `Bearer ${token}` },
-    });
-    const countries = await cRes.json();
-    const ciRes = await fetch(`${API_BASE}/admin/cities`, {
-      headers: { Authorization: `Bearer ${token}` },
-    });
-    const cities = await ciRes.json();
-
-    // 2. Build Options
-    const cOptions = countries
-      .map(
-        (c) =>
-          `<option value="${c._id}" ${
-            data.countryId?._id === c._id ? "selected" : ""
-          }>${c.name}</option>`
-      )
-      .join("");
-    const ciOptions = cities
-      .map(
-        (c) =>
-          `<option value="${c._id}" ${
-            data.cityId?._id === c._id ? "selected" : ""
-          }>${c.name}</option>`
-      )
-      .join("");
-
-    html = `
-        <div class="row g-3">
-            <div class="col-12">
-                <label class="form-label small fw-bold text-muted">Tour Name</label>
-                <input class="form-control" id="f-name" value="${
-                  data.name || ""
-                }" placeholder="e.g., Hidden Gems of Tuscany">
-            </div>
-
-            <div class="col-md-6">
-                <label class="form-label small fw-bold text-muted">Country</label>
-                <select class="form-select" id="f-country">${cOptions}</select>
-            </div>
-            <div class="col-md-6">
-                <label class="form-label small fw-bold text-muted">City</label>
-                <select class="form-select" id="f-city">${ciOptions}</select>
-            </div>
-
-            <div class="col-md-4">
-                <label class="form-label small fw-bold text-muted">Price ($)</label>
-                <input type="number" class="form-control" id="f-price" value="${
-                  data.price || 0
-                }">
-            </div>
-            <div class="col-md-4">
-                <label class="form-label small fw-bold text-muted">Duration</label>
-                <input class="form-control" id="f-duration" value="${
-                  data.duration || "5 Days"
-                }">
-            </div>
-            <div class="col-md-4">
-                <label class="form-label small fw-bold text-muted">Group Size</label>
-                <input class="form-control" id="f-group" value="${
-                  data.groupSize || "Max 12"
-                }">
-            </div>
-
-            <div class="col-12">
-                <label class="form-label small fw-bold text-muted">Main Image URL</label>
-                <input class="form-control" id="f-image" value="${
-                  data.images?.[0] || ""
-                }" placeholder="https://...">
-            </div>
-            
-            <div class="col-12">
-                <label class="form-label small fw-bold text-muted">Tour Overview</label>
-                <textarea class="form-control" id="f-overview" rows="4" placeholder="Detailed description...">${
-                  data.overview || ""
-                }</textarea>
-            </div>
-        </div>
-    `;
-  }
-
-  container.innerHTML = html;
-
-  // ATTACH LISTENERS FOR CALCULATOR
-  if (type === "city") {
-    ["f-cost-accom", "f-cost-meal", "f-cost-transit"].forEach((id) => {
-      document.getElementById(id).addEventListener("input", calculateBudget);
-    });
-  }
-}
-
-function calculateBudget() {
-  const accom = parseFloat(document.getElementById("f-cost-accom").value) || 0;
-  const meal = parseFloat(document.getElementById("f-cost-meal").value) || 0;
-  const transit =
-    parseFloat(document.getElementById("f-cost-transit").value) || 0;
-
-  // Research Report Formula
-  const total = accom + meal * 0.8 + transit;
-  document.getElementById("f-budget").value = Math.ceil(total);
-}
-
-// --- SAVE HANDLER ---
-
+// ==========================================
+// SAVE & DELETE
+// ==========================================
 async function handleSave() {
   const btn = document.getElementById("btn-save-cms");
-  const spinner = document.getElementById("save-spinner");
-
+  const originalText = btn.innerText;
+  btn.innerText = "Saving...";
   btn.disabled = true;
-  spinner.classList.remove("d-none");
+
+  const payload = {};
 
   try {
-    const payload = {};
-
     if (currentType === "country") {
       payload.name = document.getElementById("f-name").value;
       payload.continent = document.getElementById("f-continent").value;
       payload.isoCode = document.getElementById("f-iso").value;
-      payload.currency = document.getElementById("f-currency").value;
+      payload.currency = document.getElementById("f-curr").value;
       payload.visaPolicy = document.getElementById("f-visa").value;
+      payload.marketYieldTier = document.getElementById("f-market").value;
       payload.annualVisitors = document.getElementById("f-visitors").value;
-      payload.marketYieldTier = document.getElementById("f-yield").value;
+      payload.backgroundImage = document.getElementById("f-img").value;
     } else if (currentType === "city") {
       payload.name = document.getElementById("f-name").value;
       payload.countryId = document.getElementById("f-country").value;
+
       payload.location = {
         type: "Point",
         coordinates: [
-          parseFloat(document.getElementById("f-lng").value),
-          parseFloat(document.getElementById("f-lat").value),
+          parseFloat(document.getElementById("f-lng").value) || 0,
+          parseFloat(document.getElementById("f-lat").value) || 0,
         ],
       };
-      // NESTED ECONOMIC DATA
+
       payload.economics = {
-        minDailyBudget: parseFloat(document.getElementById("f-budget").value),
-        components: {
-          accommodationCost: parseFloat(
-            document.getElementById("f-cost-accom").value
-          ),
-          mealCost: parseFloat(document.getElementById("f-cost-meal").value),
-          transitCost: parseFloat(
-            document.getElementById("f-cost-transit").value
-          ),
-        },
+        minDailyBudget: Number(document.getElementById("f-budget").value),
+        accommodationCost: Number(document.getElementById("f-accom").value),
+        mealIndex: Number(document.getElementById("f-meal").value),
+        transitCost: Number(document.getElementById("f-transit").value),
+        currencyStrength: document.getElementById("f-strength").value,
       };
-    } else if (currentType === "tour") {
-      // --- RESTORED TOUR PAYLOAD ---
-      payload.name = document.getElementById("f-name").value;
-      payload.countryId = document.getElementById("f-country").value;
-      payload.cityId = document.getElementById("f-city").value;
-      payload.price = parseFloat(document.getElementById("f-price").value);
-      payload.duration = document.getElementById("f-duration").value;
-      payload.groupSize = document.getElementById("f-group").value;
-      payload.images = [document.getElementById("f-image").value]; // Assuming single image for now
-      payload.overview = document.getElementById("f-overview").value;
-    }
+
+      payload.timeZone = document.getElementById("f-timezone").value;
+      payload.popularityIndex = Number(document.getElementById("f-pop").value);
+      
+    } else if (currentType === 'tour') {
+            // 1. Basic Fields
+            payload.name = document.getElementById('f-name').value;
+            payload.countryId = document.getElementById('f-country').value;
+            payload.cityId = document.getElementById('f-city').value;
+            payload.price = Number(document.getElementById('f-price').value);
+            payload.duration = document.getElementById('f-dur').value;
+            payload.groupSize = document.getElementById('f-group').value;
+            
+            // 2. Images (Split by newline and clean up)
+            const rawImages = document.getElementById('f-images').value;
+            payload.images = rawImages.split('\n').map(url => url.trim()).filter(url => url.length > 0);
+
+            // 3. Stats & Sentiment
+            payload.stats = {
+                rating: Number(document.getElementById('f-rating').value),
+                reviewsCount: Number(document.getElementById('f-reviews').value),
+                isTrending: document.getElementById('f-trending').checked,
+                breakdown: {
+                    verified: Number(document.getElementById('f-verified').value),
+                    volume: Number(document.getElementById('f-volume').value),
+                    nlpSentiment: Number(document.getElementById('f-nlp').value)
+                }
+            };
+
+            // 4. Details
+            payload.overview = document.getElementById('f-overview').value;
+            
+            // Amenities (Split by comma)
+            const rawAmen = document.getElementById('f-amenities').value;
+            payload.amenities = rawAmen.split(',').map(item => item.trim()).filter(i => i.length > 0);
+
+            // 5. Itinerary (Try/Catch to handle bad JSON)
+            try {
+                payload.itinerary = JSON.parse(document.getElementById('f-itinerary').value);
+            } catch (e) {
+                alert("Invalid JSON in Itinerary field. Please check the format.");
+                btn.innerText = "Save Changes"; // Reset button
+                btn.disabled = false;
+                return; // Stop saving
+            }
+        }
 
     const endpoint =
       currentType === "country"
@@ -591,37 +686,49 @@ async function handleSave() {
       body: JSON.stringify(payload),
     });
 
-    if (!res.ok) throw new Error("Operation Failed");
-
-    cmsModal.hide();
-    showToast(`${currentType} saved successfully!`);
-
-    // Refresh Data
-    if (currentType === "country") loadCountries();
-    if (currentType === "city") loadCities();
-    if (currentType === "tour") loadTours();
-    loadStats();
-  } catch (err) {
-    showToast(err.message, true);
+    if (res.ok) {
+      cmsModal.hide();
+      showToast("Success", "Record saved successfully");
+      // Refresh
+      if (currentType === "country") loadCountries();
+      if (currentType === "city") loadCities();
+      if (currentType === "tour") loadTours();
+      loadDashboardStats();
+    } else {
+      showToast("Error", "Failed to save data");
+    }
+  } catch (e) {
+    showToast("Error", "System error occurred");
   } finally {
+    btn.innerText = originalText;
     btn.disabled = false;
-    spinner.classList.add("d-none");
   }
 }
 
 window.deleteItem = async (endpoint, id) => {
-  if (!confirm("Are you sure? This action is irreversible.")) return;
+  if (
+    !confirm(
+      "Are you sure you want to delete this item? This cannot be undone."
+    )
+  )
+    return;
+
   try {
     await fetch(`${API_BASE}/admin/${endpoint}/${id}`, {
       method: "DELETE",
       headers: { Authorization: `Bearer ${token}` },
     });
-    showToast("Item deleted");
-    if (endpoint === "countries") loadCountries();
-    if (endpoint === "cities") loadCities();
-    if (endpoint === "tours") loadTours();
-    loadStats();
+    showToast("Deleted", "Item removed successfully");
+
+    // Refresh Current View
+    window.location.reload();
   } catch (e) {
-    showToast("Delete failed", true);
+    showToast("Error", "Could not delete item");
   }
 };
+
+function showToast(title, msg) {
+  document.getElementById("toast-msg").innerText = `${title}: ${msg}`;
+  const toast = new bootstrap.Toast(document.getElementById("liveToast"));
+  toast.show();
+}

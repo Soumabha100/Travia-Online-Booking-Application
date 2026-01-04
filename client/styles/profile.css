@@ -166,3 +166,25 @@ body {
   color: white;
   box-shadow: 0 4px 12px rgba(220, 53, 69, 0.3);
 }
+
+/* --- Admin Portal Button --- */
+.btn-profile-admin {
+  background: linear-gradient(135deg, #002a3d 0%, #001f2d 100%); /* Travia Dark */
+  color: #1dd3b0; /* Travia Teal */
+  border: 1px solid transparent;
+  box-shadow: 0 4px 15px rgba(0, 42, 61, 0.2);
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-profile-admin:hover {
+  color: #ffffff;
+  border-color: #1dd3b0;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(29, 211, 176, 0.2);
+}
+
+.btn-profile-admin i {
+  font-size: 1.1em;
+  vertical-align: -1px;
+}

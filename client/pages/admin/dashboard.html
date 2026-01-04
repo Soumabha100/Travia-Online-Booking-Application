@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Travia Command Center</title>
+    <title>Admin Dashboard</title>
     <link
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
       rel="stylesheet"
@@ -12,7 +12,7 @@
       rel="stylesheet"
       href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css"
     />
-    <link rel="stylesheet" href="../styles/admin.css" />
+    <link rel="stylesheet" href="../../styles/admin.css" />
   </head>
   <body>
     <aside class="sidebar" id="sidebar">
@@ -33,25 +33,25 @@
         >
       </div>
       <nav class="sidebar-nav d-flex flex-column gap-1">
-        <a href="#" class="sidebar-link active" id="menu-dashboard"
+        <a href="dashboard.html" class="sidebar-link active" id="menu-dashboard"
           ><i class="bi bi-grid-1x2-fill"></i> Dashboard</a
         >
-        <a href="#" class="sidebar-link" id="menu-countries"
+        <a href="countries.html" class="sidebar-link" id="menu-countries"
           ><i class="bi bi-flag"></i> Countries</a
         >
-        <a href="#" class="sidebar-link" id="menu-cities"
+        <a href="cities.html" class="sidebar-link" id="menu-cities"
           ><i class="bi bi-buildings"></i> Cities</a
         >
-        <a href="#" class="sidebar-link" id="menu-tours"
+        <a href="tours.html" class="sidebar-link" id="menu-tours"
           ><i class="bi bi-airplane"></i> Tours</a
         >
-        <a href="#" class="sidebar-link" id="menu-users"
+        <a href="users.html" class="sidebar-link" id="menu-users"
           ><i class="bi bi-people"></i> Users</a
         >
       </nav>
       <div class="mt-auto p-4">
         <a
-          href="../pages/index.html"
+          href="../index.html"
           class="btn btn-outline-light w-100 btn-sm rounded-pill"
           ><i class="bi bi-box-arrow-right"></i> Logout</a
         >
@@ -167,102 +167,20 @@
                 </div>
               </div>
             </div>
-          </div>
-        </div>
-
-        <div id="view-countries" class="admin-view d-none">
-          <div class="table-container">
-            <div class="table-header">
-              <h5 class="mb-0">Global Destinations</h5>
-              <button
-                class="btn btn-primary btn-sm"
-                onclick="openModal('country')"
+            <div class="col-xl-3 col-md-6">
+              <div
+                class="stats-card d-flex justify-content-between align-items-center"
               >
-                <i class="bi bi-plus-lg"></i> Add Country
-              </button>
-            </div>
-            <div class="table-responsive">
-              <table class="table-custom" id="table-countries">
-                <thead>
-                  <tr>
-                    <th>Country Name</th>
-                    <th>Continent</th>
-                    <th>ISO Code</th>
-                    <th>Market Yield</th>
-                    <th>Visa Policy</th>
-                    <th>Visitors/Yr</th>
-                    <th>Currency</th>
-                    <th>Images</th>
-                    <th class="text-end">Actions</th>
-                  </tr>
-                </thead>
-                <tbody id="tbody-countries"></tbody>
-              </table>
-            </div>
-          </div>
-        </div>
-
-        <div id="view-cities" class="admin-view d-none">
-          <div class="table-container">
-            <div class="table-header">
-              <h5 class="mb-0">Urban Economics</h5>
-              <button
-                class="btn btn-primary btn-sm"
-                onclick="openModal('city')"
-              >
-                <i class="bi bi-plus-lg"></i> Add City
-              </button>
-            </div>
-            <div class="table-responsive">
-              <table class="table-custom" id="table-cities">
-                <thead>
-                  <tr>
-                    <th>City Name</th>
-                    <th>Parent Country</th>
-                    <th>Location X,Y</th>
-                    <th>Min Daily Budget</th>
-                    <th>Accomodation</th>
-                    <th>Meal</th>
-                    <th>Transit</th>
-                    <th>Currency Strength</th>
-                    <th>Time Zone</th>
-                    <th>Popularity Index</th>
-                    <th class="text-end">Actions</th>
-                  </tr>
-                </thead>
-                <tbody></tbody>
-              </table>
-            </div>
-          </div>
-        </div>
-
-        <div id="view-tours" class="admin-view d-none">
-          <div class="d-flex justify-content-between align-items-center mb-4">
-            <h5 class="mb-0 fw-bold">Tour Packages</h5>
-            <button class="btn btn-primary" onclick="openModal('tour')">
-              <i class="bi bi-plus-lg"></i> New Package
-            </button>
-          </div>
-          <div id="tours-grid" class="row g-4"></div>
-        </div>
-
-        <div id="view-users" class="admin-view d-none">
-          <div class="table-container">
-            <div class="table-header">
-              <h5 class="mb-0">User Management</h5>
-            </div>
-            <div class="table-responsive">
-              <table class="table-custom" id="table-users">
-                <thead>
-                  <tr>
-                    <th>Username</th>
-                    <th>Email Address</th>
-                    <th>Role</th>
-                    <th>Account Status</th>
-                  </tr>
-                </thead>
-                <tbody></tbody>
-              </table>
+                <div>
+                  <p class="text-muted small mb-1 fw-bold text-uppercase">
+                    Users
+                  </p>
+                  <h2 class="fw-bold mb-0" id="stat-users">0</h2>
+                </div>
+                <div class="stats-icon bg-info bg-opacity-10 text-info">
+                  <i class="bi bi-person-circle"></i>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -307,7 +225,7 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="../scripts/apiConfig.js"></script>
-    <script src="../scripts/admin.js"></script>
+    <script src="../../scripts/apiConfig.js"></script>
+    <script src="../../scripts/admin.js"></script>
   </body>
 </html>
