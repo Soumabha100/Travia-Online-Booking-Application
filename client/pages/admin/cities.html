@@ -99,13 +99,15 @@
                           <th>City Name</th>
                           <th>Parent Country</th>
                           <th>Location X,Y</th>
-                          <th>Min Daily Budget</th>
+                          <th>Min Budget</th>
                           <th>Accomodation</th>
                           <th>Meal</th>
                           <th>Transit</th>
-                          <th>Currency Strength</th>
+                          <th>Currency</th>
                           <th>Time Zone</th>
-                          <th>Popularity Index</th>
+                          <th>Popularity</th>
+                          <th>Description</th>
+                          <th>Images</th>
                           <th class="text-end">Actions</th>
                         </tr>
                       </thead>
@@ -154,6 +156,32 @@
         </div>
       </div>
     </div>
+
+    <div class="modal fade" id="descModal" tabindex="-1">
+      <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
+          <div class="modal-header border-bottom-0 pb-0">
+            <h5 class="modal-title fw-bold">Full Description</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+          </div>
+          <div class="modal-body text-secondary" id="descModalBody" style="line-height: 1.6;"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal fade" id="descModal" tabindex="-1">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header border-bottom-0 pb-0">
+            <h5 class="modal-title fw-bold">Image Preview</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+          </div>
+          <div class="modal-body" id="descModalBody"></div>
+        </div>
+      </div>
+    </div>
+
+
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="../../scripts/apiConfig.js"></script>

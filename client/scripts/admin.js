@@ -34,7 +34,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     console.warn("CMS Modal element not found on this page.");
   }
 
-  // 3. Sidebar & View Logic (The Fix)
+  // 3. Sidebar & View Logic
   const path = window.location.pathname;
   const page = path.split("/").pop().replace(".html", "") || "dashboard";
 
@@ -130,7 +130,23 @@ async function loadCountries() {
             <td>${item.visaPolicy || "-"}</td>
             <td>${item.annualVisitors || 0}</td>
             <td>${item.currency}</td>
-            <td>${item.backgroundImage}</td>
+            <td>
+            <div class="d-flex align-items-center justify-content-between" style="max-width: 150px;">
+                <span class="text-muted small me-2">
+                    ${(item.backgroundImage || "").substring(0, 10)}...
+                </span>
+                
+                ${
+                  item.backgroundImage
+                    ? `
+                    <button class="btn btn-sm btn-light border text-primary" 
+                            onclick="showImagePreview('${item.backgroundImage}')">
+                        <i class="bi bi-image"></i>
+                    </button>`
+                    : ""
+                }
+            </div>
+        </td>
             <td class="text-end">
                 <button class="btn btn-sm btn-outline-primary me-1" onclick='openForm("country", ${JSON.stringify(
                   item
@@ -169,6 +185,45 @@ async function loadCities() {
             <td>${item.economics.currencyStrength || 0} </td>
             <td>${item.timeZone}</td>
             <td>${item.popularityIndex}</td>
+            <td>
+    <div class="d-flex align-items-center justify-content-between" style="max-width: 250px;">
+        <span class="text-muted small me-2">
+            ${(item.description || "").substring(0, 20)}${
+        item.description && item.description.length > 20 ? "..." : ""
+      }
+        </span>
+        ${
+          item.description && item.description.length > 20
+            ? `
+            <button class="btn btn-sm btn-light border text-primary" 
+                    onclick="showReadMore('${encodeURIComponent(
+                      item.description
+                    )}')">
+                <i class="bi bi-eye-fill"></i>
+            </button>`
+            : ""
+        }
+    </div>
+</td>
+            <td>
+    <div class="d-flex align-items-center justify-content-between" style="max-width: 150px;">
+        <span class="text-muted small me-2">
+            ${(item.images && item.images[0]
+              ? item.images[0]
+              : "No Image"
+            ).substring(0, 10)}...
+        </span>
+        ${
+          item.images && item.images[0]
+            ? `
+            <button class="btn btn-sm btn-light border text-primary" 
+                    onclick="showImagePreview('${item.images[0]}')">
+                <i class="bi bi-image"></i>
+            </button>`
+            : ""
+        }
+    </div>
+</td>
             <td class="text-end">
                 <button class="btn btn-sm btn-outline-primary me-1" onclick='openForm("city", ${JSON.stringify(
                   item
@@ -251,9 +306,13 @@ async function loadTours() {
       tbody.innerHTML = data
         .map((item) => {
           const dateObj = new Date(item.updatedAt);
-            const formattedDate = isNaN(dateObj.getTime()) 
-                ? 'N/A' 
-                : dateObj.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+          const formattedDate = isNaN(dateObj.getTime())
+            ? "N/A"
+            : dateObj.toLocaleDateString("en-US", {
+                month: "short",
+                day: "numeric",
+                year: "numeric",
+              });
 
           return `
             <tr>
@@ -285,7 +344,24 @@ async function loadTours() {
                 }</td>
                 <td>${item.stats.reviewsCount}</td>
                 <td>${item.stats.isTrending}</td>
-                <td>${item.overview}</td>
+                <td>
+    <div class="d-flex align-items-center justify-content-between" style="max-width: 150px;">
+        <span class="text-muted small me-2">${item.overview.substring(0, 10)}${
+            item.overview.length > 10 ? "..." : ""
+          }</span>
+        ${
+          item.overview.length > 10
+            ? `
+            <button class="btn btn-sm btn-light border text-primary" 
+                    onclick="showReadMore('${encodeURIComponent(
+                      item.overview
+                    )}')">
+                <i class="bi bi-eye-fill"></i>
+            </button>`
+            : ""
+        }
+    </div>
+</td>
                 <td>${item.category}</td>
                 <td>${formattedDate}</td>
                 <td>
@@ -437,11 +513,13 @@ window.openForm = async (type, data) => {
                 </div>
             </div>`;
   } else if (type === "city") {
-    // Fetch countries for the dropdown
+    // 1. Fetch Data
     const res = await fetch(`${API_BASE}/admin/countries`, {
       headers: { Authorization: `Bearer ${token}` },
     });
     const countries = await res.json();
+
+    // 2. Prepare Data
     const options = countries
       .map(
         (c) =>
@@ -450,62 +528,69 @@ window.openForm = async (type, data) => {
           }>${c.name}</option>`
       )
       .join("");
-
-    // Safely access coordinates (Default to empty if missing)
     const [lng, lat] = data.location?.coordinates || [0, 0];
+    const imagesStr = data.images ? data.images.join("\n") : ""; // Format array for textarea
+    const attractionsStr = data.topAttractions
+      ? data.topAttractions.join("\n")
+      : "";
 
     formHtml = `
+      <ul class="nav nav-tabs mb-3" id="cityTabs" role="tablist">
+        <li class="nav-item"><button class="nav-link active" data-bs-toggle="tab" data-bs-target="#tab-general">General</button></li>
+        <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-econ">Economics</button></li>
+        <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-content">Content & Media</button></li>
+      </ul>
+
+      <div class="tab-content">
+        <div class="tab-pane fade show active" id="tab-general">
             <div class="row g-3">
                 <div class="col-md-6">
-                    <label class="form-label">City Name</label>
+                    <label class="form-label fw-bold">City Name</label>
                     <input id="f-name" class="form-control" value="${
                       data.name || ""
                     }" placeholder="e.g. Tokyo">
                 </div>
                 <div class="col-md-6">
-                    <label class="form-label">Country</label>
+                    <label class="form-label fw-bold">Country</label>
                     <select id="f-country" class="form-select">${options}</select>
                 </div>
 
-                <div class="col-12"><label class="form-label text-muted small fw-bold">GEOLOCATION</label></div>
+                <div class="col-12"><label class="form-label small text-muted fw-bold mt-2">GEOLOCATION</label></div>
                 <div class="col-md-6">
                     <label class="form-label">Longitude</label>
-                    <input id="f-lng" type="number" step="any" class="form-control" value="${lng}" placeholder="e.g. 139.69">
+                    <input id="f-lng" type="number" step="any" class="form-control" value="${lng}">
                 </div>
                 <div class="col-md-6">
                     <label class="form-label">Latitude</label>
-                    <input id="f-lat" type="number" step="any" class="form-control" value="${lat}" placeholder="e.g. 35.68">
+                    <input id="f-lat" type="number" step="any" class="form-control" value="${lat}">
                 </div>
 
-                <div class="col-12"><label class="form-label text-muted small fw-bold">ECONOMICS</label></div>
-                <div class="col-md-3">
-                    <label class="form-label">Daily Budget ($)</label>
+                <div class="col-12"><label class="form-label small text-muted fw-bold mt-2">METADATA</label></div>
+                <div class="col-md-6">
+                    <label class="form-label">Time Zone</label>
+                    <input id="f-timezone" class="form-control" value="${
+                      data.timeZone || ""
+                    }" placeholder="e.g. Asia/Tokyo">
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Popularity (0-100)</label>
+                    <input id="f-pop" type="number" min="0" max="100" class="form-control" value="${
+                      data.popularityIndex || 0
+                    }">
+                </div>
+            </div>
+        </div>
+
+        <div class="tab-pane fade" id="tab-econ">
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <label class="form-label fw-bold">Daily Budget ($)</label>
                     <input id="f-budget" type="number" class="form-control" value="${
                       data.economics?.minDailyBudget || 0
                     }">
                 </div>
-                <div class="col-md-3">
-                    <label class="form-label">Hotel Cost ($)</label>
-                    <input id="f-accom" type="number" class="form-control" value="${
-                      data.economics?.accommodationCost || 0
-                    }">
-                </div>
-                <div class="col-md-3">
-                    <label class="form-label">Meal Index ($)</label>
-                    <input id="f-meal" type="number" class="form-control" value="${
-                      data.economics?.mealIndex || 0
-                    }">
-                </div>
-                <div class="col-md-3">
-                    <label class="form-label">Transit Cost ($)</label>
-                    <input id="f-transit" type="number" class="form-control" value="${
-                      data.economics?.transitCost || 0
-                    }">
-                </div>
-                
-                <div class="col-12"><label class="form-label text-muted small fw-bold">METADATA</label></div>
-                <div class="col-md-4">
-                    <label class="form-label">Currency Strength</label>
+                <div class="col-md-6">
+                    <label class="form-label fw-bold">Currency Strength</label>
                     <select id="f-strength" class="form-select">
                         <option value="Weak" ${
                           data.economics?.currencyStrength === "Weak"
@@ -524,19 +609,47 @@ window.openForm = async (type, data) => {
                         }>Strong</option>
                     </select>
                 </div>
+                <div class="col-12"><hr class="text-muted"></div>
                 <div class="col-md-4">
-                    <label class="form-label">Time Zone</label>
-                    <input id="f-timezone" class="form-control" value="${
-                      data.timeZone || ""
-                    }" placeholder="e.g. Asia/Tokyo">
-                </div>
-                <div class="col-md-4">
-                    <label class="form-label">Popularity (0-100)</label>
-                    <input id="f-pop" type="number" min="0" max="100" class="form-control" value="${
-                      data.popularityIndex || 0
+                    <label class="form-label small text-muted">Hotel Cost ($)</label>
+                    <input id="f-accom" type="number" class="form-control" value="${
+                      data.economics?.accommodationCost || 0
                     }">
                 </div>
-            </div>`;
+                <div class="col-md-4">
+                    <label class="form-label small text-muted">Meal Index ($)</label>
+                    <input id="f-meal" type="number" class="form-control" value="${
+                      data.economics?.mealIndex || 0
+                    }">
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label small text-muted">Transit Cost ($)</label>
+                    <input id="f-transit" type="number" class="form-control" value="${
+                      data.economics?.transitCost || 0
+                    }">
+                </div>
+            </div>
+        </div>
+
+        <div class="tab-pane fade" id="tab-content">
+            <div class="row g-3">
+                <div class="col-12">
+                    <label class="form-label fw-bold">Description</label>
+                    <textarea id="f-desc" class="form-control" rows="4">${
+                      data.description || ""
+                    }</textarea>
+                </div>
+                <div class="col-12">
+                    <label class="form-label fw-bold">Image URLs <span class="small text-muted">(One per line)</span></label>
+                    <textarea id="f-images" class="form-control font-monospace small" rows="4">${imagesStr}</textarea>
+                </div>
+                <div class="col-12">
+                    <label class="form-label fw-bold">Top Attractions <span class="small text-muted">(One per line)</span></label>
+                    <textarea id="f-attractions" class="form-control" rows="3">${attractionsStr}</textarea>
+                </div>
+            </div>
+        </div>
+      </div>`;
   } else if (type === "tour") {
     // 1. Fetch Relations
     const [cRes, ciRes] = await Promise.all([
@@ -550,7 +663,7 @@ window.openForm = async (type, data) => {
     const countries = await cRes.json();
     const cities = await ciRes.json();
 
-    // 2. Build Dropdowns
+    // 2. Data Preparation
     const countryOpts = countries
       .map(
         (c) =>
@@ -559,8 +672,7 @@ window.openForm = async (type, data) => {
           }>${c.name}</option>`
       )
       .join("");
-    // Pre-select city if it exists, otherwise just list all (or you could filter by country if you added that logic)
-
+    // Note: City filtering logic runs at the end of openForm, so we just list them all here initially with data attributes
     const cityOpts = cities
       .map(
         (c) =>
@@ -570,127 +682,174 @@ window.openForm = async (type, data) => {
       )
       .join("");
 
-    // 3. Format Array Data for Display
+    const validCategories = [
+      "Adventure",
+      "Relaxation",
+      "History",
+      "Culture",
+      "Food",
+      "Nature",
+    ];
+    const categoryOpts = validCategories
+      .map(
+        (cat) =>
+          `<option value="${cat}" ${
+            data.category === cat ? "selected" : ""
+          }>${cat}</option>`
+      )
+      .join("");
+
+    // Formatting Arrays for Textareas
     const amenitiesStr = data.amenities ? data.amenities.join(", ") : "";
+    const highlightsStr = data.highlights ? data.highlights.join("\n") : ""; // One per line
+    const imagesStr = data.images ? data.images.join("\n") : ""; // One per line
     const itineraryJson = data.itinerary
-      ? JSON.stringify(data.itinerary, null, 2)
-      : '[\n  { "day": 1, "title": "Arrival", "desc": "..." }\n]';
-    const imagesStr = data.images ? data.images.join("\n") : "";
+      ? JSON.stringify(data.itinerary, null, 4)
+      : '[\n  {\n    "day": 1,\n    "title": "Arrival",\n    "desc": "..."\n  }\n]';
 
     formHtml = `
-            <ul class="nav nav-tabs mb-3" id="tourTab" role="tablist">
-                <li class="nav-item"><button class="nav-link active" data-bs-toggle="tab" data-bs-target="#tab-basic">Basic Info</button></li>
-                <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-stats">Sentiment & Stats</button></li>
-                <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-details">Details & Itinerary</button></li>
-            </ul>
+      <ul class="nav nav-tabs mb-3" id="tourTabs" role="tablist">
+        <li class="nav-item"><button class="nav-link active" data-bs-toggle="tab" data-bs-target="#tab-essentials">Essentials</button></li>
+        <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-content">Content & Media</button></li>
+        <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-itinerary">Itinerary</button></li>
+        <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-stats">Analytics</button></li>
+      </ul>
 
-            <div class="tab-content">
-                <div class="tab-pane fade show active" id="tab-basic">
-                    <div class="row g-3">
-                        <div class="col-12">
-                            <label class="form-label">Tour Title</label>
-                            <input id="f-name" class="form-control" value="${
-                              data.name || ""
-                            }">
-                        </div>
-                        <div class="col-md-6">
-                            <label class="form-label">Country</label>
-                            <select id="f-country" class="form-select">${countryOpts}</select>
-                        </div>
-                        <div class="col-md-6">
-                            <label class="form-label">City</label>
-                            <select id="f-city" class="form-select">${cityOpts}</select>
-                        </div>
-                        <div class="col-md-4">
-                            <label class="form-label">Price ($)</label>
-                            <input id="f-price" type="number" class="form-control" value="${
-                              data.price || 0
-                            }">
-                        </div>
-                        <div class="col-md-4">
-                            <label class="form-label">Duration</label>
-                            <input id="f-dur" class="form-control" value="${
-                              data.duration || ""
-                            }" placeholder="e.g. 5 Days">
-                        </div>
-                        <div class="col-md-4">
-                            <label class="form-label">Group Size</label>
-                            <input id="f-group" class="form-control" value="${
-                              data.groupSize || ""
-                            }" placeholder="e.g. Max 12">
-                        </div>
-                        <div class="col-12">
-                            <label class="form-label">Image URLs (One per line)</label>
-                            <textarea id="f-images" class="form-control" rows="3" placeholder="https://...">${imagesStr}</textarea>
-                        </div>
-                    </div>
+      <div class="tab-content">
+        
+        <div class="tab-pane fade show active" id="tab-essentials">
+            <div class="row g-3">
+                <div class="col-12">
+                    <label class="form-label fw-bold">Tour Name</label>
+                    <input id="f-name" class="form-control" value="${
+                      data.name || ""
+                    }">
+                </div>
+                
+                <div class="col-md-6">
+                    <label class="form-label text-muted small">Country</label>
+                    <select id="f-country" class="form-select">${countryOpts}</select>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label text-muted small">City</label>
+                    <select id="f-city" class="form-select">${cityOpts}</select>
                 </div>
 
-                <div class="tab-pane fade" id="tab-stats">
-                    <div class="row g-3">
-                        <div class="col-12">
-                            <div class="form-check form-switch p-3 bg-light rounded">
-                                <input class="form-check-input" type="checkbox" id="f-trending" ${
-                                  data.stats?.isTrending ? "checked" : ""
-                                }>
-                                <label class="form-check-label fw-bold" for="f-trending">Mark as Trending Tour</label>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <label class="form-label">Overall Rating (0-5)</label>
-                            <input id="f-rating" type="number" step="0.1" class="form-control" value="${
-                              data.stats?.rating || 0
-                            }">
-                        </div>
-                        <div class="col-md-6">
-                            <label class="form-label">Review Count</label>
-                            <input id="f-reviews" type="number" class="form-control" value="${
-                              data.stats?.reviewsCount || 0
-                            }">
-                        </div>
-                        <div class="col-12"><hr class="text-muted"></div>
-                        <div class="col-md-4">
-                            <label class="form-label text-muted small">Verified Score</label>
-                            <input id="f-verified" type="number" step="0.1" class="form-control" value="${
-                              data.stats?.breakdown?.verified || 0
-                            }">
-                        </div>
-                        <div class="col-md-4">
-                            <label class="form-label text-muted small">Volume Score</label>
-                            <input id="f-volume" type="number" step="0.1" class="form-control" value="${
-                              data.stats?.breakdown?.volume || 0
-                            }">
-                        </div>
-                        <div class="col-md-4">
-                            <label class="form-label text-muted small">AI Sentiment</label>
-                            <input id="f-nlp" type="number" step="0.1" class="form-control" value="${
-                              data.stats?.breakdown?.nlpSentiment || 0
-                            }">
-                        </div>
-                    </div>
+                <div class="col-md-4">
+                    <label class="form-label text-muted small">Category</label>
+                    <select id="f-category" class="form-select">${categoryOpts}</select>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label text-muted small">Duration</label>
+                    <input id="f-dur" class="form-control" value="${
+                      data.duration || ""
+                    }" placeholder="e.g. 5 Days">
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label text-muted small">Group Size</label>
+                    <input id="f-group" class="form-control" value="${
+                      data.groupSize || ""
+                    }" placeholder="e.g. Max 12">
                 </div>
 
-                <div class="tab-pane fade" id="tab-details">
-                    <div class="row g-3">
-                        <div class="col-12">
-                            <label class="form-label">Overview</label>
-                            <textarea id="f-overview" class="form-control" rows="3">${
-                              data.overview || ""
-                            }</textarea>
-                        </div>
-                        <div class="col-12">
-                            <label class="form-label">Amenities (Comma separated)</label>
-                            <input id="f-amenities" class="form-control" value="${amenitiesStr}" placeholder="WiFi, Pool, Guide">
-                        </div>
-                        <div class="col-12">
-                            <label class="form-label">Itinerary JSON</label>
-                            <textarea id="f-itinerary" class="form-control font-monospace" rows="8" style="font-size: 0.85rem;">${itineraryJson}</textarea>
-                            <div class="form-text">Format: [{"day": 1, "title": "...", "desc": "..."}]</div>
-                        </div>
+                <div class="col-md-6">
+                    <label class="form-label fw-bold text-success">Regular Price ($)</label>
+                    <input id="f-price" type="number" class="form-control" value="${
+                      data.price || 0
+                    }">
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label fw-bold text-danger">Discount Price ($)</label>
+                    <input id="f-discount" type="number" class="form-control" value="${
+                      data.discountPrice || ""
+                    }" placeholder="Optional">
+                </div>
+
+                <div class="col-12 d-flex gap-4 mt-3 p-3 bg-light rounded">
+                    <div class="form-check form-switch">
+                        <input class="form-check-input" type="checkbox" id="f-featured" ${
+                          data.isFeatured ? "checked" : ""
+                        }>
+                        <label class="form-check-label fw-bold" for="f-featured">⭐ Featured Tour</label>
+                    </div>
+                    <div class="form-check form-switch">
+                        <input class="form-check-input" type="checkbox" id="f-trending" ${
+                          data.stats?.isTrending ? "checked" : ""
+                        }>
+                        <label class="form-check-label fw-bold" for="f-trending">🔥 Trending</label>
                     </div>
                 </div>
             </div>
-        `;
+        </div>
+
+        <div class="tab-pane fade" id="tab-content">
+            <div class="row g-3">
+                <div class="col-12">
+                    <label class="form-label fw-bold">Overview Description</label>
+                    <textarea id="f-overview" class="form-control" rows="4">${
+                      data.overview || ""
+                    }</textarea>
+                </div>
+                
+                <div class="col-md-6">
+                    <label class="form-label fw-bold">Highlights <span class="text-muted small">(One per line)</span></label>
+                    <textarea id="f-highlights" class="form-control" rows="5" placeholder="Skip the line ticket\nSunset Cruise included">${highlightsStr}</textarea>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label fw-bold">Amenities <span class="text-muted small">(Comma separated)</span></label>
+                    <textarea id="f-amenities" class="form-control" rows="5">${amenitiesStr}</textarea>
+                </div>
+
+                <div class="col-12">
+                    <label class="form-label fw-bold">Image URLs <span class="text-muted small">(One URL per line)</span></label>
+                    <textarea id="f-images" class="form-control font-monospace small" rows="3">${imagesStr}</textarea>
+                </div>
+            </div>
+        </div>
+
+        <div class="tab-pane fade" id="tab-itinerary">
+            <label class="form-label fw-bold">Daily Itinerary JSON</label>
+            <textarea id="f-itinerary" class="form-control font-monospace" rows="12" style="font-size: 0.85rem; background:#f8f9fa;">${itineraryJson}</textarea>
+            <div class="form-text text-muted">Ensure strict JSON format: [{"day": 1, "title": "...", "desc": "..."}]</div>
+        </div>
+
+        <div class="tab-pane fade" id="tab-stats">
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <label class="form-label">Overall Rating (0-5)</label>
+                    <input id="f-rating" type="number" step="0.1" class="form-control" value="${
+                      data.stats?.rating || 0
+                    }">
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Total Reviews</label>
+                    <input id="f-reviews" type="number" class="form-control" value="${
+                      data.stats?.reviewsCount || 0
+                    }">
+                </div>
+                <div class="col-12"><hr></div>
+                <div class="col-md-4">
+                    <label class="form-label text-muted small">Verified Score</label>
+                    <input id="f-verified" type="number" step="0.1" class="form-control" value="${
+                      data.stats?.breakdown?.verified || 0
+                    }">
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label text-muted small">Volume Score</label>
+                    <input id="f-volume" type="number" step="0.1" class="form-control" value="${
+                      data.stats?.breakdown?.volume || 0
+                    }">
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label text-muted small">AI Sentiment Score</label>
+                    <input id="f-nlp" type="number" step="0.1" class="form-control" value="${
+                      data.stats?.breakdown?.nlpSentiment || 0
+                    }">
+                </div>
+            </div>
+        </div>
+
+      </div>`;
   }
 
   body.innerHTML = formHtml;
@@ -785,7 +944,21 @@ async function handleSave() {
 
       payload.timeZone = document.getElementById("f-timezone").value;
       payload.popularityIndex = Number(document.getElementById("f-pop").value);
+
+      // 4. Content & Media
+      payload.description = document.getElementById("f-desc").value;
+      
+      // Convert Textarea (Lines) -> Array
+      payload.images = document.getElementById("f-images").value
+        .split("\n").map(url => url.trim()).filter(url => url.length > 0);
+        
+      // Top Attractions
+      payload.topAttractions = document.getElementById("f-attractions").value
+        .split("\n").map(item => item.trim()).filter(item => item.length > 0);
+
+
     } else if (currentType === "tour") {
+      // 1. Validation: Country/City Relationship
       const selectedCountryId = document.getElementById("f-country").value;
       const citySelect = document.getElementById("f-city");
       const selectedCityOption = citySelect.options[citySelect.selectedIndex];
@@ -796,32 +969,52 @@ async function handleSave() {
         btn.disabled = false;
         return;
       }
-
-      // Ensure the City actually belongs to the Country
       if (selectedCityOption.dataset.country !== selectedCountryId) {
-        alert(
-          "Security Error: The selected City does not belong to the selected Country."
-        );
+        alert("Security Error: City does not belong to the selected Country.");
         btn.innerText = "Save Changes";
         btn.disabled = false;
         return;
       }
-      // 1. Basic Fields
+
+      // 2. Gather Data
       payload.name = document.getElementById("f-name").value;
-      payload.countryId = document.getElementById("f-country").value;
+      payload.countryId = selectedCountryId;
       payload.cityId = document.getElementById("f-city").value;
+      payload.category = document.getElementById("f-category").value;
+
       payload.price = Number(document.getElementById("f-price").value);
+      const discountVal = document.getElementById("f-discount").value;
+      if (discountVal) payload.discountPrice = Number(discountVal);
+
       payload.duration = document.getElementById("f-dur").value;
       payload.groupSize = document.getElementById("f-group").value;
+      payload.isFeatured = document.getElementById("f-featured").checked;
 
-      // 2. Images (Split by newline and clean up)
-      const rawImages = document.getElementById("f-images").value;
-      payload.images = rawImages
-        .split("\n")
+      // 3. Process Content Lists
+      // Split images by newline
+      payload.images = document
+        .getElementById("f-images")
+        .value.split("\n")
         .map((url) => url.trim())
         .filter((url) => url.length > 0);
 
-      // 3. Stats & Sentiment
+      // Split highlights by newline (NEW)
+      payload.highlights = document
+        .getElementById("f-highlights")
+        .value.split("\n")
+        .map((h) => h.trim())
+        .filter((h) => h.length > 0);
+
+      // Split amenities by comma
+      payload.amenities = document
+        .getElementById("f-amenities")
+        .value.split(",")
+        .map((item) => item.trim())
+        .filter((i) => i.length > 0);
+
+      payload.overview = document.getElementById("f-overview").value;
+
+      // 4. Stats
       payload.stats = {
         rating: Number(document.getElementById("f-rating").value),
         reviewsCount: Number(document.getElementById("f-reviews").value),
@@ -833,26 +1026,16 @@ async function handleSave() {
         },
       };
 
-      // 4. Details
-      payload.overview = document.getElementById("f-overview").value;
-
-      // Amenities (Split by comma)
-      const rawAmen = document.getElementById("f-amenities").value;
-      payload.amenities = rawAmen
-        .split(",")
-        .map((item) => item.trim())
-        .filter((i) => i.length > 0);
-
-      // 5. Itinerary (Try/Catch to handle bad JSON)
+      // 5. Itinerary JSON Parsing
       try {
         payload.itinerary = JSON.parse(
           document.getElementById("f-itinerary").value
         );
       } catch (e) {
-        alert("Invalid JSON in Itinerary field. Please check the format.");
-        btn.innerText = "Save Changes"; // Reset button
+        alert("Invalid JSON in Itinerary field. Please check format.");
+        btn.innerText = "Save Changes";
         btn.disabled = false;
-        return; // Stop saving
+        return;
       }
     }
 
@@ -941,4 +1124,22 @@ window.toggleTourView = (view) => {
     btnGrid.classList.remove("active");
     btnTable.classList.add("active");
   }
+};
+
+// View Full Description
+window.showReadMore = (encodedText) => {
+  document.getElementById("descModalBody").innerText =
+    decodeURIComponent(encodedText);
+  new bootstrap.Modal(document.getElementById("descModal")).show();
+};
+
+// Show Image Preview
+window.showImagePreview = (url) => {
+  const modalBody = document.getElementById("descModalBody");
+  // Inject Image + The Link below it
+  modalBody.innerHTML = `
+        <img src="${url}" class="img-fluid rounded mb-3 w-100" style="object-fit: cover; max-height: 300px;" onerror="this.src='../../public/assets/Travia.png'">
+        <div class="p-2 bg-light rounded text-break border small text-muted font-monospace">${url}</div>
+    `;
+  new bootstrap.Modal(document.getElementById("descModal")).show();
 };
