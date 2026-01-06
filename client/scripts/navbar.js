@@ -10,42 +10,37 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 function injectNavbar(rootPath) {
-  // 1. Get User Data from Local Storage
+  // 1. Get User Data
   const token = localStorage.getItem("token");
   const userStr = localStorage.getItem("user");
   const user = userStr ? JSON.parse(userStr) : null;
 
-  // 2. Decide what to show (Login Button vs. User Profile)
+  // 2. Auth Section
   let authSectionHTML = "";
-
   if (token && user) {
-    // === USER IS LOGGED IN ===
     authSectionHTML = `
-    <a href="${rootPath}pages/profile.html" class="travia-profile-pill ms-3" style="text-decoration: none; display: flex; align-items: center; color: white;">
+    <a href="${rootPath}pages/profile.html" class="travia-profile-pill ms-3">
         <img 
           src="${
             user.avatar ||
             "https://cdn-icons-png.flaticon.com/512/3135/3135715.png"
           }" 
           alt="Profile" 
-          style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover; border: 2px solid #fff; margin-right: 8px;"
         />
-        <span style="font-weight: 600;">${user.username}</span>
-      </a>
-    `;
+        <span>${user.username}</span>
+    </a>`;
   } else {
-    // === GUEST (NOT LOGGED IN) ===
     authSectionHTML = `
         <button type="button" class="btn btn-travia ms-3" data-bs-toggle="modal" data-bs-target="#authModal">Login</button>
     `;
   }
 
-  // 3. The Navbar HTML
+  // 3. Navbar HTML (Structure Preserved, Classes Updated)
   const navbarHTML = `
-      <nav class="navbar navbar-expand-lg navbar-dark fixed-top travia-navbar">
+      <nav class="navbar navbar-expand-lg navbar-dark sticky-top travia-navbar" style="background-color: #002a3d;">
         <div class="container">
           <a class="navbar-brand fw-bold" href="${rootPath}pages/index.html">
-            <img class="travia" src="${rootPath}public/assets/Travia.png" alt="Travia Logo" />
+            <img class="travia" src="${rootPath}public/assets/Travia.png" alt="Travia" />
           </a>
   
           <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#traviaNavbar">
@@ -54,34 +49,30 @@ function injectNavbar(rootPath) {
   
           <div class="collapse navbar-collapse" id="traviaNavbar">
             <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
-              <li class="nav-item">
-                <a class="nav-link" href="${rootPath}pages/index.html">Home</a>
-              </li>
+              <li class="nav-item"><a class="nav-link" href="${rootPath}pages/index.html">Home</a></li>
               <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown">
-                  Destinations
-                </a>
+                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">Destinations</a>
                 <ul class="dropdown-menu">
-                  <li><a class="dropdown-item" href="${rootPath}pages/destinations.html">Popular Tours</a></li>
-                  <li><a class="dropdown-item" href="#">Europe</a></li>
-                  <li><a class="dropdown-item" href="#">Asia</a></li>
+                <li><a class="dropdown-item" href="${rootPath}pages/destinations.html">Popular Destinations</a></li>
+                  <li><a class="dropdown-item" href="${rootPath}pages/countries.html">All Countries</a></li>
+                  <li><a class="dropdown-item" href="${rootPath}pages/cities.html">All Cities</a></li>
                   <li><hr class="dropdown-divider" /></li>
-                  <li><a class="dropdown-item" href="${rootPath}pages/destinations.html">All Destinations</a></li>
+                  <li><a class="dropdown-item" href="${rootPath}pages/tours.html">Popular Tours</a></li>
                 </ul>
               </li>
-              <li class="nav-item"><a class="nav-link" href="#">Experiences</a></li>
+              <li class="nav-item"><a class="nav-link" href="${rootPath}pages/tours.html">Tours</a></li>
+              <li class="nav-item"><a class="nav-link" href="#">Experience</a></li>
               <li class="nav-item"><a class="nav-link" href="#">About</a></li>
             </ul>
   
-            <div class="d-flex align-items-center">
+            <div class="d-flex align-items-center gap-2">
               <form class="search-box position-relative" role="search" autocomplete="off">
-                <input class="form-control" id="search-input" type="search" placeholder="Search tours..." aria-label="Search" />
+                <input class="form-control" id="search-input" type="search" placeholder="Search places, cities, tours..." aria-label="Search" />
                 <button type="submit"><img src="${rootPath}public/assets/Search.svg" alt="Search" /></button>
                 <div id="search-results" class="search-results-box"></div>
               </form>
               
               ${authSectionHTML}
-
             </div>
           </div>
         </div>
@@ -89,19 +80,11 @@ function injectNavbar(rootPath) {
     `;
 
   const navbarContainer = document.getElementById("navbar-container");
-  if (navbarContainer) {
-    navbarContainer.innerHTML = navbarHTML;
-
-    // === 4. ATTACH EVENTS (Logout Logic) ===
-    if (token && user) {
-      // NOTE: This logout listener isn't attached to anything in the HTML above yet (no #logoutBtnNav).
-      // If you have a logout button inside profile.html, that handles itself.
-      // But if you add a dropdown menu here later, use this logic.
-    }
-  }
+  if (navbarContainer) navbarContainer.innerHTML = navbarHTML;
 }
 
 function injectFooter(rootPath) {
+  // ... (Keep your existing footer code exactly as is) ...
   const footerHTML = `
     <footer class="travia-footer text-light">
       <div class="container py-5">
@@ -169,47 +152,44 @@ function injectFooter(rootPath) {
   if (footerContainer) footerContainer.innerHTML = footerHTML;
 }
 
+// === ADVANCED SERVER-SIDE LIVE SEARCH ===
 function initSearch(rootPath) {
   const searchForm = document.querySelector(".search-box");
   if (!searchForm) return;
 
-  const API_URL = window.TraviaAPI?.destinations;
+  const API_BASE = window.TraviaAPI?.destinations;
   const searchInput = searchForm.querySelector("#search-input");
   const resultsBox = document.getElementById("search-results");
-  let searchIndex = [];
+  let debounceTimer;
 
-  if (!API_URL) return;
+  if (!API_BASE) return;
 
-  fetch(API_URL)
-    .then((res) => {
-      if (!res.ok) throw new Error(`Status: ${res.status}`);
-      return res.json();
-    })
-    .then((data) => {
-      if (Array.isArray(data)) {
-        searchIndex = buildSearchIndex(data, rootPath);
-      }
-    })
-    .catch((err) => console.error("API Error:", err));
-
+  // 1. LISTEN FOR INPUT (Triggers the Fetch)
   searchInput.addEventListener("input", (e) => {
-    const query = e.target.value.toLowerCase().trim();
-    resultsBox.innerHTML = "";
+    const query = e.target.value.trim();
+    resultsBox.innerHTML = ""; // Clear previous results
 
+    // Don't search for single letters
     if (query.length < 2) {
       resultsBox.style.display = "none";
       return;
     }
 
-    const matches = searchIndex.filter(
-      (item) =>
-        item.name.toLowerCase().includes(query) ||
-        item.parent.toLowerCase().includes(query)
-    );
+    // Show loading spinner
+    resultsBox.style.display = "block";
+    resultsBox.innerHTML =
+      '<div class="p-3 text-muted small text-center"><span class="spinner-border spinner-border-sm"></span> Searching...</div>';
 
-    renderResults(matches, resultsBox);
+    // DEBOUNCE: Clear previous timer if user is still typing
+    clearTimeout(debounceTimer);
+
+    // Set new timer: Wait 300ms before hitting the server
+    debounceTimer = setTimeout(() => {
+      performLiveSearch(query, API_BASE, rootPath, resultsBox);
+    }, 300);
   });
 
+  // 2. Hide on Click Outside
   document.addEventListener("click", (e) => {
     if (!searchForm.contains(e.target)) {
       resultsBox.style.display = "none";
@@ -219,79 +199,93 @@ function initSearch(rootPath) {
   searchForm.addEventListener("submit", (e) => e.preventDefault());
 }
 
-function buildSearchIndex(data, rootPath) {
-  let index = [];
-  data.forEach((continent) => {
-    if (continent.countries) {
-      continent.countries.forEach((tour) => {
-        index.push({
-          name: tour.name,
-          category: "Tour Package",
-          parent: continent.name,
-          image: tour.image,
-          link: `${rootPath}pages/bookings.html?destination=${encodeURIComponent(
-            tour.name
-          )}`,
-        });
+// 3. FETCHING LOGIC (Optimized Parallel Requests)
+async function performLiveSearch(query, apiBase, rootPath, container) {
+  try {
+    const encodedQuery = encodeURIComponent(query);
 
-        if (tour.city) {
-          index.push({
-            name: tour.city,
-            category: `City in ${tour.name}`,
-            parent: tour.name,
-            image: tour.image,
-            link: `${rootPath}pages/bookings.html?destination=${encodeURIComponent(
-              tour.name
-            )}`,
-          });
-        }
-        if (tour.placesToVisit) {
-          tour.placesToVisit.forEach((place) => {
-            if (place !== tour.city) {
-              index.push({
-                name: place,
-                category: `Visit in ${tour.name}`,
-                parent: tour.name,
-                image: tour.image,
-                link: `${rootPath}pages/bookings.html?destination=${encodeURIComponent(
-                  tour.name
-                )}`,
-              });
-            }
-          });
-        }
-      });
-    }
-  });
-  return index;
+    // Fetch Top 3 of each category to save bandwidth
+    const [countriesRes, citiesRes, toursRes] = await Promise.all([
+      fetch(`${apiBase}/countries?search=${encodedQuery}&limit=3`),
+      fetch(`${apiBase}/cities?search=${encodedQuery}&limit=3`),
+      fetch(`${apiBase}/tours?search=${encodedQuery}&limit=4`),
+    ]);
+
+    const countries = await countriesRes.json();
+    const cities = await citiesRes.json();
+    const toursJson = await toursRes.json();
+    const tours = Array.isArray(toursJson) ? toursJson : toursJson.data || [];
+
+    // Build Unified Results List
+    const countryResults = countries.map((c) => ({
+      name: c.name,
+      type: "Country",
+      link: `${rootPath}pages/countries.html?id=${c._id}`,
+      image: c.backgroundImage || c.images?.[0],
+    }));
+
+    const cityResults = cities.map((c) => ({
+      name: c.name,
+      type: "City",
+      link: `${rootPath}pages/cities.html?id=${c._id}`,
+      image: c.images?.[0],
+    }));
+
+    const tourResults = tours.map((t) => ({
+      name: t.name,
+      type: "Tour",
+      link: `${rootPath}pages/tour-details.html?id=${t._id}`,
+      image: t.images?.[0],
+    }));
+
+    // Combine logic: Countries first, then Cities, then Tours
+    const allMatches = [...countryResults, ...cityResults, ...tourResults];
+
+    renderAdvancedResults(allMatches, container, rootPath);
+  } catch (error) {
+    console.error("Search failed:", error);
+    container.innerHTML =
+      '<div class="p-3 text-danger small text-center">Unable to search.</div>';
+  }
 }
 
-function renderResults(matches, container) {
+// 4. RENDER LOGIC
+function renderAdvancedResults(matches, container, rootPath) {
+  container.innerHTML = ""; // Remove spinner
+
   if (matches.length === 0) {
     container.innerHTML =
-      '<div class="p-3 text-muted small text-center">No matching tours found.</div>';
-    container.style.display = "block";
+      '<div class="p-3 text-muted small text-center">No results found.</div>';
     return;
   }
 
-  matches.slice(0, 10).forEach((match) => {
+  matches.forEach((match) => {
     const div = document.createElement("div");
     div.classList.add("search-item");
+
+    // Badge Logic
+    let badgeClass = "badge-tour";
+    if (match.type === "Country") badgeClass = "badge-country";
+    if (match.type === "City") badgeClass = "badge-city";
+
     div.innerHTML = `
-            <img src="${match.image}" alt="${match.name}" 
-     onerror="this.onerror=null; this.src='../public/assets/Travia.png'">
-            <div class="info">
-                <h6 class="mb-0 text-dark" style="font-size: 14px;">${match.name}</h6>
-                <small class="text-primary" style="font-size: 11px; text-transform:uppercase; font-weight:700;">${match.category}</small>
-            </div>
-            <i class="bi bi-chevron-right ms-auto text-muted" style="font-size: 12px;"></i>
-        `;
+        <img src="${match.image || `${rootPath}public/assets/Travia.png`}" 
+             alt="${match.name}" 
+             onerror="this.src='${rootPath}public/assets/Travia.png'">
+        <div class="info flex-grow-1">
+            <h6 class="mb-0 text-dark" style="font-size: 14px;">${
+              match.name
+            }</h6>
+        </div>
+        <span class="search-badge ${badgeClass}">${match.type}</span>
+        <i class="bi bi-chevron-right text-muted" style="font-size: 12px;"></i>
+    `;
+
     div.addEventListener("click", () => {
       window.location.href = match.link;
     });
     container.appendChild(div);
   });
-  container.style.display = "block";
 }
 
 function highlightActiveLink() {

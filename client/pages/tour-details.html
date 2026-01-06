@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Tour Details | Travia</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700;900&family=Playfair+Display:ital,wght@0,600;0,800;1,600&display=swap"
+      rel="stylesheet"
+    />
+
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    />
+
+    <link rel="stylesheet" href="../styles/index.css" />
+    <link rel="stylesheet" href="../styles/tour-details.css" />
+  </head>
+
+  <body>
+    <div id="navbar-container"></div>
+
+    <main class="container py-4">
+      <div class="d-flex justify-content-between align-items-start mb-3">
+        <nav aria-label="breadcrumb">
+          <ol class="breadcrumb small">
+            <li class="breadcrumb-item">
+              <a href="index.html" class="text-decoration-none text-muted"
+                >Home</a
+              >
+            </li>
+            <li class="breadcrumb-item">
+              <a
+                href="destinations.html"
+                class="text-decoration-none text-muted"
+                >Destinations</a
+              >
+            </li>
+            <li class="breadcrumb-item">
+              <a href="tours.html" class="text-decoration-none text-muted"
+                >All Tours</a
+              >
+            </li>
+            <li
+              class="breadcrumb-item active text-dark fw-bold"
+              aria-current="page"
+              id="breadcrumb-title"
+            >
+              Loading...
+            </li>
+          </ol>
+        </nav>
+        <div class="d-flex gap-2">
+          <button
+            class="btn btn-light btn-sm rounded-circle shadow-sm icon-btn"
+            title="Share"
+          >
+            <i class="bi bi-share"></i>
+          </button>
+          <button
+            class="btn btn-light btn-sm rounded-circle shadow-sm icon-btn"
+            title="Save to Wishlist"
+          >
+            <i class="bi bi-heart"></i>
+          </button>
+        </div>
+      </div>
+
+      <div class="mb-4">
+        <div class="d-flex align-items-center gap-2 mb-2">
+          <span class="badge bg-warning text-dark" id="tour-type-badge"
+            >Tour</span
+          >
+          <div class="d-flex text-warning small" id="star-container"></div>
+        </div>
+        <h1 class="fw-bold font-playfair display-5 mb-2" id="tour-name">
+          Loading Tour Title...
+        </h1>
+        <p class="text-muted mb-0">
+          <i class="bi bi-geo-alt-fill text-travia-teal me-1"></i>
+          <span id="tour-location">Location, Country</span> •
+          <a
+            href="#map-section"
+            class="text-travia-teal text-decoration-none fw-bold small hover-underline"
+            >Show on map</a
+          >
+        </p>
+      </div>
+
+      <div class="row g-2 mb-5 hero-gallery" id="gallery-container">
+        <div class="col-lg-8">
+          <div
+            class="gallery-item main rounded-start-3 overflow-hidden h-100 position-relative"
+          >
+            <img
+              id="hero-img-main"
+              src="../public/images/Travia.png"
+              class="w-100 h-100 object-fit-cover"
+              alt="Main View"
+            />
+            <button
+              class="btn btn-light btn-sm position-absolute bottom-0 end-0 m-3 shadow-sm fw-bold"
+            >
+              <i class="bi bi-grid-3x3-gap me-1"></i> Show all photos
+            </button>
+          </div>
+        </div>
+        <div class="col-lg-4 d-none d-lg-flex flex-column gap-2 h-100">
+          <div class="gallery-item h-50 rounded-top-end-3 overflow-hidden">
+            <img
+              id="hero-img-sec1"
+              src="../public/images/Travia.png"
+              class="w-100 h-100 object-fit-cover"
+              alt="Detail 1"
+            />
+          </div>
+          <div
+            class="gallery-item h-50 rounded-bottom-end-3 overflow-hidden position-relative"
+          >
+            <img
+              id="hero-img-sec2"
+              src="../public/images/Travia.png"
+              class="w-100 h-100 object-fit-cover"
+              alt="Detail 2"
+            />
+            <div
+              class="overlay-count d-none align-items-center justify-content-center text-white fw-bold fs-5"
+            >
+              +5
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row g-5">
+        <div class="col-lg-8">
+          <div
+            class="d-flex flex-wrap gap-4 py-3 border-top border-bottom mb-4"
+            id="highlights-bar"
+          >
+            <div class="d-flex align-items-center gap-2 text-dark">
+              <i class="bi bi-clock fs-5 text-travia-teal"></i>
+              <div>
+                <small class="text-muted d-block lh-1" style="font-size: 11px"
+                  >Duration</small
+                >
+                <strong id="meta-duration">-- Days</strong>
+              </div>
+            </div>
+            <div class="d-flex align-items-center gap-2 text-dark">
+              <i class="bi bi-people fs-5 text-travia-teal"></i>
+              <div>
+                <small class="text-muted d-block lh-1" style="font-size: 11px"
+                  >Group Size</small
+                >
+                <strong id="meta-group">Max --</strong>
+              </div>
+            </div>
+            <div class="d-flex align-items-center gap-2 text-dark">
+              <i class="bi bi-translate fs-5 text-travia-teal"></i>
+              <div>
+                <small class="text-muted d-block lh-1" style="font-size: 11px"
+                  >Language</small
+                >
+                <strong>English / Local</strong>
+              </div>
+            </div>
+          </div>
+
+          <div class="mb-5">
+            <h3 class="fw-bold font-playfair mb-3">
+              Experience the Unforgettable
+            </h3>
+            <p class="text-muted lead fs-6" id="tour-overview">
+              Loading overview...
+            </p>
+
+            <div class="bg-light p-4 rounded-3 mt-4">
+              <h6 class="fw-bold mb-3">Tour Highlights</h6>
+              <div class="row g-2" id="highlights-list"></div>
+            </div>
+          </div>
+
+          <div class="mb-5">
+            <h4 class="fw-bold font-playfair mb-3">What's Included</h4>
+            <div class="row g-3" id="amenities-list"></div>
+          </div>
+
+          <div class="mb-5">
+            <h4 class="fw-bold font-playfair mb-3">Itinerary</h4>
+            <div class="accordion" id="itineraryAccordion"></div>
+          </div>
+
+          <div class="mb-5" id="map-section">
+            <h4 class="fw-bold font-playfair mb-3">Where you'll be</h4>
+            <div
+              id="tour-map"
+              class="rounded-3 overflow-hidden shadow-sm"
+              style="height: 350px; background: #eee"
+            ></div>
+          </div>
+        </div>
+
+        <div class="col-lg-4">
+          <div class="sticky-top" style="top: 100px; z-index: 100">
+            <div class="card border-0 shadow-lg rounded-4 overflow-hidden">
+              <div class="card-header bg-travia-navy text-white p-4">
+                <small class="opacity-75">Starting from</small>
+                <div class="d-flex align-items-end gap-2">
+                  <h2 class="fw-bold mb-0 display-6" id="price-display">$0</h2>
+                  <span class="mb-1 opacity-75">/ person</span>
+                </div>
+                <div
+                  class="badge bg-success bg-opacity-25 text-success border border-success mt-2 d-none"
+                  id="deal-badge"
+                >
+                  Limited Time Deal
+                </div>
+              </div>
+
+              <div class="card-body p-4">
+                <form id="booking-form">
+                  <div class="mb-3">
+                    <label
+                      class="form-label fw-bold small text-uppercase text-muted"
+                      >Select Date</label
+                    >
+                    <div class="input-group">
+                      <span class="input-group-text bg-light border-end-0"
+                        ><i class="bi bi-calendar3"></i
+                      ></span>
+                      <input
+                        type="date"
+                        class="form-control border-start-0 bg-light"
+                        id="travel-date"
+                        required
+                      />
+                    </div>
+                  </div>
+
+                  <div class="mb-4">
+                    <label
+                      class="form-label fw-bold small text-uppercase text-muted"
+                      >Guests</label
+                    >
+                    <div
+                      class="d-flex align-items-center justify-content-between border rounded p-2"
+                    >
+                      <button
+                        type="button"
+                        class="btn btn-sm btn-light rounded-circle"
+                        onclick="updateGuestCount(-1)"
+                      >
+                        -
+                      </button>
+                      <span class="fw-bold" id="guest-count-display"
+                        >1 Adult</span
+                      >
+                      <button
+                        type="button"
+                        class="btn btn-sm btn-light rounded-circle"
+                        onclick="updateGuestCount(1)"
+                      >
+                        +
+                      </button>
+                    </div>
+                    <input type="hidden" id="guest-input" value="1" />
+                  </div>
+
+                  <div
+                    class="bg-light p-3 rounded-3 mb-4 d-none"
+                    id="price-breakdown"
+                  >
+                    <div class="d-flex justify-content-between mb-2 small">
+                      <span id="base-calc-text">$100 x 1</span>
+                      <span id="base-calc-total">$100</span>
+                    </div>
+                    <div class="d-flex justify-content-between mb-2 small">
+                      <span>Service Fee</span>
+                      <span class="text-success">Free</span>
+                    </div>
+                    <hr class="my-2" />
+                    <div
+                      class="d-flex justify-content-between fw-bold text-travia-navy"
+                    >
+                      <span>Total</span>
+                      <span id="final-total">$100</span>
+                    </div>
+                  </div>
+
+                  <button
+                    type="submit"
+                    class="btn btn-travia-primary w-100 py-3 rounded-pill fw-bold shadow-sm mb-3"
+                  >
+                    Check Availability
+                  </button>
+
+                  <p class="text-center small text-muted mb-0">
+                    <i class="bi bi-shield-check text-success me-1"></i> Free
+                    cancellation 24h prior
+                  </p>
+                </form>
+              </div>
+            </div>
+
+            <div class="mt-4 text-center">
+              <a
+                href="#"
+                class="text-decoration-none text-muted small hover-underline"
+              >
+                <i class="bi bi-flag me-1"></i> Report this listing
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <div id="footer-container"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="../scripts/apiConfig.js"></script>
+    <script src="../scripts/navbar.js"></script>
+    <script src="../scripts/tour-details.js"></script>
+  </body>
+</html>

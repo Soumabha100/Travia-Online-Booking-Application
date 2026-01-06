@@ -1,0 +1,136 @@
+/* =========================================
+   CITIES PAGE - OPTIMIZED STYLES
+   ========================================= */
+
+/* --- HERO SECTION --- */
+#cities-hero {
+    min-height: 450px;
+    background-color: #002a3d;
+    position: relative;
+}
+
+/* Fix: Force Hero Text to be White to override Global Navy Color */
+#cities-hero h1, 
+#cities-hero h2, 
+#cities-hero h3, 
+#cities-hero p {
+    color: #ffffff !important; 
+    text-shadow: 0 2px 10px rgba(0,0,0,0.5); /* Better readability */
+}
+
+/* Carousel Adjustments */
+.carousel-item {
+    height: 450px;
+}
+
+.city-hero-img {
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+    filter: brightness(0.65); /* Slightly brighter for better image visibility */
+}
+
+.carousel-caption {
+    bottom: 20%;
+    z-index: 10;
+}
+
+/* Single City Banner (Specific View) */
+.city-banner {
+    height: 450px;
+    position: relative;
+    border-radius: 0 0 30px 30px;
+    overflow: hidden;
+}
+
+.city-banner img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.banner-overlay {
+    background: linear-gradient(to top, rgba(0, 42, 61, 0.95), transparent);
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    padding: 5rem 1rem 3rem;
+    text-align: center;
+}
+
+/* Force Banner Overlay Text to White */
+.banner-overlay h1, .banner-overlay p {
+    color: #ffffff !important;
+}
+
+/* --- CITY CARD TILES (Booking.com Style) --- */
+.city-tile {
+    position: relative;
+    border-radius: 16px; /* Softer corners */
+    overflow: hidden;
+    height: 320px; /* Taller for better impact */
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    cursor: pointer;
+    display: block;
+    text-decoration: none; /* Remove underline from link */
+}
+
+.city-tile:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 30px rgba(0,0,0,0.15);
+}
+
+.city-tile img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.city-tile:hover img {
+    transform: scale(1.1); /* Zoom effect */
+}
+
+/* Overlay Gradient */
+.city-overlay {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.85) 0%, rgba(0, 0, 0, 0.4) 60%, transparent 100%);
+    padding: 25px 20px;
+    z-index: 2;
+}
+
+/* Fix: Force Card Heading to White */
+.city-name {
+    font-family: 'Playfair Display', serif;
+    font-weight: 700;
+    font-size: 1.6rem;
+    margin-bottom: 4px;
+    color: #ffffff !important; /* Override global navy */
+    text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+}
+
+.city-meta {
+    font-size: 0.95rem;
+    color: rgba(255, 255, 255, 0.9); /* Slightly transparent white */
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 500;
+}
+
+/* Flag Badge (Top Right) */
+.flag-badge {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: rgba(255, 255, 255, 0.95);
+    color: var(--travia-navy);
+    padding: 6px 14px;
+    border-radius: 30px;
+    font-weight: 700;
+    font-size: 0.85rem;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+    z-index: 5;
+    backdrop-filter: blur(4px);
+}

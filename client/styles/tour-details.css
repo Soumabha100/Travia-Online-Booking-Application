@@ -1,0 +1,299 @@
+/* =========================================
+   TOUR DETAILS PAGE - ENHANCED STYLING
+   ========================================= */
+
+:root {
+    --travia-navy: #002a3d;
+    --travia-teal: #1dd3b0;
+    --travia-teal-hover: #14b8a6;
+    --soft-bg: #f8f9fa;
+    --border-color: #e5e7eb;
+}
+
+/* --- 1. GENERAL TYPOGRAPHY & LAYOUT --- */
+body {
+    background-color: #fff;
+    color: #444;
+}
+
+h1, h2, h3, h4, h5 {
+    color: var(--travia-navy);
+}
+
+.text-travia-teal {
+    color: var(--travia-teal) !important;
+}
+
+.text-travia-navy {
+    color: var(--travia-navy) !important;
+}
+
+.hover-underline:hover {
+    text-decoration: underline !important;
+}
+
+/* Badge Tweaks */
+.badge {
+    padding: 0.5em 0.8em;
+    font-weight: 600;
+    letter-spacing: 0.3px;
+}
+
+/* --- 2. HERO GALLERY (Airbnb/Booking Style) --- */
+.hero-gallery {
+    height: 450px; /* Taller for better impact */
+    margin-bottom: 2rem;
+}
+
+@media (max-width: 991px) {
+    .hero-gallery {
+        height: auto;
+    }
+    .hero-gallery .col-lg-8 {
+        height: 300px; /* Mobile Main Image Height */
+    }
+}
+
+.gallery-item {
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    height: 100%;
+}
+
+.gallery-item img {
+    transition: transform 0.5s ease;
+}
+
+.gallery-item:hover img {
+    transform: scale(1.05); /* Subtle Zoom Effect */
+}
+
+/* Dark Overlay on Hover */
+.gallery-item::after {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0);
+    transition: background 0.3s ease;
+    pointer-events: none; /* Let clicks pass through */
+}
+
+.gallery-item:hover::after {
+    background: rgba(0,0,0,0.1);
+}
+
+/* "Show All Photos" Button */
+.gallery-item .btn {
+    z-index: 10;
+    font-size: 0.85rem;
+    backdrop-filter: blur(4px);
+    background: rgba(255,255,255,0.9);
+    border: 1px solid rgba(0,0,0,0.1);
+    transition: all 0.2s;
+}
+
+.gallery-item .btn:hover {
+    background: #fff;
+    transform: scale(1.05);
+}
+
+/* --- 3. QUICK HIGHLIGHTS BAR --- */
+#highlights-bar {
+    background-color: #fff;
+    border-radius: 12px;
+    padding: 1rem !important;
+    border: 1px solid var(--border-color) !important;
+    display: flex;
+    gap: 2rem;
+    flex-wrap: wrap;
+}
+
+/* Icon Container Circle */
+#highlights-bar i {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(29, 211, 176, 0.1);
+    border-radius: 50%;
+    color: var(--travia-teal);
+    font-size: 1.2rem;
+    transition: transform 0.2s;
+}
+
+#highlights-bar > div:hover i {
+    transform: rotate(15deg) scale(1.1);
+    background-color: rgba(29, 211, 176, 0.2);
+}
+
+/* --- 4. CONTENT SECTIONS --- */
+
+/* Highlight List (Checkmarks) */
+#highlights-list i {
+    color: var(--travia-teal);
+    font-size: 1.1rem;
+}
+
+/* Amenities Grid */
+.amenity-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px;
+    border-radius: 8px;
+    transition: background 0.2s;
+}
+
+.amenity-item:hover {
+    background-color: var(--soft-bg);
+}
+
+.amenity-item i {
+    color: var(--travia-navy);
+    font-size: 1.2rem;
+    opacity: 0.8;
+}
+
+.amenity-item span {
+    font-weight: 500;
+    color: #555;
+}
+
+/* --- 5. ITINERARY ACCORDION (Modern) --- */
+.accordion-item {
+    border: 1px solid var(--border-color);
+    margin-bottom: 10px;
+    border-radius: 8px !important;
+    overflow: hidden;
+}
+
+.accordion-button {
+    font-weight: 700;
+    color: var(--travia-navy);
+    background-color: #fff;
+    padding: 1.2rem 1.5rem;
+    box-shadow: none !important; /* Remove Bootstrap blue glow */
+}
+
+.accordion-button:not(.collapsed) {
+    background-color: rgba(29, 211, 176, 0.05); /* Very light teal */
+    color: var(--travia-navy);
+    border-bottom: 1px solid var(--border-color);
+}
+
+.accordion-button::after {
+    background-size: 1rem;
+    transition: transform 0.3s;
+}
+
+.accordion-body {
+    font-size: 0.95rem;
+    line-height: 1.6;
+    color: #555;
+    padding: 1.5rem;
+}
+
+/* Day Badge Styling */
+.accordion-button .badge {
+    background-color: var(--travia-navy) !important;
+    font-weight: 600;
+    padding: 0.5em 0.8em;
+}
+
+/* --- 6. MAP SECTION --- */
+#tour-map {
+    border-radius: 12px;
+    border: 1px solid var(--border-color);
+    z-index: 1; /* Keep below sticky header */
+}
+
+/* --- 7. STICKY BOOKING SIDEBAR (The Money Maker) --- */
+.sticky-top {
+    top: 100px;
+    z-index: 100;
+    transition: top 0.3s;
+}
+
+.card {
+    border: 1px solid var(--border-color) !important;
+    border-radius: 16px !important;
+    overflow: hidden;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.08) !important; /* Soft deep shadow */
+}
+
+/* Booking Header */
+.card-header {
+    background: var(--travia-navy) !important;
+    border-bottom: none;
+    padding: 1.5rem;
+}
+
+.card-header h2 {
+    color: #fff;
+}
+
+/* Inputs */
+.form-control, .input-group-text, .btn-light {
+    border-color: #ddd;
+}
+
+.form-control:focus {
+    border-color: var(--travia-teal);
+    box-shadow: 0 0 0 3px rgba(29, 211, 176, 0.15);
+}
+
+/* Guest Counter Buttons */
+.btn-light.rounded-circle {
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #ddd;
+    color: var(--travia-navy);
+    font-weight: bold;
+}
+
+.btn-light.rounded-circle:hover {
+    background-color: var(--travia-teal);
+    color: #fff;
+    border-color: var(--travia-teal);
+}
+
+/* Main CTA Button */
+.btn-travia-primary {
+    background-color: var(--travia-teal);
+    border: none;
+    color: #002a3d; /* Navy text for contrast */
+    font-size: 1.1rem;
+    transition: all 0.3s ease;
+}
+
+.btn-travia-primary:hover {
+    background-color: var(--travia-teal-hover);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(29, 211, 176, 0.4);
+}
+
+/* Price Breakdown Box */
+#price-breakdown {
+    background-color: #f8fafc;
+    border: 1px solid #e2e8f0;
+}
+
+/* --- 8. UTILITIES --- */
+.icon-btn {
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+}
+
+.icon-btn:hover {
+    background-color: #f0f0f0;
+    color: var(--travia-navy);
+}

@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Find Tours | Travia</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700;900&display=swap"
+      rel="stylesheet"
+    />
+
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css"
+    />
+    <link rel="stylesheet" href="../styles/index.css" />
+    <link rel="stylesheet" href="../styles/tours.css" />
+  </head>
+
+  <body>
+    <div id="navbar-container"></div>
+
+    <div
+      class="search-header bg-travia-navy py-4 shadow-sm sticky-top"
+      style="top: 0; z-index: 1020"
+    >
+      <div class="container">
+        <div
+          class="search-bar-compact p-2 bg-white rounded-pill d-flex align-items-center shadow-lg"
+        >
+          <div class="input-group border-end px-3">
+            <span class="input-group-text bg-transparent border-0 ps-0"
+              ><i class="bi bi-geo-alt text-muted"></i
+            ></span>
+            <input
+              type="text"
+              id="header-search-input"
+              class="form-control border-0 shadow-none"
+              placeholder="Where are you going? (City, Country...)"
+            />
+          </div>
+          <div class="input-group border-end px-3">
+            <span class="input-group-text bg-transparent border-0 ps-0"
+              ><i class="bi bi-calendar text-muted"></i
+            ></span>
+            <input
+              type="text"
+              class="form-control border-0 shadow-none"
+              placeholder="Check-in - Check-out"
+              disabled
+            />
+          </div>
+          <button
+            class="btn btn-travia-primary rounded-pill px-5 fw-bold ms-2"
+            onclick="document.getElementById('header-search-input').focus()"
+          >
+            Search
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <main class="container py-4">
+      <nav aria-label="breadcrumb" class="mb-4">
+        <ol class="breadcrumb small">
+          <li class="breadcrumb-item">
+            <a href="index.html" class="text-decoration-none text-muted"
+              >Home</a
+            >
+          </li>
+          <li class="breadcrumb-item">
+            <a href="destinations.html" class="text-decoration-none text-muted"
+              >Destinations</a
+            >
+          </li>
+          <li
+            class="breadcrumb-item active text-dark fw-bold"
+            aria-current="page"
+          >
+            All Tours
+          </li>
+        </ol>
+      </nav>
+
+      <div class="row g-4">
+        <aside class="col-lg-3">
+          <div
+            class="map-widget mb-4 rounded-3 overflow-hidden position-relative shadow-sm border"
+          >
+            <div
+              class="map-bg"
+              id="map-widget-bg"
+              style="background-image: url('../public/assets/World-Map.jpg')"
+            ></div>
+
+            <div
+              class="map-overlay d-flex align-items-center justify-content-center"
+            >
+              <button
+                id="btn-show-map"
+                class="btn btn-travia-primary shadow-sm rounded-pill px-4"
+                disabled
+              >
+                <i class="bi bi-geo-alt-fill me-1"></i>
+                <span id="lbl-show-map">Loading...</span>
+              </button>
+            </div>
+          </div>
+
+          <div
+            class="filter-box border rounded-3 p-3 bg-white shadow-sm"
+            id="filter-sidebar"
+          >
+            <div class="d-flex justify-content-between align-items-center mb-3">
+              <h5 class="fw-bold font-lato mb-0">Filter by:</h5>
+              <button
+                class="btn btn-link btn-sm text-decoration-none p-0"
+                onclick="window.resetFilters()"
+              >
+                Reset
+              </button>
+            </div>
+
+            <div class="filter-group border-bottom pb-3 mb-3">
+              <h6 class="fw-bold small text-dark mb-2">
+                Your Budget (Total Price)
+              </h6>
+              <div class="form-check">
+                <input
+                  class="form-check-input filter-checkbox"
+                  type="checkbox"
+                  data-type="budget"
+                  value="low"
+                  id="p1"
+                />
+                <label class="form-check-label small" for="p1">$0 - $500</label>
+              </div>
+              <div class="form-check">
+                <input
+                  class="form-check-input filter-checkbox"
+                  type="checkbox"
+                  data-type="budget"
+                  value="mid"
+                  id="p2"
+                />
+                <label class="form-check-label small" for="p2"
+                  >$500 - $1000</label
+                >
+              </div>
+              <div class="form-check">
+                <input
+                  class="form-check-input filter-checkbox"
+                  type="checkbox"
+                  data-type="budget"
+                  value="high"
+                  id="p3"
+                />
+                <label class="form-check-label small" for="p3">$1000 +</label>
+              </div>
+            </div>
+
+            <div class="filter-group border-bottom pb-3 mb-3">
+              <h6 class="fw-bold small text-dark mb-2">Review Score</h6>
+              <div class="form-check">
+                <input
+                  class="form-check-input filter-checkbox"
+                  type="checkbox"
+                  data-type="rating"
+                  value="9"
+                  id="r1"
+                />
+                <label class="form-check-label small" for="r1"
+                  >Superb: 9+</label
+                >
+              </div>
+              <div class="form-check">
+                <input
+                  class="form-check-input filter-checkbox"
+                  type="checkbox"
+                  data-type="rating"
+                  value="8"
+                  id="r2"
+                />
+                <label class="form-check-label small" for="r2"
+                  >Very Good: 8+</label
+                >
+              </div>
+              <div class="form-check">
+                <input
+                  class="form-check-input filter-checkbox"
+                  type="checkbox"
+                  data-type="rating"
+                  value="7"
+                  id="r3"
+                />
+                <label class="form-check-label small" for="r3">Good: 7+</label>
+              </div>
+            </div>
+
+            <div class="filter-group">
+              <h6 class="fw-bold small text-dark mb-2">Tour Type</h6>
+              <div class="form-check">
+                <input
+                  class="form-check-input filter-checkbox"
+                  type="checkbox"
+                  data-type="category"
+                  value="Adventure"
+                  id="c1"
+                />
+                <label class="form-check-label small" for="c1">Adventure</label>
+              </div>
+              <div class="form-check">
+                <input
+                  class="form-check-input filter-checkbox"
+                  type="checkbox"
+                  data-type="category"
+                  value="History"
+                  id="c2"
+                />
+                <label class="form-check-label small" for="c2"
+                  >History & Culture</label
+                >
+              </div>
+              <div class="form-check">
+                <input
+                  class="form-check-input filter-checkbox"
+                  type="checkbox"
+                  data-type="category"
+                  value="Relaxation"
+                  id="c3"
+                />
+                <label class="form-check-label small" for="c3"
+                  >Relaxation</label
+                >
+              </div>
+              <div class="form-check">
+                <input
+                  class="form-check-input filter-checkbox"
+                  type="checkbox"
+                  data-type="category"
+                  value="Nature"
+                  id="c4"
+                />
+                <label class="form-check-label small" for="c4">Nature</label>
+              </div>
+            </div>
+          </div>
+        </aside>
+
+        <div class="col-lg-9">
+          <div
+            class="d-flex flex-wrap justify-content-between align-items-center mb-4 pb-3 border-bottom"
+          >
+            <h2 class="h4 fw-bold font-lato mb-0" id="results-count">
+              Loading tours...
+            </h2>
+
+            <div class="d-flex gap-2 align-items-center">
+              <select
+                class="form-select form-select-sm rounded-pill px-3 py-2 border-secondary"
+                id="sort-select"
+                style="width: auto"
+              >
+                <option value="recommended">Sort by: Recommended</option>
+                <option value="price-asc">Price (Low to High)</option>
+                <option value="price-desc">Price (High to Low)</option>
+                <option value="rating">Top Reviewed</option>
+              </select>
+
+              <div class="btn-group" role="group">
+                <button
+                  type="button"
+                  class="btn btn-outline-secondary btn-sm active"
+                  id="btn-view-list"
+                >
+                  List
+                </button>
+
+                <button
+                  type="button"
+                  class="btn btn-outline-secondary btn-sm"
+                  id="btn-view-grid"
+                >
+                  Grid
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div id="tours-list-view">
+            <div class="text-center py-5">
+              <div class="spinner-border text-travia-teal" role="status"></div>
+            </div>
+          </div>
+
+          <div id="tours-grid-view" class="row g-4 d-none"></div>
+
+          <nav
+            class="mt-5 d-flex justify-content-center"
+            id="pagination-container"
+          ></nav>
+        </div>
+      </div>
+    </main>
+
+    <div id="footer-container"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../scripts/apiConfig.js"></script>
+    <script src="../scripts/navbar.js"></script>
+    <script src="../scripts/tours.js"></script>
+  </body>
+</html>

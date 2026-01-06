@@ -1,5 +1,4 @@
-const API_BASE =
-  "https://travia-online-booking-application-backend.onrender.com/api";
+const API_BASE = window.TraviaAPI.admin;
 const token = localStorage.getItem("token");
 let cmsModal; // Bootstrap Modal Instance
 let currentType = null; // 'country', 'city', 'tour'
@@ -94,7 +93,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 async function loadDashboardStats() {
   if (!document.getElementById("stat-tours")) return;
   try {
-    const res = await fetch(`${API_BASE}/admin/stats`, {
+    const res = await fetch(`${API_BASE}/stats`, {
       headers: { Authorization: `Bearer ${token}` },
     });
     const data = await res.json();
@@ -111,7 +110,7 @@ async function loadDashboardStats() {
 
 async function loadCountries() {
   if (!document.getElementById("table-countries")) return;
-  const res = await fetch(`${API_BASE}/admin/countries`, {
+  const res = await fetch(`${API_BASE}/countries`, {
     headers: { Authorization: `Bearer ${token}` },
   });
   const data = await res.json();
@@ -163,7 +162,7 @@ async function loadCountries() {
 
 async function loadCities() {
   if (!document.getElementById("table-cities")) return;
-  const res = await fetch(`${API_BASE}/admin/cities`, {
+  const res = await fetch(`${API_BASE}/cities`, {
     headers: { Authorization: `Bearer ${token}` },
   });
   const data = await res.json();
@@ -241,7 +240,7 @@ async function loadCities() {
 async function loadTours() {
   if (!document.getElementById("tours-grid")) return;
   try {
-    const res = await fetch(`${API_BASE}/admin/tours`, {
+    const res = await fetch(`${API_BASE}/tours`, {
       headers: { Authorization: `Bearer ${token}` },
     });
     const data = await res.json();
@@ -390,7 +389,7 @@ async function loadTours() {
 }
 async function loadUsers() {
   if (!document.getElementById("table-users")) return;
-  const res = await fetch(`${API_BASE}/admin/users`, {
+  const res = await fetch(`${API_BASE}/users`, {
     headers: { Authorization: `Bearer ${token}` },
   });
   const data = await res.json();
@@ -514,7 +513,7 @@ window.openForm = async (type, data) => {
             </div>`;
   } else if (type === "city") {
     // 1. Fetch Data
-    const res = await fetch(`${API_BASE}/admin/countries`, {
+    const res = await fetch(`${API_BASE}/countries`, {
       headers: { Authorization: `Bearer ${token}` },
     });
     const countries = await res.json();
@@ -653,10 +652,10 @@ window.openForm = async (type, data) => {
   } else if (type === "tour") {
     // 1. Fetch Relations
     const [cRes, ciRes] = await Promise.all([
-      fetch(`${API_BASE}/admin/countries`, {
+      fetch(`${API_BASE}/countries`, {
         headers: { Authorization: `Bearer ${token}` },
       }),
-      fetch(`${API_BASE}/admin/cities`, {
+      fetch(`${API_BASE}/cities`, {
         headers: { Authorization: `Bearer ${token}` },
       }),
     ]);
@@ -951,7 +950,7 @@ async function handleSave() {
       // Convert Textarea (Lines) -> Array
       payload.images = document.getElementById("f-images").value
         .split("\n").map(url => url.trim()).filter(url => url.length > 0);
-        
+
       // Top Attractions
       payload.topAttractions = document.getElementById("f-attractions").value
         .split("\n").map(item => item.trim()).filter(item => item.length > 0);
@@ -1047,8 +1046,8 @@ async function handleSave() {
         : "tours";
     const method = editingId ? "PUT" : "POST";
     const url = editingId
-      ? `${API_BASE}/admin/${endpoint}/${editingId}`
-      : `${API_BASE}/admin/${endpoint}`;
+      ? `${API_BASE}/${endpoint}/${editingId}`
+      : `${API_BASE}/${endpoint}`;
 
     const res = await fetch(url, {
       method: method,
@@ -1087,7 +1086,7 @@ window.deleteItem = async (endpoint, id) => {
     return;
 
   try {
-    await fetch(`${API_BASE}/admin/${endpoint}/${id}`, {
+    await fetch(`${API_BASE}/${endpoint}/${id}`, {
       method: "DELETE",
       headers: { Authorization: `Bearer ${token}` },
     });

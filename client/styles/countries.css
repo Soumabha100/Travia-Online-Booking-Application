@@ -1,0 +1,165 @@
+/* --- HERO SECTION --- */
+#countries-hero {
+    min-height: 500px;
+    background-color: #002a3d;
+}
+
+/* Carousel Styles */
+.carousel-item {
+    height: 500px;
+}
+
+.country-hero-img {
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+    filter: brightness(0.7); /* Darken for text readability */
+}
+
+.carousel-caption {
+    bottom: 20%;
+    text-shadow: 0 4px 10px rgba(0,0,0,0.5);
+}
+
+/* Single Country Banner */
+.country-banner {
+    height: 400px;
+    position: relative;
+    overflow: hidden;
+    border-radius: 0 0 30px 30px; /* Modern curved bottom */
+}
+
+.country-banner img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.banner-overlay {
+    background: linear-gradient(to top, rgba(0,42,61,0.9), transparent);
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    padding: 3rem 1rem;
+    text-align: center;
+}
+
+/* --- RICH GRID CARD (Booking.com Style) --- */
+/* Copied from your optimized tours.css for consistency */
+
+.tour-card-grid {
+    border: 1px solid #e7e7e7;
+    border-radius: 12px;
+    background: #fff;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.tour-card-grid:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 24px rgba(0,0,0,0.08);
+    border-color: #1dd3b0;
+}
+
+.card-img-wrapper {
+    height: 220px;
+    position: relative;
+    overflow: hidden;
+}
+
+.card-img-top {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+}
+
+.tour-card-grid:hover .card-img-top {
+    transform: scale(1.05);
+}
+
+.card-body {
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    gap: 0.5rem;
+}
+
+.tour-name-grid {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #002a3d;
+    line-height: 1.3;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    margin-bottom: 4px;
+}
+
+.star-rating-row {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 0.8rem;
+    color: #ffc107;
+}
+
+.grid-features {
+    font-size: 0.85rem;
+    color: #555;
+    margin: 8px 0;
+    border-left: 2px solid #e0e0e0;
+    padding-left: 8px;
+}
+
+.grid-feature-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 2px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.grid-footer {
+    margin-top: auto;
+    padding-top: 12px;
+    border-top: 1px solid #f0f0f0;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+}
+
+.rating-score-box {
+    background-color: #002a3d;
+    color: #fff;
+    font-weight: 700;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 6px 6px 6px 0;
+}
+
+.price-section-grid {
+    text-align: right;
+}
+
+.current-price {
+    font-size: 1.25rem;
+    font-weight: 800;
+    color: #333;
+    line-height: 1;
+}
+
+.old-price {
+    font-size: 0.8rem;
+    text-decoration: line-through;
+    color: #999;
+}

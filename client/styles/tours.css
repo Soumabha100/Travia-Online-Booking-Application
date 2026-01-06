@@ -1,0 +1,382 @@
+/* =========================================
+   1. GLOBAL VARIABLES & THEME
+   ========================================= */
+:root {
+    --travia-teal: #1dd3b0;
+    --travia-navy: #002a3d;
+    --travia-bg-light: #f8f9fa;
+    /* Soft, premium shadows */
+    --shadow-sm: 0 2px 8px rgba(0, 42, 61, 0.08);
+    --shadow-md: 0 8px 24px rgba(0, 42, 61, 0.12);
+    --shadow-hover: 0 12px 32px rgba(29, 211, 176, 0.15);
+}
+
+/* =========================================
+   2. TYPOGRAPHY (Unified - No Playfair)
+   ========================================= */
+body {
+    background-color: var(--travia-bg-light);
+    font-family: 'Lato', sans-serif;
+    color: #333;
+}
+
+/* Headings use bold Lato instead of Playfair for consistency */
+h1, h2, h3, h4, h5, h6 {
+    color: var(--travia-navy);
+    font-weight: 700;
+    letter-spacing: -0.3px;
+}
+
+.font-playfair {
+    font-family: 'Lato', sans-serif !important; /* Override */
+    font-weight: 800; /* Extra bold for emphasis */
+}
+
+.font-lato { font-family: 'Lato', sans-serif; }
+
+/* =========================================
+   3. STICKY SEARCH BAR
+   ========================================= */
+.search-header {
+    background-color: var(--travia-navy);
+    position: sticky;
+    top: 0;
+    z-index: 1020;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+
+.search-bar-compact {
+    max-width: 950px;
+    margin: 0 auto;
+    background: #fff;
+    border: 1px solid #e0e0e0;
+}
+
+.search-bar-compact .form-control:focus {
+    box-shadow: none;
+    background: transparent;
+}
+
+/* =========================================
+   4. SIDEBAR WIDGETS
+   ========================================= */
+/* Map Widget */
+.map-widget {
+    height: 160px;
+    position: relative;
+    border: 1px solid #e7e7e7;
+    border-radius: 12px;
+    overflow: hidden;
+    transition: transform 0.3s ease;
+}
+
+.map-widget:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+    cursor: pointer;
+}
+
+/* Update the Map Widget Button Style */
+.map-widget .btn {
+    background-color: #ffffff !important; /* Pure White */
+    color: var(--travia-navy) !important; /* Navy Text */
+    border: 1px solid rgba(0,0,0,0.1); /* Subtle border */
+    font-weight: 700; 
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15); 
+    transition: all 0.3s ease;
+}
+
+.map-widget .btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+    background-color: #f8f9fa !important; /* Slight grey on hover */
+}
+
+.map-bg {
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+    transition: transform 0.5s ease;
+}
+
+.map-widget:hover .map-bg {
+    transform: scale(1.05);
+}
+
+.map-overlay {
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0, 42, 61, 0.2); /* Slight dark tint */
+    backdrop-filter: blur(1px);
+}
+
+/* Filters Box */
+.filter-box {
+    border: 1px solid #e7e7e7;
+    background: #fff;
+    border-radius: 12px;
+}
+
+.filter-group .form-check-input:checked {
+    background-color: var(--travia-teal);
+    border-color: var(--travia-teal);
+}
+
+.form-check-label {
+    cursor: pointer;
+    color: #555;
+    transition: color 0.2s;
+}
+
+.form-check:hover .form-check-label {
+    color: var(--travia-navy);
+}
+
+/* =========================================
+   5. TOUR CARDS (Booking.com Style)
+   ========================================= */
+.tour-card {
+    border: 1px solid #e7e7e7 !important;
+    background: #fff;
+    border-radius: 12px !important;
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+.tour-card:hover {
+    border-color: #bfece6 !important; /* Subtle teal hint */
+    box-shadow: var(--shadow-hover) !important;
+    transform: translateY(-3px);
+}
+
+.tour-card-img {
+    min-height: 250px;
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+}
+
+/* Highlights List (Green Line Styling) */
+.tour-features {
+    line-height: 1.7;
+    font-size: 0.85rem;
+    color: #555;
+}
+
+/* Typography Helpers */
+.text-truncate-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.hover-underline:hover {
+    text-decoration: underline;
+    text-decoration-color: var(--travia-teal);
+    text-decoration-thickness: 2px;
+    cursor: pointer;
+}
+
+/* --- FIX: Rating Badge Consistency --- */
+.rating-badge {
+    background-color: var(--travia-navy);
+    color: #ffffff;
+    width: 42px; 
+    height: 42px;
+    border-radius: 8px; /* Slightly softer corners */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 1.1rem;
+    box-shadow: var(--shadow-sm);
+}
+
+/* Price & Buttons */
+.price-display {
+    color: var(--travia-navy);
+    font-weight: 800; /* Extra bold since we removed Playfair */
+}
+
+.btn-travia-primary {
+    background-color: var(--travia-teal);
+    color: var(--travia-navy);
+    border: none;
+    transition: all 0.3s ease;
+}
+
+.btn-travia-primary:hover {
+    background-color: #14b898;
+    color: #fff;
+    box-shadow: 0 4px 12px rgba(29, 211, 176, 0.4);
+}
+
+.icon-btn {
+    width: 38px; height: 38px;
+    display: flex; align-items: center; justify-content: center;
+    border: none;
+    transition: all 0.2s;
+    background: #fff;
+    color: var(--travia-navy);
+    font-size: 1.1rem;
+}
+
+.icon-btn:hover {
+    color: #dc3545;
+    background-color: #ffeef0;
+    transform: scale(1.1);
+}
+
+/* Responsive Divider */
+.border-end-md {
+    border-right: 1px solid #f0f0f0;
+}
+
+@media (max-width: 767.98px) {
+    .border-end-md {
+        border-right: none;
+        border-bottom: 1px solid #f0f0f0;
+    }
+    
+    .tour-card-img {
+        min-height: 200px;
+    }
+}
+
+/* =========================================
+   RICH GRID CARD DESIGN (Booking.com Style)
+   ========================================= */
+
+.tour-card-grid {
+    border: 1px solid #e7e7e7;
+    border-radius: 12px; /* Softer corners */
+    background: #fff;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden; /* Contains the image zoom */
+}
+
+.tour-card-grid:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 24px rgba(0,0,0,0.08); /* Premium hover lift */
+    border-color: #ccebea; /* Subtle active border color */
+}
+
+/* Image Section */
+.tour-card-grid .card-img-wrapper {
+    height: 200px;
+    position: relative;
+    overflow: hidden;
+}
+
+.tour-card-grid .card-img-top {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+}
+
+.tour-card-grid:hover .card-img-top {
+    transform: scale(1.05); /* Subtle zoom effect */
+}
+
+/* Typography & Layout */
+.tour-card-grid .card-body {
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    gap: 0.5rem;
+}
+
+.tour-name-grid {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--travia-navy);
+    line-height: 1.3;
+    display: -webkit-box;
+    -webkit-line-clamp: 2; /* Limit to 2 lines */
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    margin-bottom: 4px;
+}
+
+/* Star Rating Row */
+.star-rating-row {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 0.8rem;
+    margin-bottom: 4px;
+}
+
+/* Feature List (Compact) */
+.grid-features {
+    font-size: 0.85rem;
+    color: #555;
+    margin: 8px 0;
+    border-left: 2px solid #e0e0e0;
+    padding-left: 8px;
+}
+
+.grid-feature-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 2px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Footer Section */
+.grid-footer {
+    margin-top: auto; /* Pushes to bottom */
+    padding-top: 12px;
+    border-top: 1px solid #f0f0f0;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+}
+
+.rating-block-compact {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.rating-score-box {
+    background-color: var(--travia-navy);
+    color: #fff;
+    font-weight: 700;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 6px 6px 6px 0; /* Unique shape */
+    font-size: 0.9rem;
+}
+
+/* Price Tag */
+.price-section-grid {
+    text-align: right;
+}
+
+.price-section-grid .old-price {
+    font-size: 0.8rem;
+    text-decoration: line-through;
+    color: #999;
+}
+
+.price-section-grid .current-price {
+    font-size: 1.25rem;
+    font-weight: 800;
+    color: #333;
+    line-height: 1;
+}

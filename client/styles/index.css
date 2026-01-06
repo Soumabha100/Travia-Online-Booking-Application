@@ -1,93 +1,40 @@
+/* =========================================
+   1. IMPORTS & GLOBAL TYPOGRAPHY
+   ========================================= */
 @import url("https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
 
-h1,
-h2,
-h3,
-h4,
-h5,
-.navbar-brand {
+:root {
+  --travia-navy: #002a3d;
+  --travia-teal: #1dd3b0;
+  --travia-teal-hover: #14b8a6;
+}
+
+body, p, a, .btn {
+  font-family: "Open Sans", sans-serif;
+}
+
+h1, h2, h3, h4, h5, .navbar-brand {
   font-family: "Poppins", sans-serif;
   letter-spacing: 0.5px;
 }
 
-.discount{
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: 24px;
-}
+a { text-decoration: none; }
 
-.discount img{
-  width: 480px;
-}
-
-body,
-p,
-a,
-.btn {
-  font-family: "Open Sans", sans-serif;
-}
-
-.parallax {
-  background-attachment: fixed;
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: cover;
-  height: 720px;
-  position: relative;
-}
-
-.parallax-caption {
-  position: absolute;
-  bottom: 20px;
-  left: 20px;
-  color: #fff;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-}
-
-.parallax-caption h3 {
-  font-size: 2rem;
-  font-weight: bold;
-}
-
-.parallax-caption p {
-  font-size: 1.2rem;
-}
-
-.parallax-1 {
-  background-image: url(../public/images/BG1.jpg);
-}
-
-.parallax-2 {
-  background-image: url(../public/images/BG2.jpg);
-}
-
-.parallax-3 {
-  background-image: url(../public/images/BG3.jpg);
-}
-
-.cards {
-  display: flex;
-  justify-content: space-evenly;
-  padding: 24px;
-}
-
-/* Navbar background */
+/* =========================================
+   2. NAVBAR & NAVIGATION
+   ========================================= */
+/* Glassy Navbar Effect (Your Preferred Style) */
 .travia-navbar {
-  background: rgba(0, 42, 61, 0.85);
-  backdrop-filter: blur(10px);
+  background: rgba(0, 42, 61, 0.85); /* Semi-transparent Navy */
+  backdrop-filter: blur(10px);        /* Blur effect */
   box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
   transition: all 0.3s ease;
+  padding: 12px 0;
 }
 
-/* Brand */
 .navbar-brand {
   font-size: 1.6rem;
   letter-spacing: 1px;
-}
-
-.brand-highlight {
-  color: #1dd3b0;
 }
 
 .travia {
@@ -96,384 +43,35 @@ a,
   object-fit: contain;
 }
 
-/* Nav links */
+/* Nav Links with Smooth Underline Animation */
 .nav-link {
   position: relative;
   margin: 0 10px;
   font-weight: 500;
   color: #ffffff !important;
+  padding: 8px 16px;
+  transition: all 0.2s ease;
 }
 
-.nav-link::after {
+/* Only apply underline to links that are NOT dropdown toggles */
+.nav-link:not(.dropdown-toggle)::after {
   content: "";
   position: absolute;
   width: 0;
   height: 2px;
   left: 0;
   bottom: -5px;
-  background-color: #1dd3b0;
+  background-color: var(--travia-teal);
   transition: width 0.3s ease-in-out;
 }
 
-.nav-link:hover::after,
-.nav-link.active::after {
+.nav-link:not(.dropdown-toggle):hover::after,
+.nav-link:not(.dropdown-toggle).active::after {
   width: 100%;
 }
 
-/* CTA Button */
-.btn-travia {
-  background-color: #1dd3b0;
-  color: #002a3d;
-  padding: 8px 20px;
-  border-radius: 30px;
-  font-weight: 600;
-  transition: all 0.3s ease;
-}
-
-.btn-travia:hover {
-  background-color: #14b8a6;
-  transform: translateY(-2px);
-}
-
-/* Footer wrapper */
-.travia-footer {
-  background: linear-gradient(180deg, #001f2d, #002a3d);
-}
-
-/* Brand */
-.footer-brand {
-  font-size: 1.8rem;
-  font-weight: 700;
-}
-
-.brand-highlight {
-  color: #1dd3b0;
-}
-
-/* Text */
-.footer-text {
-  color: #b5c7d3;
-  margin-top: 10px;
-  line-height: 1.7;
-}
-
-/* Titles */
-.footer-title {
-  font-weight: 600;
-  margin-bottom: 15px;
-  position: relative;
-}
-
-.footer-title::after {
-  content: "";
-  width: 40px;
-  height: 2px;
-  background: #1dd3b0;
-  display: block;
-  margin-top: 6px;
-}
-
-/* Links */
-.footer-links {
-  list-style: none;
-  padding: 0;
-}
-
-.footer-links li {
-  margin-bottom: 10px;
-}
-
-.footer-links a {
-  color: #b5c7d3;
-  text-decoration: none;
-  transition: all 0.3s ease;
-}
-
-.footer-links a:hover {
-  color: #1dd3b0;
-  padding-left: 5px;
-}
-
-/* Social icons */
-.footer-socials {
-  margin-top: 20px;
-}
-
-.footer-socials a {
-  color: #ffffff;
-  font-size: 1.2rem;
-  margin-right: 15px;
-  transition: transform 0.3s ease, color 0.3s ease;
-}
-
-.footer-socials a:hover {
-  color: #1dd3b0;
-  transform: translateY(-3px);
-}
-
-/* Newsletter */
-.footer-newsletter input {
-  border-radius: 30px;
-  border: none;
-  padding: 10px 15px;
-}
-
-.footer-newsletter input:focus {
-  box-shadow: none;
-}
-
-/* CTA Button (same as navbar) */
-.btn-travia {
-  background-color: #1dd3b0;
-  color: #002a3d;
-  border-radius: 30px;
-  font-weight: 600;
-  padding: 10px 20px;
-}
-
-.btn-travia:hover {
-  background-color: #14b8a6;
-}
-
-/* Bottom bar */
-.footer-bottom {
-  background-color: #001824;
-  color: #8faec0;
-  font-size: 0.9rem;
-}
-
-.footer-links li {
-  margin-bottom: 12px;
-}
-
-/* Contact List Styles */
-.footer-contact-list {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-}
-
-.footer-contact-list li {
-  display: flex;
-  align-items: flex-start;
-  margin-bottom: 15px;
-  color: #b5c7d3;
-  font-size: 0.95rem;
-}
-
-.footer-contact-list i {
-  color: #1dd3b0; /* Ocean Green Icon */
-  margin-right: 12px;
-  font-size: 1.1rem;
-  margin-top: -2px; /* Align icon with text */
-}
-
-/* Better Input Group for Newsletter */
-.footer-newsletter .input-group {
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 30px;
-  padding: 4px;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-}
-
-.footer-newsletter input {
-  background: transparent !important;
-  border: none !important;
-  color: #fff !important;
-  box-shadow: none !important;
-  padding-left: 15px;
-}
-
-.footer-newsletter input::placeholder {
-  color: rgba(255, 255, 255, 0.5);
-}
-
-.footer-newsletter .btn-travia {
-  border-radius: 50%;
-  width: 40px;
-  height: 40px;
-  padding: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-/* Bottom Bar Legal Links */
-.footer-legal a {
-  color: #8faec0;
-  text-decoration: none;
-  font-size: 0.9rem;
-  transition: color 0.3s;
-}
-
-.footer-legal a:hover {
-  color: #1dd3b0;
-}
-
-/* Responsive tweak for bottom bar */
-@media (max-width: 768px) {
-  .footer-bottom .container {
-    flex-direction: column;
-    text-align: center;
-  }
-  .footer-legal {
-    margin-top: 10px;
-  }
-}
-
-.travia-card {
-  border: none; 
-  border-radius: 24px; 
-  background: #ffffff;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05); 
-  transition: all 0.4s ease; 
-  overflow: hidden; 
-}
-
-/* Lift Effect on Hover */
-.travia-card:hover {
-  transform: translateY(-10px); /* Lifts the card up */
-  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15); /* Premium shadow depth */
-}
-
-/* Image Wrapper for Zoom Effect */
-.card-img-wrapper {
-  overflow: hidden; /* Clips the image when it zooms */
-  height: 280px; /* Fixed height for consistency */
-}
-
-.travia-card .card-img-top {
-  height: 100%;
-  width: 100%;
-  object-fit: cover; /* Ensures image covers area without stretching */
-  transition: transform 0.6s ease;
-}
-
-/* Subtle Zoom on Image Hover */
-.travia-card:hover .card-img-top {
-  transform: scale(1.08);
-}
-
-/* Content Styling */
-.travia-card .card-body {
-  padding: 24px;
-}
-
-.travia-card .card-title {
-  font-family: "Poppins", sans-serif;
-  font-weight: 700;
-  font-size: 1.25rem;
-  color: #002a3d; /* Travia Dark Blue */
-  margin-bottom: 12px;
-}
-
-.travia-card .card-text {
-  font-family: "Open Sans", sans-serif;
-  color: #6c757d; /* Muted grey for clean look */
-  font-size: 0.95rem;
-  line-height: 1.6;
-  margin-bottom: 24px;
-}
-
-/* Button Styling */
-.travia-card .btn {
-  padding: 10px 28px;
-  border-radius: 50px; /* Pill shape */
-  font-weight: 600;
-  font-size: 0.9rem;
- background-color: #0d6efd; 
-}
-
-/* Search Bar Styling */
-.search-form input {
-  background-color: rgba(255, 255, 255, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  color: #fff;
-  border-radius: 20px; /* Pill shape */
-  padding-left: 20px;
-  transition: all 0.3s ease;
-}
-
-.search-form input::placeholder {
-  color: rgba(255, 255, 255, 0.6);
-}
-
-.search-form input:focus {
-  background-color: rgba(255, 255, 255, 0.2);
-  box-shadow: none;
-  border-color: #1dd3b0; /* Your brand highlight color */
-  color: #fff;
-}
-
-/* --- Unified Search Pill --- */
-.search-box {
-  display: flex;
-  align-items: center;
-  background-color: rgba(
-    255,
-    255,
-    255,
-    0.1
-  ); /* Glass background for the whole box */
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  border-radius: 30px; /* One big rounded pill */
-  padding: 2px 5px; /* Padding to keep elements away from edges */
-  width: 250px; /* Fixed width for consistency */
-  transition: all 0.3s ease;
-}
-
-/* Style the Input to be invisible/transparent inside the box */
-.search-box input {
-  background: transparent !important;
-  border: none !important;
-  color: #fff !important;
-  box-shadow: none !important;
-  padding-left: 15px;
-  font-size: 0.95rem;
-}
-
-.search-box input::placeholder {
-  color: rgba(255, 255, 255, 0.6);
-}
-
-/* Style the Button to sit nicely at the end */
-.search-box button {
-  background: transparent;
-  border: none;
-  border-radius: 50%; /* Circle shape on hover */
-  width: 35px;
-  height: 35px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.3s ease;
-  margin-right: 2px;
-}
-
-/* Icon Sizing */
-.search-box button img {
-  width: 16px;
-  height: 16px;
-  opacity: 0.8;
-  transition: opacity 0.3s;
-}
-
-/* --- Hover & Focus Effects --- */
-
-/* When hovering the BUTTON, make it glow Ocean Green */
-.search-box button:hover {
-  background-color: rgba(29, 211, 176, 0.2); /* Your brand color tint */
-}
-
-/* When clicking the INPUT, light up the whole box border */
-.search-box:focus-within {
-  background-color: rgba(255, 255, 255, 0.15);
-  border-color: #1dd3b0; /* Brand Ocean Green */
-  box-shadow: 0 0 10px rgba(29, 211, 176, 0.3);
-}
-
+/* Dropdown Menu Animations */
 @media (min-width: 992px) {
-  /* Show dropdown on hover */
   .nav-item.dropdown:hover .dropdown-menu {
     display: block;
     opacity: 1;
@@ -482,9 +80,8 @@ a,
     margin-top: 0;
   }
 
-  /* Initial hidden state for animation */
   .dropdown-menu {
-    display: block; /* We keep it 'block' but hide it visually to animate */
+    display: block;
     opacity: 0;
     visibility: hidden;
     transform: translateY(20px);
@@ -493,9 +90,8 @@ a,
   }
 }
 
-/* --- Dropdown Styling (Dark Theme) --- */
 .dropdown-menu {
-  background-color: #002a3d;
+  background-color: var(--travia-navy);
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 12px;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
@@ -503,670 +99,31 @@ a,
 }
 
 .dropdown-item {
-  color: #ccdfec; /* Light Grey Text */
+  color: #ccdfec;
   padding: 10px 20px;
   font-weight: 500;
   transition: all 0.2s ease;
 }
 
 .dropdown-item:hover {
-  background-color: rgba(29, 211, 176, 0.1); /* Slight Green Tint */
-  color: #1dd3b0; /* Ocean Green Text */
-  padding-left: 25px; /* Slight shift to the right */
+  background-color: rgba(29, 211, 176, 0.1);
+  color: var(--travia-teal);
+  padding-left: 25px;
 }
 
 .dropdown-divider {
   border-top: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-/* The Container Bar */
-.travel-banner {
-  width: 100%;
-  background: rgba(0, 42, 61, 0.95); 
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-  overflow: hidden; 
-  padding: 12px 0;
-  position: relative;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-  margin-bottom: 20px;
-}
-
-/* The Scrolling Text */
-.travel-text {
-  display: inline-block;
-  white-space: nowrap; /* Forces text to stay on one line */
-  
-  /* Font Styling */
-  font-family: "Poppins", sans-serif;
-  font-size: 1rem;
-  color: #eaf7f5;
-  letter-spacing: 0.5px;
-  
-  /* Animation Configuration */
-  animation: scrollText 30s linear infinite;
-  padding-left: 100%; /* Starts the text from the far right */
-}
-
-/* Highlight Important Words (Strong) */
-.travel-text strong {
-  color: #1dd3b0; /* Travia Ocean Green */
-  font-weight: 700;
-  text-transform: uppercase;
-}
-
-/* Hover Effect: Pause so users can read the offer */
-.travel-banner:hover .travel-text {
-  animation-play-state: paused;
-  cursor: pointer;
-}
-
-/* The Animation Keyframes */
-@keyframes scrollText {
-  0% {
-    transform: translateX(0);
-  }
-  100% {
-    transform: translateX(-100%);
-  }
-}
-
-/* Mobile Responsiveness */
-@media (max-width: 768px) {
-  .travel-text {
-    font-size: 0.9rem; /* Slightly smaller on phone */
-    animation-duration: 20s; /* Faster scroll on smaller screens */
-  }
-}
-
-/* === Simple Holiday Section === */
-.holiday-container {
-  margin-top: 30px;
-  padding: 25px;
-  background-color: rgba(0, 42, 61, 0.85); /* Travia Dark Blue */
-  border-radius: 20px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  color: white;
-}
-
-/* Title Styling */
-.holiday-container h3 {
-  color: #1dd3b0; /* Travia Ocean Green */
-  font-family: "Poppins", sans-serif;
-  margin-bottom: 20px;
-  font-size: 1.5rem;
-}
-
-/* Layout for the cards */
-.holiday-list {
-  display: flex;
-  flex-wrap: wrap; /* Wraps to next line on small screens */
-  gap: 15px;       /* Space between cards */
-}
-
-/* Individual Holiday Card */
-.holiday-card {
-  background: rgba(255, 255, 255, 0.05); /* Very light transparent white */
-  padding: 15px 20px;
-  border-radius: 12px;
-  flex: 1 1 250px; /* Each card takes at least 250px space */
-  border: 1px solid transparent; /* Invisible border for hover effect */
-  transition: all 0.2s ease-in-out;
-}
-
-/* Hover Effect */
-.holiday-card:hover {
-  border-color: #1dd3b0; /* Green border on hover */
-  transform: translateY(-3px); /* Slight lift */
-}
-
-/* Highlight 'Today' differently */
-.holiday-card.today {
-  background: rgba(29, 211, 176, 0.15); /* Green tint */
-  border: 1px solid #1dd3b0;
-  flex: 1 1 100%; /* Makes 'Today' card take full width */
-}
-
-/* Text Details */
-.holiday-date {
-  font-size: 0.85rem;
-  color: #b5c7d3; /* Light Blue-Grey */
-  text-transform: uppercase;
-  letter-spacing: 1px;
-}
-
-.holiday-name {
-  font-size: 1.2rem;
-  font-weight: bold;
-  margin: 5px 0;
-}
-
-/* Offer Section inside the card */
-.holiday-offer {
-  margin-top: 10px;
-  padding-top: 10px;
-  border-top: 1px solid rgba(255, 255, 255, 0.1); /* Divider line */
-  font-size: 0.9rem;
-  color: #eaf7f5;
-}
-
-.holiday-offer span {
-  color: #1dd3b0; /* Highlight the word 'Offer' */
-  font-weight: bold;
-}
-
-.hero {
-  margin-top: 12px;
-}
-.btn2 {
-  font-weight: 700;
-  font-size: 24px;
-  border: none;
-  border-radius: 18px;
-  padding: 16px;
-  backdrop-filter: blur(10px);
-  background-color: #1dd3b0;
-  color: #002a3d;
-  cursor: pointer;
-  margin-top: 20px;
-  transition: ease-in-out 0.2s;
-}
-
-.btn2 a {
-  color: #002a3d;
-  text-decoration: none;
-}
-
-.btn2:hover {
-background-color: #ffffff;
-color: #001f2d;
-transform: translateY(-3px);
-}
-
-/* === Special Offer Section === */
-.special-offer-container {
-  display: flex;
-  justify-content: center;
-  margin: 30px 0; /* Space above and below */
-  padding: 0 15px;
-}
-
-.offer-banner {
-  background: linear-gradient(135deg, rgba(0, 42, 61, 0.95), rgba(0, 20, 30, 0.98));
-  width: 100%;
-  max-width: 900px; /* Restrict width so it doesn't stretch too far */
-  border-radius: 20px;
-  border: 1px solid rgba(29, 211, 176, 0.3); /* Subtle Teal Border */
-  padding: 25px 40px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between; /* Spreads items out */
-  box-shadow: 0 0 20px rgba(29, 211, 176, 0.15); /* Glowing effect */
-  position: relative;
-  overflow: hidden;
-  flex-wrap: wrap; /* Makes it responsive on phones */
-  gap: 20px;
-}
-
-/* The Glowing Background Decoration */
-.offer-banner::before {
-  content: "";
-  position: absolute;
-  top: -50%;
-  left: -50%;
-  width: 200%;
-  height: 200%;
-  background: radial-gradient(circle, rgba(29, 211, 176, 0.1) 0%, transparent 60%);
-  animation: rotateGlow 10s linear infinite;
-  z-index: 0;
-}
-
-/* Ensure text sits on top of the glow */
-.offer-badge, .offer-content, .btn-claim {
-  position: relative;
-  z-index: 1;
-}
-
-/* Fire Badge */
-.offer-badge {
-  background: #ff7e42; /* Hot Red/Orange for urgency */
-  color: white;
-  padding: 6px 12px;
-  border-radius: 30px;
-  font-size: 0.8rem;
-  font-weight: bold;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  animation: pulseBadge 2s infinite;
-  align-self: flex-start; /* Aligns to top on mobile */
-}
-
-/* Text Styling */
-.offer-content h2 {
-  font-family: "Poppins", sans-serif;
-  color: #fff;
-  font-size: 1.8rem;
-  margin: 0;
-  font-weight: 700;
-}
-
-.offer-content p {
-  color: #b5c7d3;
-  margin: 5px 0 0 0;
-  font-size: 1rem;
-}
-
-.offer-content strong {
-  color: #1dd3b0; /* Brand Teal */
-  font-size: 1.2rem;
-}
-
-/* Claim Button */
-.btn-claim {
-  background: #1dd3b0;
-  color: #002a3d;
-  border: none;
-  padding: 12px 25px;
-  border-radius: 50px;
-  font-weight: bold;
-  font-size: 1rem;
-  cursor: pointer;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-  white-space: nowrap; /* Prevents button text wrapping */
-}
-
-.btn-claim:hover {
-  background: #fff; /* Turns white on hover */
-  transform: translateY(-3px);
-  box-shadow: 0 5px 15px rgba(255, 255, 255, 0.3);
-}
-
-/* Animations */
-@keyframes pulseBadge {
-  0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 107, 107, 0.7); }
-  70% { transform: scale(1.05); box-shadow: 0 0 0 10px rgba(255, 107, 107, 0); }
-  100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 107, 107, 0); }
-}
-
-@keyframes rotateGlow {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
-}
-
-/* Mobile Responsiveness */
-@media (max-width: 768px) {
-  .offer-banner {
-    flex-direction: column;
-    text-align: center;
-    padding: 20px;
-  }
-  
-  .offer-badge {
-    align-self: center;
-    margin-bottom: 10px;
-  }
-}
-
-.hero-section {
-  position: relative; 
-  height: 720px;      
-  overflow: hidden;
-  margin-top: -80px;  
-}
-
-.hero-img {
-  height: 720px;
-  object-fit: cover; 
-  width: 100%;
-}
-
-/* Dark Overlay (Crucial for text readability) */
-.hero-overlay {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(to bottom, rgba(0, 42, 61, 0.106), rgba(0, 42, 61, 0.371));
-  z-index: 1;
-}
-
-.hero-content {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 10;
-  display: flex;
-  align-items: flex-end;
-  justify-content: flex-start;
-  
-  pointer-events: none;
-  padding-bottom: 20px; 
-  padding-left: 20px;
-}
-.hero-caption {
-  text-align: left; 
-  color: #fff;
-  pointer-events: auto; 
-  max-width: 650px;
-  
-  background: linear-gradient(90deg, rgba(0, 42, 61, 0.6) 0%, transparent 100%);
-  padding: 30px;
-  border-left: 5px solid #1dd3b0;
-  border-radius: 0 20px 20px 0;
-}
-
-/* Adjust Headline Size */
-.hero-caption h3 {
-  font-size: 3rem;
-  font-weight: 700;
-  text-shadow: 2px 2px 8px rgba(0,0,0,0.6);
-  margin-bottom: 10px;
-  font-family: "Poppins", sans-serif;
-  line-height: 1.2;
-}
-
-/* Adjust Paragraph Size */
-.hero-caption p {
-  font-size: 1.3rem;
-  text-shadow: 1px 1px 4px rgba(0,0,0,0.6);
-  margin-bottom: 25px;
-  color: #eaf7f5;
-}
-
-.hero-caption p a {
-  list-style: none;
-  font-size: 1.3rem;
-  text-shadow: 1px 1px 4px rgba(0,0,0,0.6);
-  margin-bottom: 25px;
-  color: #eaf7f5;
-}
-
-/* Mobile Responsiveness */
-@media (max-width: 768px) {
-  .hero-content {
-    padding-bottom: 40px;
-    padding-left: 20px;
-    align-items: center; /* On phone, center it again or keep bottom */
-    justify-content: center;
-  }
-  
-  .hero-caption {
-    text-align: center;
-    border-left: none; /* Remove accent border on mobile */
-    border-bottom: 4px solid #1dd3b0; /* Put accent on bottom instead */
-    background: rgba(0, 42, 61, 0.5); /* darker background for phone readability */
-    border-radius: 20px;
-    margin: 0 20px;
-  }
-  
-  .hero-caption h3 {
-    font-size: 2rem;
-  }
-}
-
-/* Form CSS  */
-
-.auth-container {
-    padding: 2rem;
-    border-radius: 20px; 
-    background: #ffffff;
-    border: none;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-}
-
-.btn-close-modal {
-    position: absolute;
-    top: 20px;
-    right: 20px;
-    background: transparent;
-    border: none;
-    font-size: 1.2rem;
-    color: #94a3b8; /* Soft Grey */
-    cursor: pointer;
-    transition: all 0.2s ease;
-    z-index: 10;
-    transition: ease-in-out 0.2s;
-}
-
-.btn-close-modal:hover {
-    color: #d32f2f; 
-    font-size: 1.3rem; 
-}
-
-.auth-title {
-    text-align: center;
-    font-weight: 700;
-    margin-bottom: 2rem;
-    color: #002a3d; 
-}
-
-/* Hidden state for toggling forms */
-.auth-form--hidden {
-    display: none;
-}
-
-/* Message Box (General Errors) */
-.auth-message {
-    text-align: center;
-    margin-bottom: 1rem;
-    font-size: 0.9rem;
-    padding: 10px;
-    border-radius: 5px;
-    display: none; /* Hidden by default */
-}
-
-.auth-message--error {
-    color: #d32f2f;
-    background: #ffebee;
-    border: 1px solid #ffcdd2;
-    display: block; 
-}
-
-/* Input Fields */
-.auth-input-group {
-    margin-bottom: 1.25rem;
-}
-
-.auth-input {
-    display: block;
-    width: 100%;
-    padding: 0.75rem;
-    box-sizing: border-box;
-    border-radius: 10px;
-    border: 1px solid #dddddd;
-    outline: none;
-    background: #f8f9fa;
-    transition: background 0.2s, border-color 0.2s;
-    font-size: 1rem;
-}
-
-.auth-input:focus {
-    border-color: #1dd3b0; /* Travia Teal */
-    background: #ffffff;
-}
-
-/* Input Error State */
-.auth-input--error {
-    border-color: #d32f2f;
-    background: #fff8f8;
-}
-
-.auth-input-error-message {
-    margin-top: 5px;
-    font-size: 0.85rem;
-    color: #d32f2f;
-}
-
-/* Buttons */
-.auth-button {
-    width: 100%;
-    padding: 12px;
-    font-weight: bold;
-    font-size: 1rem;
-    color: #ffffff;
-    border: none;
-    border-radius: 50px; /* Pill shape */
-    background: #1dd3b0; /* Travia Teal */
-    cursor: pointer;
-    transition: background 0.3s, transform 0.1s;
-}
-
-.auth-button:hover {
-    background: #15a98d; /* Darker Teal */
-}
-
-.auth-button:active {
-    transform: scale(0.98);
-}
-
-/* Links (Forgot Password / Switch) */
-.auth-text {
-    text-align: center;
-    margin-top: 1.5rem;
-    font-size: 0.95rem;
-}
-
-.auth-link {
-    color: #6c757d;
-    text-decoration: none;
-    cursor: pointer;
-}
-
-.auth-link:hover {
-    text-decoration: underline;
-    color: #1dd3b0;
-}
-
-/* Ensure the search box can anchor the dropdown */
-.search-box {
-  position: relative; 
-}
-
-/* The Dropdown Box */
-.search-results-box {
-  position: absolute;
-  top: 100%; /* Push it directly below the input */
-  left: 0;
-  width: 100%; /* Matches width of search bar */
-  background: white;
-  border-radius: 15px; /* Matches your rounded theme */
-  box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-  z-index: 1050; /* Above everything */
-  max-height: 350px;
-  overflow-y: auto;
-  display: none; /* Hidden by default */
-  margin-top: 8px;
-  padding: 5px 0;
-  border: 1px solid rgba(0,0,0,0.05);
-}
-
-/* Individual Result Items */
-.search-item {
-  display: flex;
-  align-items: center;
-  padding: 10px 15px;
-  cursor: pointer;
-  border-bottom: 1px solid #f0f0f0;
-  transition: background 0.2s;
-}
-
-.search-item:last-child {
-  border-bottom: none;
-}
-
-.search-item:hover {
-  background-color: #f1f8f6; /* Very light tint of your Teal brand color */
-}
-
-/* Thumbnail Image */
-.search-item img {
-  width: 40px;
-  height: 40px;
-  border-radius: 8px;
-  object-fit: cover;
-  margin-right: 12px;
-}
-
-/* Text Info */
-.search-item .info {
-  display: flex;
-  flex-direction: column;
-}
-
-.search-item .info h6 {
-  margin: 0;
-  font-family: "Poppins", sans-serif;
-  font-size: 14px;
-  font-weight: 600;
-  color: #002a3d; /* Travia Dark Blue */
-}
-
-.search-item .info small {
-  font-size: 11px;
-  color: #1dd3b0; /* Travia Ocean Green for category */
-  text-transform: uppercase;
-  font-weight: 700;
-}
-
-/* Scrollbar Polish */
-.search-results-box::-webkit-scrollbar {
-  width: 5px;
-}
-.search-results-box::-webkit-scrollbar-thumb {
-  background-color: #ccc;
-  border-radius: 10px;
-}
-
-/* === TOAST NOTIFICATIONS (Booking.com style) === */
-.toast-container {
-    position: fixed;
-    top: 20px;
-    left: 50%;
-    transform: translateX(-50%);
-    z-index: 10000; /* On top of everything */
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-}
-
-.toast {
-    background: #333;
-    color: white;
-    padding: 12px 24px;
-    border-radius: 8px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    font-size: 0.95rem;
-    opacity: 0;
-    transform: translateY(-20px);
-    transition: all 0.3s ease;
-    min-width: 300px;
-}
-
-.toast.show {
-    opacity: 1;
-    transform: translateY(0);
-}
-
-.toast.success { background-color: #009898; /* Teal */ }
-.toast.error { background-color: #dc3545; /* Red */ }
-
-.toast i { font-size: 1.2rem; }
-
-/* --- Profile Pill in Navbar --- */
+/* Profile Pill */
 .travia-profile-pill {
   display: flex;
   align-items: center;
   text-decoration: none;
-  background: rgba(255, 255, 255, 0.15); /* Subtle glass background */
+  background: rgba(255, 255, 255, 0.15);
   border: 1px solid rgba(255, 255, 255, 0.3);
-  padding: 5px 15px 5px 5px; /* Space on right for text */
-  border-radius: 50px; /* Full rounded pill shape */
+  padding: 4px 12px 4px 4px;
+  border-radius: 50px;
   transition: all 0.3s ease;
 }
 
@@ -1190,4 +147,657 @@ transform: translateY(-3px);
   font-weight: 600;
   font-size: 0.95rem;
   letter-spacing: 0.3px;
+}
+
+/* =========================================
+   3. SEARCH BAR (Booking.com Style)
+   ========================================= */
+.search-box {
+  display: flex;
+  align-items: center;
+  background-color: rgba(255, 255, 255, 0.1); /* Glass background */
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 30px;
+  padding: 2px 5px;
+  width: 320px; /* Wider */
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.search-box input {
+  background: transparent !important;
+  border: none !important;
+  color: #fff !important;
+  box-shadow: none !important;
+  padding-left: 15px;
+  font-size: 0.95rem;
+}
+
+.search-box input::placeholder {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.search-box button {
+  background: transparent;
+  border: none;
+  border-radius: 50%;
+  width: 35px;
+  height: 35px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  margin-right: 2px;
+}
+
+.search-box button img {
+  width: 16px;
+  height: 16px;
+  opacity: 0.8;
+  transition: opacity 0.3s;
+}
+
+.search-box button:hover {
+  background-color: rgba(29, 211, 176, 0.2);
+}
+
+.search-box:focus-within {
+  background-color: rgba(255, 255, 255, 0.15);
+  border-color: var(--travia-teal);
+  box-shadow: 0 0 10px rgba(29, 211, 176, 0.3);
+}
+
+/* Search Dropdown Results */
+.search-results-box {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  background: white;
+  border-radius: 15px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+  z-index: 1050;
+  max-height: 350px;
+  overflow-y: auto;
+  display: none;
+  margin-top: 8px;
+  padding: 5px 0;
+  border: 1px solid rgba(0,0,0,0.05);
+}
+
+.search-item {
+  display: flex;
+  align-items: center;
+  padding: 10px 15px;
+  cursor: pointer;
+  border-bottom: 1px solid #f0f0f0;
+  transition: background 0.2s;
+}
+
+.search-item:last-child {
+  border-bottom: none;
+}
+
+.search-item:hover {
+  background-color: #f1f8f6;
+}
+
+.search-item img {
+  width: 40px;
+  height: 40px;
+  border-radius: 8px;
+  object-fit: cover;
+  margin-right: 12px;
+}
+
+.search-item .info {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+
+.search-item .info h6 {
+  margin: 0;
+  font-family: "Poppins", sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--travia-navy);
+}
+
+.search-item .info small {
+  font-size: 11px;
+  color: var(--travia-teal);
+  text-transform: uppercase;
+  font-weight: 700;
+}
+
+/* Scrollbar Polish */
+.search-results-box::-webkit-scrollbar {
+  width: 5px;
+}
+.search-results-box::-webkit-scrollbar-thumb {
+  background-color: #ccc;
+  border-radius: 10px;
+}
+
+/* Category Badges in Search (New Addition) */
+.search-badge {
+  font-size: 0.7rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  padding: 2px 6px;
+  border-radius: 4px;
+  margin-left: 10px;
+}
+.badge-country { background-color: #e0f2fe; color: #0284c7; }
+.badge-city    { background-color: #fce7f3; color: #be185d; }
+.badge-tour    { background-color: #dcfce7; color: #15803d; }
+
+/* =========================================
+   4. BUTTONS & UI ELEMENTS
+   ========================================= */
+.btn-travia {
+  background-color: var(--travia-teal);
+  color: var(--travia-navy);
+  padding: 8px 20px;
+  border-radius: 30px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  border: none;
+}
+
+.btn-travia:hover {
+  background-color: var(--travia-teal-hover);
+  transform: translateY(-2px);
+}
+
+.btn2 {
+  font-weight: 700;
+  font-size: 24px;
+  border: none;
+  border-radius: 18px;
+  padding: 16px;
+  backdrop-filter: blur(10px);
+  background-color: var(--travia-teal);
+  color: var(--travia-navy);
+  cursor: pointer;
+  margin-top: 20px;
+  transition: ease-in-out 0.2s;
+}
+
+.btn2:hover {
+  background-color: #ffffff;
+  transform: translateY(-3px);
+}
+
+.btn2 a {
+  color: var(--travia-navy);
+  text-decoration: none;
+}
+
+.discount {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 24px;
+}
+
+.discount img {
+  width: 480px;
+}
+
+/* =========================================
+   5. HERO & SECTIONS
+   ========================================= */
+.hero-section {
+  position: relative; 
+  height: 720px;      
+  overflow: hidden;
+  margin-top: -80px; /* Pulls hero behind navbar */
+}
+
+.hero-img {
+  height: 720px;
+  object-fit: cover; 
+  width: 100%;
+}
+
+.hero-overlay {
+  position: absolute;
+  top: 0; left: 0; width: 100%; height: 100%;
+  background: linear-gradient(to bottom, rgba(0, 42, 61, 0.1), rgba(0, 42, 61, 0.4));
+  z-index: 1;
+}
+
+.hero-content {
+  position: absolute;
+  top: 0; left: 0; width: 100%; height: 100%;
+  z-index: 10;
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-start;
+  pointer-events: none;
+  padding-bottom: 20px; 
+  padding-left: 20px;
+}
+
+.hero-caption {
+  text-align: left; 
+  color: #fff;
+  pointer-events: auto; 
+  max-width: 650px;
+  background: linear-gradient(90deg, rgba(0, 42, 61, 0.6) 0%, transparent 100%);
+  padding: 30px;
+  border-left: 5px solid var(--travia-teal);
+  border-radius: 0 20px 20px 0;
+}
+
+.hero-caption h3 {
+  font-size: 3rem;
+  font-weight: 700;
+  text-shadow: 2px 2px 8px rgba(0,0,0,0.6);
+  margin-bottom: 10px;
+  line-height: 1.2;
+}
+
+.hero-caption p {
+  font-size: 1.3rem;
+  text-shadow: 1px 1px 4px rgba(0,0,0,0.6);
+  margin-bottom: 25px;
+  color: #eaf7f5;
+}
+
+.hero-caption p a {
+  color: #eaf7f5;
+  text-decoration: underline;
+}
+
+/* Parallax */
+.parallax {
+  background-attachment: fixed;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  height: 720px;
+  position: relative;
+}
+
+.parallax-caption {
+  position: absolute;
+  bottom: 20px;
+  left: 20px;
+  color: #fff;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.parallax-1 { background-image: url(../public/images/BG1.jpg); }
+.parallax-2 { background-image: url(../public/images/BG2.jpg); }
+.parallax-3 { background-image: url(../public/images/BG3.jpg); }
+
+/* =========================================
+   6. CARDS & LAYOUTS
+   ========================================= */
+.cards {
+  display: flex;
+  justify-content: space-evenly;
+  padding: 24px;
+}
+
+.travia-card {
+  border: none; 
+  border-radius: 24px; 
+  background: #ffffff;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05); 
+  transition: all 0.4s ease; 
+  overflow: hidden; 
+}
+
+.travia-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+}
+
+.card-img-wrapper {
+  overflow: hidden;
+  height: 280px;
+}
+
+.travia-card .card-img-top {
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+  transition: transform 0.6s ease;
+}
+
+.travia-card:hover .card-img-top {
+  transform: scale(1.08);
+}
+
+.travia-card .card-body { padding: 24px; }
+
+.travia-card .card-title {
+  font-weight: 700;
+  font-size: 1.25rem;
+  color: var(--travia-navy);
+  margin-bottom: 12px;
+}
+
+.travia-card .card-text {
+  color: #6c757d;
+  font-size: 0.95rem;
+  line-height: 1.6;
+  margin-bottom: 24px;
+}
+
+.travia-card .btn {
+  padding: 10px 28px;
+  border-radius: 50px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  background-color: #0d6efd; 
+}
+
+/* =========================================
+   7. OFFERS & HOLIDAYS
+   ========================================= */
+.travel-banner {
+  width: 100%;
+  background: rgba(0, 42, 61, 0.95); 
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  overflow: hidden; 
+  padding: 12px 0;
+  position: relative;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+  margin-bottom: 20px;
+}
+
+.travel-text {
+  display: inline-block;
+  white-space: nowrap;
+  font-family: "Poppins", sans-serif;
+  font-size: 1rem;
+  color: #eaf7f5;
+  letter-spacing: 0.5px;
+  animation: scrollText 30s linear infinite;
+  padding-left: 100%;
+}
+
+.travel-text strong {
+  color: var(--travia-teal);
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.travel-banner:hover .travel-text {
+  animation-play-state: paused;
+  cursor: pointer;
+}
+
+@keyframes scrollText {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-100%); }
+}
+
+/* Holiday Section */
+.holiday-container {
+  margin-top: 30px;
+  padding: 25px;
+  background-color: rgba(0, 42, 61, 0.85);
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: white;
+}
+
+.holiday-container h3 {
+  color: var(--travia-teal);
+  margin-bottom: 20px;
+  font-size: 1.5rem;
+}
+
+.holiday-list {
+  display: flex; flex-wrap: wrap; gap: 15px;
+}
+
+.holiday-card {
+  background: rgba(255, 255, 255, 0.05);
+  padding: 15px 20px;
+  border-radius: 12px;
+  flex: 1 1 250px;
+  border: 1px solid transparent;
+  transition: all 0.2s ease-in-out;
+}
+
+.holiday-card:hover {
+  border-color: var(--travia-teal);
+  transform: translateY(-3px);
+}
+
+.holiday-card.today {
+  background: rgba(29, 211, 176, 0.15);
+  border: 1px solid var(--travia-teal);
+  flex: 1 1 100%;
+}
+
+.holiday-date {
+  font-size: 0.85rem;
+  color: #b5c7d3;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.holiday-offer span {
+  color: var(--travia-teal);
+  font-weight: bold;
+}
+
+/* Offer Banner */
+.special-offer-container {
+  display: flex; justify-content: center; margin: 30px 0; padding: 0 15px;
+}
+
+.offer-banner {
+  background: linear-gradient(135deg, rgba(0, 42, 61, 0.95), rgba(0, 20, 30, 0.98));
+  width: 100%; max-width: 900px;
+  border-radius: 20px;
+  border: 1px solid rgba(29, 211, 176, 0.3);
+  padding: 25px 40px;
+  display: flex; align-items: center; justify-content: space-between;
+  box-shadow: 0 0 20px rgba(29, 211, 176, 0.15);
+  position: relative; overflow: hidden; gap: 20px; flex-wrap: wrap;
+}
+
+.offer-banner::before {
+  content: ""; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%;
+  background: radial-gradient(circle, rgba(29, 211, 176, 0.1) 0%, transparent 60%);
+  animation: rotateGlow 10s linear infinite; z-index: 0;
+}
+
+.offer-badge {
+  background: #ff7e42; color: white; padding: 6px 12px;
+  border-radius: 30px; font-size: 0.8rem; font-weight: bold;
+  text-transform: uppercase; letter-spacing: 1px;
+  animation: pulseBadge 2s infinite; position: relative; z-index: 1;
+}
+
+.offer-content { position: relative; z-index: 1; }
+.offer-content h2 { color: #fff; font-size: 1.8rem; margin: 0; font-weight: 700; }
+.offer-content p { color: #b5c7d3; margin: 5px 0 0 0; }
+.offer-content strong { color: var(--travia-teal); }
+
+.btn-claim {
+  background: var(--travia-teal); color: var(--travia-navy);
+  border: none; padding: 12px 25px; border-radius: 50px;
+  font-weight: bold; cursor: pointer; position: relative; z-index: 1;
+  transition: all 0.2s ease;
+}
+
+.btn-claim:hover { background: #fff; transform: translateY(-3px); }
+
+@keyframes pulseBadge {
+  0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 107, 107, 0.7); }
+  70% { transform: scale(1.05); box-shadow: 0 0 0 10px rgba(255, 107, 107, 0); }
+  100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 107, 107, 0); }
+}
+
+@keyframes rotateGlow { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+
+/* =========================================
+   8. FOOTER
+   ========================================= */
+.travia-footer {
+  background: linear-gradient(180deg, #001f2d, #002a3d);
+}
+
+.footer-title {
+  font-weight: 600; margin-bottom: 15px; position: relative;
+}
+
+.footer-title::after {
+  content: ""; width: 40px; height: 2px;
+  background: var(--travia-teal); display: block; margin-top: 6px;
+}
+
+.footer-links { list-style: none; padding: 0; }
+.footer-links li { margin-bottom: 12px; }
+.footer-links a { color: #b5c7d3; transition: all 0.3s ease; }
+.footer-links a:hover { color: var(--travia-teal); padding-left: 5px; }
+
+.footer-socials { margin-top: 20px; }
+.footer-socials a {
+  color: #fff; font-size: 1.2rem; margin-right: 15px; transition: all 0.3s ease;
+}
+.footer-socials a:hover { color: var(--travia-teal); transform: translateY(-3px); }
+
+/* Newsletter */
+.footer-newsletter .input-group {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 30px; padding: 4px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.footer-newsletter input {
+  background: transparent !important; border: none !important;
+  color: #fff !important; padding-left: 15px; box-shadow: none !important;
+}
+
+.footer-newsletter input::placeholder { color: rgba(255, 255, 255, 0.5); }
+
+.footer-newsletter .btn-travia {
+  border-radius: 50%; width: 40px; height: 40px; padding: 0;
+  display: flex; align-items: center; justify-content: center;
+}
+
+.footer-contact-list { list-style: none; padding: 0; margin: 0; }
+.footer-contact-list li {
+  display: flex; align-items: flex-start; margin-bottom: 15px;
+  color: #b5c7d3; font-size: 0.95rem;
+}
+.footer-contact-list i {
+  color: var(--travia-teal); margin-right: 12px; font-size: 1.1rem; margin-top: -2px;
+}
+
+.footer-bottom { background-color: #001824; color: #8faec0; font-size: 0.9rem; }
+.footer-legal a { color: #8faec0; transition: color 0.3s; }
+.footer-legal a:hover { color: var(--travia-teal); }
+
+/* =========================================
+   9. AUTH MODAL (FIXED)
+   ========================================= */
+.auth-container {
+  padding: 2rem;
+  border-radius: 20px;
+  background: #ffffff;
+  border: none;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+  position: relative;
+}
+
+.auth-title {
+  text-align: center; font-weight: 700; margin-bottom: 2rem; color: var(--travia-navy);
+}
+
+/* FIX: Ensure toggle works */
+.auth-form--hidden {
+  display: none !important;
+}
+
+.auth-input {
+  display: block; width: 100%; padding: 0.75rem;
+  border-radius: 10px; border: 1px solid #ddd;
+  background: #f8f9fa; transition: all 0.2s;
+  margin-bottom: 1.25rem;
+}
+
+.auth-input:focus { border-color: var(--travia-teal); background: #fff; outline: none; }
+
+.auth-button {
+  width: 100%; padding: 12px;
+  font-weight: bold; color: #fff;
+  border: none; border-radius: 50px;
+  background: var(--travia-teal);
+  cursor: pointer; transition: all 0.2s;
+}
+
+.auth-button:hover { background: var(--travia-teal-hover); }
+
+.auth-link { color: #6c757d; cursor: pointer; }
+.auth-link:hover { color: var(--travia-teal); text-decoration: underline; }
+
+.auth-text { text-align: center; margin-top: 1.5rem; font-size: 0.95rem; }
+
+.btn-close-modal {
+  position: absolute; top: 20px; right: 20px;
+  background: transparent; border: none; font-size: 1.2rem;
+  color: #94a3b8; transition: color 0.2s;
+}
+.btn-close-modal:hover { color: #d32f2f; }
+
+.auth-message {
+  text-align: center; margin-bottom: 1rem; font-size: 0.9rem;
+  padding: 10px; border-radius: 5px; display: none;
+}
+.auth-message--error {
+  color: #d32f2f; background: #ffebee; border: 1px solid #ffcdd2; display: block;
+}
+
+/* =========================================
+   10. TOAST NOTIFICATIONS
+   ========================================= */
+.toast-container {
+  position: fixed; top: 20px; left: 50%; transform: translateX(-50%);
+  z-index: 10000; display: flex; flex-direction: column; gap: 10px;
+}
+
+.toast {
+  background: #333; color: white;
+  padding: 12px 24px; border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  display: flex; align-items: center; gap: 10px;
+  font-size: 0.95rem; opacity: 0; transform: translateY(-20px);
+  transition: all 0.3s ease; min-width: 300px;
+}
+
+.toast.show { opacity: 1; transform: translateY(0); }
+.toast.success { background-color: #009898; }
+.toast.error { background-color: #dc3545; }
+
+/* =========================================
+   11. RESPONSIVE
+   ========================================= */
+@media (max-width: 768px) {
+  .hero-content {
+    padding-bottom: 40px; padding-left: 20px;
+    align-items: center; justify-content: center;
+  }
+  
+  .hero-caption {
+    text-align: center; border-left: none; border-bottom: 4px solid var(--travia-teal);
+    background: rgba(0, 42, 61, 0.5); border-radius: 20px; margin: 0 20px;
+  }
+  
+  .offer-banner { flex-direction: column; text-align: center; padding: 20px; }
+  .offer-badge { align-self: center; margin-bottom: 10px; }
+  .footer-bottom .container { flex-direction: column; text-align: center; }
+  .footer-legal { margin-top: 10px; }
 }
