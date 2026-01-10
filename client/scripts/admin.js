@@ -21,7 +21,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   // 1. Security Check
   if (!token || !user.isAdmin) {
-    window.location.href = "../pages/index.html";
+    window.location.href = "index.html";
     return;
   }
 

@@ -5,7 +5,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   if (!userStr || !token) {
     // If not logged in, redirect to home immediately
-    window.location.replace("index.html");
+    window.location.replace("../index.html");
     return;
   }
 
@@ -39,7 +39,7 @@ document.addEventListener("DOMContentLoaded", () => {
     logoutBtn.addEventListener("click", () => {
       localStorage.removeItem("token");
       localStorage.removeItem("user");
-      window.location.href = "index.html";
+      window.location.href = "../index.html";
     });
   }
 });

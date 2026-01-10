@@ -39,7 +39,7 @@ function injectNavbar(rootPath) {
   const navbarHTML = `
       <nav class="navbar navbar-expand-lg navbar-dark sticky-top travia-navbar" style="background-color: #002a3d;">
         <div class="container">
-          <a class="navbar-brand fw-bold" href="${rootPath}pages/index.html">
+          <a class="navbar-brand fw-bold" href="${rootPath}index.html">
             <img class="travia" src="${rootPath}public/assets/Travia.png" alt="Travia" />
           </a>
   
@@ -49,7 +49,7 @@ function injectNavbar(rootPath) {
   
           <div class="collapse navbar-collapse" id="traviaNavbar">
             <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
-              <li class="nav-item"><a class="nav-link" href="${rootPath}pages/index.html">Home</a></li>
+              <li class="nav-item"><a class="nav-link" href="${rootPath}index.html">Home</a></li>
               <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">Destinations</a>
                 <ul class="dropdown-menu">
