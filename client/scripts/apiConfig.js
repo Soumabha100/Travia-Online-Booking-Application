@@ -1,18 +1,25 @@
 let apiBaseUrl;
 const hostname = window.location.hostname;
 
+let localHostUrl = "http://localhost:8001/api";
+let serverHostURL = "https://travia-online-booking-application-backend.onrender.com/api";
+
+let isLocalHost = false;
+
 if (hostname === 'localhost' || hostname === '127.0.0.1') {
     // 1. Local Development
-    apiBaseUrl = "http://localhost:8001/api";
+    
+    apiBaseUrl = isLocalHost ? localHostUrl : serverHostURL;
     console.log('[Travia] Environment: LOCAL');
 } 
 else if (hostname.includes('dev') || hostname.includes('staging')) {
-    apiBaseUrl = "https://travia-online-booking-application-backend.onrender.com/api";
+    // 2. User Acceptance Testing
+    apiBaseUrl = serverHostURL;
     console.log('[Travia] Environment: STAGING/DEV');
 } 
 else {
     // 3. Production Environment (Live Site)
-    apiBaseUrl = "https://travia-online-booking-application-backend.onrender.com/api";
+    apiBaseUrl = serverHostURL;
     console.log('[Travia] Environment: PRODUCTION');
 }
 
