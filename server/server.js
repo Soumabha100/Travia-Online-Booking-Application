@@ -56,6 +56,12 @@ app.use("/api/booking", bookingRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/admin", adminRoutes);
 
+// Test the route from the Render Server (Only used for UptimeRobot Config!)
+
+app.get("/api/test", (req, res) => {
+  res.json({ message: "Hello, the Backend Server is now live! 👋" });
+});
+
 const PORT = process.env.PORT;
 
 app.listen(PORT, () => {
